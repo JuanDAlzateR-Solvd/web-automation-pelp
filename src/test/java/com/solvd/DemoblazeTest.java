@@ -20,7 +20,7 @@ public class DemoblazeTest {
     private static final Logger logger =
             LoggerFactory.getLogger(DemoblazeTest.class);
 
-    @Test (testName = "Functionality of top menu", description = "verifies that home page loads,top Menu works correctly")
+    @Test(testName = "Functionality of top menu", description = "verifies that home page loads,top Menu works correctly")
     public void buttonFunctionalityTest() {
 
         WebDriver driver = DriverFactory.createDriver(DriverRunMode.LOCAL, DriverType.CHROME);
@@ -35,7 +35,7 @@ public class DemoblazeTest {
         driver.get("https://demoblaze.com/");
 
         //wait 1 second, just to debug code
-        int timePause=1;
+        int timePause = 1;
         navActions.pause(timePause);
 
         topMenu.clickButton(TopMenu.MenuItem.HOME);
@@ -58,7 +58,7 @@ public class DemoblazeTest {
         driver.quit();
     }
 
-    @Test (testName = "List of Products", description = "filters the products by category, then prints in console all the products")
+    @Test(testName = "List of Products", description = "filters the products by category, then prints in console all the products")
     public void ListOfProductsTest() {
 
         WebDriver driver = DriverFactory.createDriver(DriverRunMode.REMOTE, DriverType.CHROME);
@@ -81,7 +81,7 @@ public class DemoblazeTest {
 
         navActions.pause(1);
 
-        List<String> productsList=productGrid.productsList();
+        List<String> productsList = productGrid.productsList();
         productsList.forEach(logger::info);
 
         navActions.pause(3);

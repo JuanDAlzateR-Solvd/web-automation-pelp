@@ -10,7 +10,7 @@ import java.time.Duration;
 
 public class OpenPageTest {
 
-    @Test (testName = "Open Home Page ", description = "verifies that home page loads")
+    @Test(testName = "Open Home Page ", description = "verifies that home page loads")
     public void simpleTest() {
 
         WebDriver driver = DriverFactory.createDriver(DriverRunMode.LOCAL, DriverType.CHROME);
@@ -21,18 +21,18 @@ public class OpenPageTest {
         driver.get("https://www.amazon.com/");
 
         //Thread sleep just to debug code
-        int timeSleep=3000;
-        try{
+        int timeSleep = 3000;
+        try {
             Thread.sleep(timeSleep);
-        }catch(InterruptedException e){
+        } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
 
         driver.get("https://www.next.co.uk/");
 
-        try{
+        try {
             Thread.sleep(timeSleep);
-        }catch(InterruptedException e){
+        } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
         driver.quit();

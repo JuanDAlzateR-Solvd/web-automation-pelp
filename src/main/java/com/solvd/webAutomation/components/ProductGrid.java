@@ -40,6 +40,6 @@ public class ProductGrid {
             productsList.add(product.getText());
         }
         return productsList;
-        }
+    }
 
 }

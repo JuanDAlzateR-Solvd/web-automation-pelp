@@ -24,15 +24,19 @@ public class HomePage {
         this.navActions = new NavActions(driver);
 
     }
+
     public WebDriver getDriver() {
         return driver;
     }
+
     public void clickPhonesButton() {
         navActions.click(phonesButton);
     }
+
     public void clickLaptopsButton() {
         navActions.click(laptopsButton);
     }
+
     public void clickMonitorsButton() {
         navActions.click(monitorsButton);
     }

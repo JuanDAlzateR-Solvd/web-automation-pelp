@@ -7,11 +7,11 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 
-public class Actions {
-    private WebDriver driver;
+public class NavActions {
+    private final WebDriver driver;
     private WebDriverWait wait;
 
-    public Actions(WebDriver driver) {
+    public NavActions(WebDriver driver) {
         this.driver = driver;
     }
 
@@ -30,7 +30,12 @@ public class Actions {
     }
 
     public void pause(int seconds) {
-        WebDriverWait waitTime=new WebDriverWait(driver, Duration.ofSeconds(seconds));
-        wait.until(d -> true);
+//        WebDriverWait waitTime=new WebDriverWait(driver, Duration.ofSeconds(seconds));
+//        wait.until(d -> true);
+        try {
+            Thread.sleep(seconds * 1000L);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

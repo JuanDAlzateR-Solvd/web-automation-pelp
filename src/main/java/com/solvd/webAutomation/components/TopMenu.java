@@ -1,5 +1,6 @@
 package com.solvd.webAutomation.components;
 
+import com.solvd.webAutomation.actions.NavActions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -9,6 +10,7 @@ import java.util.HashMap;
 
 public class TopMenu {
     private WebDriver driver;
+    private NavActions navActions;
 
     @FindBy(css = "a[class='nav-link'][href='index.html']")
     private WebElement homeButton;
@@ -23,18 +25,9 @@ public class TopMenu {
     @FindBy(css = "a[class='nav-link'][id='signin2']]")
     private WebElement signUpButton;
 
-    public HashMap<MenuItem, WebElement> navButtons = new HashMap<>();
-
     public TopMenu(WebDriver driver) {
         this.driver = driver;
         PageFactory.initElements(driver, this);
-
-        navButtons.put(MenuItem.HOME, homeButton);
-        navButtons.put(MenuItem.CONTACT, contactButton);
-        navButtons.put(MenuItem.ABOUTUS, aboutUsButton);
-        navButtons.put(MenuItem.CART, cartButton);
-        navButtons.put(MenuItem.LOGIN, logInButton);
-        navButtons.put(MenuItem.SIGNUP, signUpButton);
 
     }
 
@@ -42,17 +35,25 @@ public class TopMenu {
         return driver;
     }
 
-    public void clickButton(MenuItem navItem) {
-        navButtons.get(navItem).click();
+    public void clickButton(MenuItem item) {
+        switch (item) {
+            case HOME -> navActions.click(homeButton);
+            case CONTACT -> navActions.click(contactButton);
+            case ABOUT_US ->  navActions.click(aboutUsButton);
+            case CART ->  navActions.click(cartButton);
+            case LOG_IN ->  navActions.click(logInButton);
+            case SIGN_UP ->  navActions.click(signUpButton);
+        }
     }
+
 
     public enum MenuItem {
         HOME(),
         CONTACT(),
-        ABOUTUS(),
+        ABOUT_US(),
         CART(),
-        LOGIN(),
-        SIGNUP()
+        LOG_IN(),
+        SIGN_UP()
     }
 
 }

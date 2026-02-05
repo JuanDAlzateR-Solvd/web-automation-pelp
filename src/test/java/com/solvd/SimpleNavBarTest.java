@@ -1,11 +1,18 @@
 package com.solvd;
 
 import com.solvd.webAutomation.components.Header;
+import com.solvd.webAutomation.driver.DriverFactory;
+import com.solvd.webAutomation.driver.DriverRunMode;
+import com.solvd.webAutomation.driver.DriverType;
 import com.solvd.webAutomation.pages.desktop.HomePage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.annotations.Test;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.time.Duration;
 
 public class SimpleNavBarTest {
@@ -14,6 +21,9 @@ public class SimpleNavBarTest {
     public void simpleTest() {
 
         WebDriver driver = new ChromeDriver();
+
+     //   WebDriver driver = DriverFactory.createDriver(DriverRunMode.LOCAL, DriverType.CHROME);
+
         HomePage homePage = new HomePage(driver);
 
         driver.manage().window().maximize();

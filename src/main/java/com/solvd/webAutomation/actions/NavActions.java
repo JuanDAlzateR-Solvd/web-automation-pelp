@@ -18,7 +18,7 @@ public class NavActions {
     }
 
     public void click(@NonNull WebElement element) {
-     //   wait.until(ExpectedConditions.elementToBeClickable(element));
+        wait.until(ExpectedConditions.elementToBeClickable(element));
         element.click();
     }
 

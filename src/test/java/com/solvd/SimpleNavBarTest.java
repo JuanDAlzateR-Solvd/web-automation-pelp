@@ -1,18 +1,11 @@
 package com.solvd;
 
-import com.solvd.webAutomation.components.Header;
-import com.solvd.webAutomation.driver.DriverFactory;
-import com.solvd.webAutomation.driver.DriverRunMode;
-import com.solvd.webAutomation.driver.DriverType;
+import com.solvd.webAutomation.components.TopMenu;
 import com.solvd.webAutomation.pages.desktop.HomePage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.annotations.Test;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.time.Duration;
 
 public class SimpleNavBarTest {
@@ -22,7 +15,7 @@ public class SimpleNavBarTest {
 
         WebDriver driver = new ChromeDriver();
 
-     //   WebDriver driver = DriverFactory.createDriver(DriverRunMode.LOCAL, DriverType.CHROME);
+     // WebDriver driver = DriverFactory.createDriver(DriverRunMode.LOCAL, DriverType.CHROME);
 
         HomePage homePage = new HomePage(driver);
 
@@ -41,16 +34,16 @@ public class SimpleNavBarTest {
             Thread.currentThread().interrupt();
         }
 
-        Header header = new Header(driver);
+        TopMenu header = new TopMenu(driver);
 
-        header.clickButton(Header.NavItem.WOMEN);
+        header.clickButton(TopMenu.MenuItem.WOMEN);
 
         try{
             Thread.sleep(timeSleep);
         }catch(InterruptedException e){
             Thread.currentThread().interrupt();
         }
-        header.clickButton(Header.NavItem.MEN);
+        header.clickButton(TopMenu.MenuItem.MEN);
 
         try{
             Thread.sleep(timeSleep);

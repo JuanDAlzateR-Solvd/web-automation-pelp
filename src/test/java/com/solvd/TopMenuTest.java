@@ -64,27 +64,11 @@ public class TopMenuTest {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 
         driver.get("https://demoblaze.com/");
+        navActions.pause(2);
 
-        //wait 1 second, just to debug code
-        int timePause=1;
-        navActions.pause(timePause);
+        topMenu.clickButton2(TopMenu.MenuItem.ABOUT_US);
 
-        topMenu.clickButton(TopMenu.MenuItem.HOME);
-
-        navActions.pause(timePause);
-        topMenu.clickButton(TopMenu.MenuItem.CONTACT);
-
-        navActions.pause(timePause);
-        topMenu.clickButton(TopMenu.MenuItem.ABOUT_US);
-
-        navActions.pause(timePause);
-        topMenu.clickButton(TopMenu.MenuItem.CART);
-
-        navActions.pause(timePause);
-        topMenu.clickButton(TopMenu.MenuItem.LOG_IN);
-
-        navActions.pause(timePause);
-        topMenu.clickButton(TopMenu.MenuItem.SIGN_UP);
+        navActions.pause(3);
 
         driver.quit();
 

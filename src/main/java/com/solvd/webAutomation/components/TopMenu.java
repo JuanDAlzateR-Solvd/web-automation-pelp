@@ -20,15 +20,15 @@ public class TopMenu {
     private WebElement aboutUsButton;
     @FindBy(css = "a[class='nav-link'][id='cartur']")
     private WebElement cartButton;
-    @FindBy(css = "a[class='nav-link'][id='login2']]")
+    @FindBy(css = "a[class='nav-link'][id='login2']")
     private WebElement logInButton;
-    @FindBy(css = "a[class='nav-link'][id='signin2']]")
+    @FindBy(css = "a[class='nav-link'][id='signin2']")
     private WebElement signUpButton;
 
     public TopMenu(WebDriver driver) {
         this.driver = driver;
         PageFactory.initElements(driver, this);
-
+        this.navActions = new NavActions(driver);
     }
 
     public WebDriver getDriver() {
@@ -39,12 +39,24 @@ public class TopMenu {
         switch (item) {
             case HOME -> navActions.click(homeButton);
             case CONTACT -> navActions.click(contactButton);
-            case ABOUT_US ->  navActions.click(aboutUsButton);
-            case CART ->  navActions.click(cartButton);
-            case LOG_IN ->  navActions.click(logInButton);
-            case SIGN_UP ->  navActions.click(signUpButton);
+            case ABOUT_US -> navActions.click(aboutUsButton);
+            case CART -> navActions.click(cartButton);
+            case LOG_IN -> navActions.click(logInButton);
+            case SIGN_UP -> navActions.click(signUpButton);
         }
     }
+
+//    public void clickButton2(MenuItem item) {
+//        switch (item) {
+//            case HOME -> homeButton.click();
+//            case CONTACT -> contactButton.click();
+//            case ABOUT_US -> aboutUsButton.click();
+//            case CART -> cartButton.click();
+//            case LOG_IN -> logInButton.click();
+//            case SIGN_UP -> signUpButton.click();
+//        }
+//    }
+
 
 
     public enum MenuItem {

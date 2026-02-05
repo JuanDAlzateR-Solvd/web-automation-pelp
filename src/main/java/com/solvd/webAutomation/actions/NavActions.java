@@ -1,5 +1,6 @@
 package com.solvd.webAutomation.actions;
 
+import org.jspecify.annotations.NonNull;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -8,15 +9,16 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 
 public class NavActions {
-    private final WebDriver driver;
+    private WebDriver driver;
     private WebDriverWait wait;
 
     public NavActions(WebDriver driver) {
         this.driver = driver;
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
-    public void click(WebElement element) {
-        wait.until(ExpectedConditions.elementToBeClickable(element));
+    public void click(@NonNull WebElement element) {
+     //   wait.until(ExpectedConditions.elementToBeClickable(element));
         element.click();
     }
 

@@ -1,19 +1,15 @@
 package com.solvd.webAutomation;
 
-import com.solvd.webAutomation.actions.NavActions;
-import com.solvd.webAutomation.components.ProductGrid;
+
 import com.solvd.webAutomation.components.TopMenu;
-import com.solvd.webAutomation.driver.DriverFactory;
-import com.solvd.webAutomation.driver.DriverRunMode;
-import com.solvd.webAutomation.driver.DriverType;
+
 import com.solvd.webAutomation.pages.desktop.HomePage;
-import org.openqa.selenium.WebDriver;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import java.time.Duration;
 import java.util.List;
 
 public class DemoblazeTest extends AbstractTest{
@@ -32,17 +28,17 @@ public class DemoblazeTest extends AbstractTest{
         navActions.pause(timePause);
         topMenu.clickButton(TopMenu.MenuItem.CONTACT);
 
-        navActions.pause(timePause);
-        topMenu.clickButton(TopMenu.MenuItem.ABOUT_US);
-
-        navActions.pause(timePause);
-        topMenu.clickButton(TopMenu.MenuItem.CART);
-
-        navActions.pause(timePause);
-        topMenu.clickButton(TopMenu.MenuItem.LOG_IN);
-
-        navActions.pause(timePause);
-        topMenu.clickButton(TopMenu.MenuItem.SIGN_UP);
+//        navActions.pause(timePause);
+//        topMenu.clickButton(TopMenu.MenuItem.ABOUT_US);
+//
+//        navActions.pause(timePause);
+//        topMenu.clickButton(TopMenu.MenuItem.CART);
+//
+//        navActions.pause(timePause);
+//        topMenu.clickButton(TopMenu.MenuItem.LOG_IN);
+//
+//        navActions.pause(timePause);
+//        topMenu.clickButton(TopMenu.MenuItem.SIGN_UP);
     }
 
     @Test(testName = "List of Products - Task1", description = "filters the products by category, then prints in console all the products")

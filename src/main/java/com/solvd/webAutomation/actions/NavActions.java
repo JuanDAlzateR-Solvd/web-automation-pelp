@@ -39,12 +39,12 @@ public class NavActions {
     }
 
     public void pause(int seconds) {
-        WebDriverWait waitTime=new WebDriverWait(driver, Duration.ofSeconds(seconds));
-        wait.until(d -> true);
-//        try {
-//            Thread.sleep(seconds * 1000L);
-//        } catch (InterruptedException e) {
-//            throw new RuntimeException(e);
-//        }
+//        WebDriverWait waitTime=new WebDriverWait(driver, Duration.ofSeconds(seconds));
+//        wait.until(d -> true);
+        try {
+            Thread.sleep(seconds * 1000L);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

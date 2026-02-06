@@ -9,6 +9,8 @@ import java.net.URL;
 
 public class DriverFactory {
 
+    private static ThreadLocal<WebDriver> threadDriver = new ThreadLocal<>();
+
     private DriverFactory() {
         // prevent instantiation
     }
@@ -30,7 +32,9 @@ public class DriverFactory {
     private static WebDriver createLocalDriver(DriverType driverType) {
         switch (driverType) {
             case CHROME:
-                return new ChromeDriver();
+                WebDriver driver = new ChromeDriver();
+                threadDriver.set(driver);
+                return driver;
 
             default:
                 throw new IllegalArgumentException("Unsupported driver type: " + driverType);
@@ -42,16 +46,28 @@ public class DriverFactory {
             switch (driverType) {
                 case CHROME:
                     ChromeOptions options = new ChromeOptions();
-                    return new RemoteWebDriver(
+                    RemoteWebDriver driver=new RemoteWebDriver(
                             new URL("http://localhost:4444"),
                             options
                     );
+                    threadDriver.set(driver);
+                    return driver;
 
                 default:
                     throw new IllegalArgumentException("Unsupported driver type: " + driverType);
             }
         } catch (Exception e) {
             throw new RuntimeException("Failed to create remote driver", e);
+        }
+    }
+
+    public static WebDriver getDriver() {
+        return threadDriver.get();
+    }
+    public static  void quitDriver() {
+        if (threadDriver.get() != null) {
+            threadDriver.get().quit();
+            threadDriver.remove();
         }
     }
 }

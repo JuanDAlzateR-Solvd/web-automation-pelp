@@ -24,8 +24,6 @@ public class AbstractTest {
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
     protected WebDriver driver;
     protected WebDriverWait wait;
-    protected WebDriver driver;
-    protected WebDriverWait wait;
     protected HomePage homePage;
     protected TopMenu topMenu;
     protected ProductGrid productGrid;
@@ -59,31 +57,5 @@ public class AbstractTest {
     }
 
     //
-    protected void click(WebElement element) {
-        logger.info("Clicking on element [{}]", element.getTagName());
-        navActions.click(element);
-    }
 
-    protected void type(WebElement element, String text) {
-        logger.info("Typing on element [{}]", element.getTagName());
-        navActions.type(element, text);
-    }
-
-    protected String getText(WebElement element) {
-        logger.info("Getting text from element [{}]", element.getTagName());
-        navActions.waitVisible(element);
-        return element.getText();
-    }
-
-    protected Boolean isVisible(WebElement element) {
-        logger.info("Checking if visibility of element [{}]", element.getTagName());
-        try {
-            wait.until(ExpectedConditions.visibilityOf(element));
-            logger.info("Element [{}] is visible", element.getTagName());
-            return true;
-        }catch (TimeoutException e) {
-            logger.warn("Element [{}] is not visible", element.getTagName());
-            return false;
-        }
-    }
 }

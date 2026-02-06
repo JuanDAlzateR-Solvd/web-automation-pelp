@@ -1,6 +1,7 @@
 package com.solvd.webAutomation.pages.desktop;
 
 import com.solvd.webAutomation.actions.NavActions;
+import com.solvd.webAutomation.components.TopMenu;
 import com.solvd.webAutomation.pages.common.AbstractPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -9,7 +10,6 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
 public class HomePage extends AbstractPage {
-
 
     @FindBy(css = "a[onclick*='phone']")
     private WebElement phonesButton;
@@ -26,15 +26,23 @@ public class HomePage extends AbstractPage {
         return driver;
     }
 
-    public void clickPhonesButton() {
-        navActions.click(phonesButton);
+    public void clickButton(MenuItem item) {
+        switch (item) {
+            case PHONES -> click(phonesButton, item.name);
+            case LAPTOPS -> click(laptopsButton, item.name);
+            case MONITORS -> click(monitorsButton, item.name);
+        }
     }
 
-    public void clickLaptopsButton() {
-        navActions.click(laptopsButton);
-    }
+    public enum MenuItem {
+        PHONES("Category Phones"),
+        LAPTOPS("Category Laptops"),
+        MONITORS("Category Monitors");
 
-    public void clickMonitorsButton() {
-        navActions.click(monitorsButton);
+        private final String name;
+
+        MenuItem(String name) {
+            this.name = name;
+        }
     }
 }

@@ -51,9 +51,9 @@ public class DemoblazeTest extends AbstractTest{
         //The navActions pauses are to emulate a little more the behavior of human, not bot
         //Problems with bot navigation detection
 
-        homePage.clickLaptopsButton();
+        homePage.clickButton(HomePage.MenuItem.LAPTOPS);
 
-        navActions.pause(50000);
+        navActions.pause(5);
 
         List<String> productsList = productGrid.productsList();
         productsList.forEach(logger::info);

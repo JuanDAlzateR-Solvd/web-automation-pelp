@@ -1,16 +1,16 @@
 package com.solvd.webAutomation.components;
 
 import com.solvd.webAutomation.actions.NavActions;
+import com.solvd.webAutomation.pages.common.AbstractPage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 
-public class TopMenu {
-    private WebDriver driver;
-    private NavActions navActions;
+public class TopMenu extends AbstractPage {
 
     @FindBy(css = "a[class='nav-link'][href='index.html']")
     private WebElement homeButton;
@@ -26,9 +26,7 @@ public class TopMenu {
     private WebElement signUpButton;
 
     public TopMenu(WebDriver driver) {
-        this.driver = driver;
-        PageFactory.initElements(driver, this);
-        this.navActions = new NavActions(driver);
+        super(driver);
     }
 
     public WebDriver getDriver() {
@@ -37,34 +35,28 @@ public class TopMenu {
 
     public void clickButton(MenuItem item) {
         switch (item) {
-            case HOME -> navActions.click(homeButton);
-            case CONTACT -> navActions.click(contactButton);
-            case ABOUT_US -> navActions.click(aboutUsButton);
-            case CART -> navActions.click(cartButton);
-            case LOG_IN -> navActions.click(logInButton);
-            case SIGN_UP -> navActions.click(signUpButton);
+            case HOME -> click(homeButton, item.name);
+            case CONTACT -> click(contactButton, item.name);
+            case ABOUT_US -> click(aboutUsButton, item.name);
+            case CART -> click(cartButton, item.name);
+            case LOG_IN -> click(logInButton, item.name);
+            case SIGN_UP -> click(signUpButton, item.name);
         }
     }
 
-//    public void clickButton2(MenuItem item) {
-//        switch (item) {
-//            case HOME -> homeButton.click();
-//            case CONTACT -> contactButton.click();
-//            case ABOUT_US -> aboutUsButton.click();
-//            case CART -> cartButton.click();
-//            case LOG_IN -> logInButton.click();
-//            case SIGN_UP -> signUpButton.click();
-//        }
-//    }
-
-
     public enum MenuItem {
-        HOME(),
-        CONTACT(),
-        ABOUT_US(),
-        CART(),
-        LOG_IN(),
-        SIGN_UP()
+        HOME("Top Menu Home"),
+        CONTACT("Top Menu Contact"),
+        ABOUT_US("Top Menu About Us"),
+        CART("Top Menu Cart"),
+        LOG_IN("Top Menu Log In"),
+        SIGN_UP("Top Menu Sign Up");
+
+        private final String name;
+
+        MenuItem(String name) {
+            this.name = name;
+        }
     }
 
 }

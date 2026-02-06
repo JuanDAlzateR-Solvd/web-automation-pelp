@@ -53,7 +53,7 @@ public class DemoblazeTest extends AbstractTest{
 
         homePage.clickLaptopsButton();
 
-        navActions.pause(1);
+        navActions.pause(50000);
 
         List<String> productsList = productGrid.productsList();
         productsList.forEach(logger::info);

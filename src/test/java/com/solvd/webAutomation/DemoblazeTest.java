@@ -12,7 +12,7 @@ import org.testng.annotations.Test;
 
 import java.util.List;
 
-public class DemoblazeTest extends AbstractTest{
+public class DemoblazeTest extends AbstractTest {
     private static final Logger logger =
             LoggerFactory.getLogger(DemoblazeTest.class);
 

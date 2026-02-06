@@ -46,7 +46,7 @@ public class DriverFactory {
             switch (driverType) {
                 case CHROME:
                     ChromeOptions options = new ChromeOptions();
-                    RemoteWebDriver driver=new RemoteWebDriver(
+                    RemoteWebDriver driver = new RemoteWebDriver(
                             new URL("http://localhost:4444"),
                             options
                     );
@@ -64,7 +64,8 @@ public class DriverFactory {
     public static WebDriver getDriver() {
         return threadDriver.get();
     }
-    public static  void quitDriver() {
+
+    public static void quitDriver() {
         if (threadDriver.get() != null) {
             threadDriver.get().quit();
             threadDriver.remove();

@@ -45,7 +45,7 @@ public class AbstractTest {
         navActions.pause(timePause);
     }
 
-    @AfterMethod (alwaysRun = true)
+    @AfterMethod(alwaysRun = true)
     public void tearDown() {
         DriverFactory.quitDriver();
     }

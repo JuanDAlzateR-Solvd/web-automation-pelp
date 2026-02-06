@@ -52,7 +52,7 @@ public abstract class AbstractPage {
             wait.until(ExpectedConditions.visibilityOf(element));
             logger.info("Element [{}] is visible", element.getTagName());
             return true;
-        }catch (TimeoutException e) {
+        } catch (TimeoutException e) {
             logger.warn("Element [{}] is not visible", element.getTagName());
             return false;
         }

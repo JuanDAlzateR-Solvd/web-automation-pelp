@@ -1,4 +1,4 @@
-package com.solvd;
+package com.solvd.webAutomation;
 
 import com.solvd.webAutomation.actions.NavActions;
 import com.solvd.webAutomation.driver.DriverFactory;

@@ -1,4 +1,4 @@
-package com.solvd;
+package com.solvd.webAutomation;
 
 import com.solvd.webAutomation.actions.NavActions;
 import com.solvd.webAutomation.components.ProductGrid;
@@ -16,23 +16,12 @@ import org.testng.annotations.Test;
 import java.time.Duration;
 import java.util.List;
 
-public class DemoblazeTest {
+public class DemoblazeTest extends AbstractTest{
     private static final Logger logger =
             LoggerFactory.getLogger(DemoblazeTest.class);
 
     @Test(testName = "Functionality of top menu", description = "verifies that home page loads,top Menu works correctly")
     public void buttonFunctionalityTest() {
-
-        WebDriver driver = DriverFactory.createDriver(DriverRunMode.LOCAL, DriverType.CHROME);
-
-        HomePage homePage = new HomePage(driver);
-        TopMenu topMenu = new TopMenu(driver);
-        NavActions navActions = new NavActions(driver);
-
-        driver.manage().window().maximize();
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-
-        driver.get("https://demoblaze.com/");
 
         //wait 1 second, just to debug code
         int timePause = 1;
@@ -54,29 +43,14 @@ public class DemoblazeTest {
 
         navActions.pause(timePause);
         topMenu.clickButton(TopMenu.MenuItem.SIGN_UP);
-
-        driver.quit();
     }
 
     @Test(testName = "List of Products - Task1", description = "filters the products by category, then prints in console all the products")
     public void ListOfProductsTest() {
 
-        WebDriver driver = DriverFactory.createDriver(DriverRunMode.REMOTE, DriverType.CHROME);
-        //DriverRunMode LOCAL or REMOTE. REMOTE Requires Selenium server standalone.
-
-        HomePage homePage = new HomePage(driver);
-        TopMenu topMenu = new TopMenu(driver);
-        NavActions navActions = new NavActions(driver);
-        ProductGrid productGrid = new ProductGrid(driver);
-
-        driver.manage().window().maximize();
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-
-        driver.get("https://demoblaze.com/");
-
         //The navActions pauses are to emulate a little more the behavior of human, not bot
         //Problems with bot navigation detection
-        navActions.pause(1);
+
         homePage.clickLaptopsButton();
 
         navActions.pause(1);
@@ -88,7 +62,6 @@ public class DemoblazeTest {
 
         Assert.assertFalse(productsList.isEmpty());
 
-        driver.quit();
     }
 }
 

@@ -1,15 +1,15 @@
 package com.solvd.webAutomation.pages.desktop;
 
 import com.solvd.webAutomation.actions.NavActions;
+import com.solvd.webAutomation.pages.common.AbstractPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-public class HomePage {
-    private WebDriver driver;
-    private NavActions navActions;
+public class HomePage extends AbstractPage {
+
 
     @FindBy(css = "a[onclick*='phone']")
     private WebElement phonesButton;
@@ -19,10 +19,7 @@ public class HomePage {
     private WebElement monitorsButton;
 
     public HomePage(WebDriver driver) {
-        this.driver = driver;
-        PageFactory.initElements(driver, this);
-        this.navActions = new NavActions(driver);
-
+        super(driver);
     }
 
     public WebDriver getDriver() {

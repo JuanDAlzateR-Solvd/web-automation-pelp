@@ -58,11 +58,11 @@ public class DemoblazeTest {
         driver.quit();
     }
 
-    @Test(testName = "List of Products", description = "filters the products by category, then prints in console all the products")
+    @Test(testName = "List of Products - Task1", description = "filters the products by category, then prints in console all the products")
     public void ListOfProductsTest() {
 
         WebDriver driver = DriverFactory.createDriver(DriverRunMode.REMOTE, DriverType.CHROME);
-        //DriverRunMode LOCAL or REMOTE. REMOTE Requieres Selenium server standalone.
+        //DriverRunMode LOCAL or REMOTE. REMOTE Requires Selenium server standalone.
 
         HomePage homePage = new HomePage(driver);
         TopMenu topMenu = new TopMenu(driver);
@@ -89,7 +89,6 @@ public class DemoblazeTest {
         Assert.assertFalse(productsList.isEmpty());
 
         driver.quit();
-
     }
 }
 

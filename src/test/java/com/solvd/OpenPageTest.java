@@ -1,5 +1,6 @@
 package com.solvd;
 
+import com.solvd.webAutomation.actions.NavActions;
 import com.solvd.webAutomation.driver.DriverFactory;
 import com.solvd.webAutomation.driver.DriverRunMode;
 import com.solvd.webAutomation.driver.DriverType;
@@ -14,27 +15,19 @@ public class OpenPageTest {
     public void simpleTest() {
 
         WebDriver driver = DriverFactory.createDriver(DriverRunMode.LOCAL, DriverType.CHROME);
+        NavActions navActions = new NavActions(driver);
 
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 
         driver.get("https://www.amazon.com/");
 
-        //Thread sleep just to debug code
-        int timeSleep = 3000;
-        try {
-            Thread.sleep(timeSleep);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
+        int timePause = 1;
+        navActions.pause(timePause);
 
         driver.get("https://www.next.co.uk/");
+        navActions.pause(timePause);
 
-        try {
-            Thread.sleep(timeSleep);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
         driver.quit();
 
     }

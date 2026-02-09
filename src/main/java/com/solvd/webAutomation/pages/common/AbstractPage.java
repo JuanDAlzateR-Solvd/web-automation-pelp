@@ -5,6 +5,7 @@ import com.solvd.webAutomation.actions.NavActions;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.PageFactory;
 
+import org.openqa.selenium.support.pagefactory.AjaxElementLocatorFactory;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -83,7 +83,7 @@ public class DemoblazeTest extends AbstractTest {
             productGrid.clickNextButton();
         }
 
-        navActions.waitUntilPageIsReady();
+        navActions.waitVisible(productGrid.getGrid());
 
         List<WebElement> products = productGrid.getElementsList();
         WebElement lastProduct = products.get(products.size() - 1);

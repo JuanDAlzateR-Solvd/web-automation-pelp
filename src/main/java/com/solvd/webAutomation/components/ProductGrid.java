@@ -59,4 +59,8 @@ public class ProductGrid extends AbstractPage {
         click(product,productName);
     }
 
+    public WebElement getGrid() {
+        return grid;
+    }
+
 }

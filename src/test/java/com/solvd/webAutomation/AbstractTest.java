@@ -39,7 +39,7 @@ public class AbstractTest {
         productGrid = new ProductGrid(driver);
 
         driver.manage().window().maximize();
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(2));
+//        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10)); //not mix implicitly wait with explicitly wait
 
         driver.get("https://demoblaze.com/");
         homePage.waitUntilPageLoads();

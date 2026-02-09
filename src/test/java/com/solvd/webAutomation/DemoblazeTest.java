@@ -68,13 +68,13 @@ public class DemoblazeTest extends AbstractTest {
 
     @Test(testName = "Product Search by Category - Task3 TC-001",
             description = "filters the products by a category, then verifies info from the last product of last page",
-    dataProvider = "Category MenuItem Provider")
+            dataProvider = "Category MenuItem Provider")
     public void SearchOfProductByCategoryTest(HomePage.MenuItem category) {
 
         //The navActions pauses are to emulate a little more the behavior of human, not bot
         //Problems with bot navigation detection
 
-        homePage.clickButton(category);
+        homePage.clickBy(category);
 
         navActions.waitUntilPageIsReady();
 
@@ -103,14 +103,14 @@ public class DemoblazeTest extends AbstractTest {
     }
 
     //Data Providers
-    @DataProvider(name="Category MenuItem Provider")
+    @DataProvider(name = "Category MenuItem Provider")
     public Object[][] HomePageMenuItem() {
         return Arrays.stream(HomePage.MenuItem.values())
                 .map(type -> new Object[]{type})
                 .toArray(Object[][]::new);
     }
 
-    @DataProvider(name="Category MenuItem Provider2")
+    @DataProvider(name = "Category MenuItem Provider2")
     public Object[][] HomePageMenuItem2() {
         return new Object[][]{
                 {TopMenu.MenuItem.HOME},

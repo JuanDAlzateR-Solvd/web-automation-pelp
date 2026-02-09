@@ -1,10 +1,7 @@
 package com.solvd.webAutomation.actions;
 
 import org.jspecify.annotations.NonNull;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
@@ -29,6 +26,22 @@ public class NavActions {
         element.click();
     }
 
+    public void click(By locator) {
+
+        wait.until(driver -> {
+            try {
+                waitUntilModalIsGone();
+                WebElement element = driver.findElement(locator);
+                wait.until(ExpectedConditions.elementToBeClickable(element));
+                element.click();
+                return true;
+            } catch (StaleElementReferenceException e) {
+                return false;
+            }
+
+        });
+    }
+
     public void type(@NonNull WebElement element, @NonNull String text) {
         wait.until(ExpectedConditions.visibilityOf(element));
         element.sendKeys(text);
@@ -42,7 +55,10 @@ public class NavActions {
     public void waitVisible(WebElement element) {
         wait.until(ExpectedConditions.visibilityOf(element));
     }
-    public void waitClickable(WebElement element) {wait.until(ExpectedConditions.elementToBeClickable(element));}
+
+    public void waitClickable(WebElement element) {
+        wait.until(ExpectedConditions.elementToBeClickable(element));
+    }
 
     public void pause(int milliseconds) {
 //        WebDriverWait waitTime=new WebDriverWait(driver, Duration.ofSeconds(milliseconds/1000));
@@ -68,5 +84,16 @@ public class NavActions {
         ((JavascriptExecutor) driver).executeScript(
                 "arguments[0].scrollIntoView({block:'center', inline:'nearest'});", element
         );
+    }
+
+    private void waitUntilModalIsGone() {
+        By modal = By.cssSelector("div[id='exampleModal']");
+        try {
+            wait.until(ExpectedConditions.invisibilityOfElementLocated(modal));
+        } catch (TimeoutException e) {
+            // no modal
+        }
+
+
     }
 }

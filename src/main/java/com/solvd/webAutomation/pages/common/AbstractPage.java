@@ -18,7 +18,6 @@ public abstract class AbstractPage {
     protected NavActions navActions;
 
 
-
     public AbstractPage(WebDriver driver) {
         this.driver = driver;
         PageFactory.initElements(driver, this);
@@ -26,8 +25,7 @@ public abstract class AbstractPage {
     }
 
     protected void click(WebElement element) {
-        logger.info("Clicking on element [{}]", element.getTagName());
-        navActions.click(element);
+        click(element, element.getTagName());
     }
 
     protected void click(WebElement element, String elementName) {
@@ -35,13 +33,19 @@ public abstract class AbstractPage {
         navActions.click(element);
     }
 
+    protected void click(By locator, String elementName) {
+        logger.info("Clicking on element [{}]", elementName);
+        navActions.click(locator);
+    }
+
+
     protected void type(WebElement element, String text) {
         logger.info("Typing on element [{}]", element.getTagName());
         navActions.type(element, text);
     }
 
     protected String getText(WebElement element) {
-        return getText(element,element.getTagName());
+        return getText(element, element.getTagName());
     }
 
     protected String getText(WebElement element, String elementName) {
@@ -51,15 +55,7 @@ public abstract class AbstractPage {
     }
 
     protected Boolean isVisible(WebElement element) {
-        logger.info("Checking if visibility of element [{}]", element.getTagName());
-        try {
-            navActions.waitVisible(element);
-            logger.info("Element [{}] is visible", element.getTagName());
-            return true;
-        } catch (TimeoutException e) {
-            logger.warn("Element [{}] is not visible", element.getTagName());
-            return false;
-        }
+        return isVisible(element, element.getTagName());
     }
 
     protected Boolean isVisible(WebElement element, String elementName) {
@@ -75,7 +71,7 @@ public abstract class AbstractPage {
     }
 
     protected Boolean isClickable(WebElement element) {
-        return isClickable(element,element.getTagName());
+        return isClickable(element, element.getTagName());
     }
 
     protected Boolean isClickable(WebElement element, String elementName) {

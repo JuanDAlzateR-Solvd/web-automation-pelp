@@ -11,11 +11,15 @@ import org.openqa.selenium.support.PageFactory;
 
 public class HomePage extends AbstractPage {
 
-    @FindBy(css = "a[onclick*='phone']")
+    private static final String phonesCssSelector = "a[onclick*='phone']";
+    private static final String laptopsCssSelector = "a[onclick*='notebook']";
+    private static final String monitorsCssSelector = "a[onclick*='monitor']";
+
+    @FindBy(css = phonesCssSelector)
     private WebElement phonesButton;
-    @FindBy(css = "a[onclick*='notebook']")
+    @FindBy(css = laptopsCssSelector)
     private WebElement laptopsButton;
-    @FindBy(css = "a[onclick*='monitor']")
+    @FindBy(css = monitorsCssSelector)
     private WebElement monitorsButton;
 
     public HomePage(WebDriver driver) {
@@ -35,19 +39,34 @@ public class HomePage extends AbstractPage {
         }
     }
 
+    public void clickBy(MenuItem item) {
+        By by = By.cssSelector(item.cssSelector);
+        click(by, item.name);
+    }
+
     public void waitUntilPageLoads() {
         waitUntilPageIsReady();
     }
 
     public enum MenuItem {
-        PHONES("Category Phones"),
-        LAPTOPS("Category Laptops"),
-        MONITORS("Category Monitors");
+        PHONES("Category Phones", phonesCssSelector),
+        LAPTOPS("Category Laptops", laptopsCssSelector),
+        MONITORS("Category Monitors", monitorsCssSelector);
 
         private final String name;
+        private final String cssSelector;
 
-        MenuItem(String name) {
+        MenuItem(String name, String cssSelector) {
             this.name = name;
+            this.cssSelector = cssSelector;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public String getCssSelector() {
+            return cssSelector;
         }
     }
-    }
+}

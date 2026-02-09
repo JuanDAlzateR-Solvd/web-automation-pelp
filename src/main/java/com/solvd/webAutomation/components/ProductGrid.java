@@ -45,18 +45,19 @@ public class ProductGrid extends AbstractPage {
     public Boolean nextButtonIsClickable() {
         return isClickable(nextButton);
     }
+
     public void clickNextButton() {
-       click(nextButton,"Next Button");
+        click(nextButton, "Next Button");
     }
 
     public String getTextOf(WebElement product) {
         String productName = getText(product).split("\n")[0];
-        return getText(product,productName);
+        return getText(product, productName);
     }
 
     public void clickProduct(WebElement product) {
         String productName = getText(product).split("\n")[0];
-        click(product,productName);
+        click(product, productName);
     }
 
     public WebElement getGrid() {

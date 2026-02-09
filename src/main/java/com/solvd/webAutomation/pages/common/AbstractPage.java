@@ -41,7 +41,11 @@ public abstract class AbstractPage {
     }
 
     protected String getText(WebElement element) {
-        logger.info("Getting text from element [{}]", element.getTagName());
+        return getText(element,element.getTagName());
+    }
+
+    protected String getText(WebElement element, String elementName) {
+        logger.info("Getting text from element [{}]", elementName);
         navActions.waitVisible(element);
         return element.getText();
     }
@@ -49,7 +53,7 @@ public abstract class AbstractPage {
     protected Boolean isVisible(WebElement element) {
         logger.info("Checking if visibility of element [{}]", element.getTagName());
         try {
-            wait.until(ExpectedConditions.visibilityOf(element));
+            navActions.waitVisible(element);
             logger.info("Element [{}] is visible", element.getTagName());
             return true;
         } catch (TimeoutException e) {
@@ -58,14 +62,31 @@ public abstract class AbstractPage {
         }
     }
 
-    protected Boolean isClickable(WebElement element) {
-        logger.info("Checking if clickable on element [{}]", element.getTagName());
+    protected Boolean isVisible(WebElement element, String elementName) {
+        logger.info("Checking if visibility of element [{}]", elementName);
         try {
-            wait.until(ExpectedConditions.elementToBeClickable(element));
-            logger.info("Element [{}] is clickable", element.getTagName());
+            navActions.waitVisible(element);
+            logger.info("Element [{}] is visible", elementName);
             return true;
         } catch (TimeoutException e) {
-            logger.warn("Element [{}] is not clickable", element.getTagName());
+            logger.warn("Element [{}] is not visible", elementName);
+            return false;
+        }
+    }
+
+    protected Boolean isClickable(WebElement element) {
+        return isClickable(element,element.getTagName());
+    }
+
+    protected Boolean isClickable(WebElement element, String elementName) {
+
+        logger.info("Checking if clickable on element [{}]", elementName);
+        try {
+            navActions.waitClickable(element);
+            logger.info("Element [{}] is clickable", elementName);
+            return true;
+        } catch (TimeoutException e) {
+            logger.warn("Element [{}] is not clickable", elementName);
             return false;
         }
     }

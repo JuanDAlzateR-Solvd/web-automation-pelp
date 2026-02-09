@@ -3,13 +3,17 @@ package com.solvd.webAutomation;
 
 import com.solvd.webAutomation.components.TopMenu;
 
+import com.solvd.webAutomation.pages.common.AbstractPage;
 import com.solvd.webAutomation.pages.desktop.HomePage;
 
+import com.solvd.webAutomation.pages.desktop.ProductPage;
+import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
 
 import java.util.Arrays;
 import java.util.List;
@@ -74,21 +78,45 @@ public class DemoblazeTest extends AbstractTest {
 
         navActions.pause(1);
 
-        List<String> productsList = productGrid.productsList();
-        productsList.forEach(logger::info);
+        if (productGrid.nextButtonIsClickable()) {
+            productGrid.clickNextButton();
+        }
 
-        navActions.pause(3);
+        navActions.pause(1);
+        List<WebElement> products = productGrid.getElementsList();
+        WebElement lastProduct = products.get(products.size() - 1);
 
-        Assert.assertFalse(productsList.isEmpty());
+        logger.info(productGrid.getTextOf(lastProduct));
+        productGrid.clickProduct(lastProduct);
+
+        SoftAssert sa = new SoftAssert();
+
+        Arrays.stream(ProductPage.InfoItem.values()).sequential()
+                .forEach(info -> {
+                    sa.assertTrue(productPage.isVisible(info));
+                });
+
+        sa.assertAll();
 
     }
 
     //Data Providers
     @DataProvider(name="Category MenuItem Provider")
     public Object[][] HomePageMenuItem() {
-        return Arrays.stream(TopMenu.MenuItem.values())
+        return Arrays.stream(HomePage.MenuItem.values())
                 .map(type -> new Object[]{type})
                 .toArray(Object[][]::new);
+    }
+
+    @DataProvider(name="Category MenuItem Provider2")
+    public Object[][] HomePageMenuItem2() {
+        return new Object[][]{
+                {TopMenu.MenuItem.HOME},
+                {TopMenu.MenuItem.CONTACT},
+                {TopMenu.MenuItem.CART}
+
+
+        };
     }
 
 }

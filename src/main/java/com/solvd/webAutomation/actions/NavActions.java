@@ -37,6 +37,7 @@ public class NavActions {
     public void waitVisible(WebElement element) {
         wait.until(ExpectedConditions.visibilityOf(element));
     }
+    public void waitClickable(WebElement element) {wait.until(ExpectedConditions.elementToBeClickable(element));}
 
     public void pause(int seconds) {
 //        WebDriverWait waitTime=new WebDriverWait(driver, Duration.ofSeconds(seconds));

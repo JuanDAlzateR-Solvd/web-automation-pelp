@@ -26,7 +26,7 @@ public class DemoblazeTest extends AbstractTest {
     public void buttonFunctionalityTest() {
 
         //wait 1 second, just to debug code
-        int timePause = 1;
+        int timePause = 2000;
         navActions.pause(timePause);
 
         topMenu.clickButton(TopMenu.MenuItem.HOME);
@@ -55,12 +55,12 @@ public class DemoblazeTest extends AbstractTest {
 
         homePage.clickButton(HomePage.MenuItem.LAPTOPS);
 
-        navActions.pause(5);
+        navActions.pause(500);
 
         List<String> productsList = productGrid.productsList();
         productsList.forEach(logger::info);
 
-        navActions.pause(3);
+//        navActions.pause(500);
 
         Assert.assertFalse(productsList.isEmpty());
 
@@ -76,13 +76,14 @@ public class DemoblazeTest extends AbstractTest {
 
         homePage.clickButton(category);
 
-        navActions.pause(1);
+        navActions.pause(2000);
 
-        if (productGrid.nextButtonIsClickable()) {
+        if (productGrid.nextButtonIsClickable() && category != HomePage.MenuItem.MONITORS) {
+            //demoblaze.com has a bug, when click on category monitors it shows the next button, even thought it shouldn't.
             productGrid.clickNextButton();
         }
 
-        navActions.pause(1);
+        navActions.pause(2000);
         List<WebElement> products = productGrid.getElementsList();
         WebElement lastProduct = products.get(products.size() - 1);
 

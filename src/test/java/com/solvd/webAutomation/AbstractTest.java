@@ -44,7 +44,7 @@ public class AbstractTest {
         driver.get("https://demoblaze.com/");
 
         //wait 1 second, just to debug code
-        int timePause = 1;
+        int timePause = 1000;
         navActions.pause(timePause);
     }
 

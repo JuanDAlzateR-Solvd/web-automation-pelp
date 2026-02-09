@@ -39,11 +39,11 @@ public class NavActions {
     }
     public void waitClickable(WebElement element) {wait.until(ExpectedConditions.elementToBeClickable(element));}
 
-    public void pause(int seconds) {
-//        WebDriverWait waitTime=new WebDriverWait(driver, Duration.ofSeconds(seconds));
-//        wait.until(d -> true);
+    public void pause(int milliseconds) {
+//        WebDriverWait waitTime=new WebDriverWait(driver, Duration.ofSeconds(milliseconds/1000));
+//        waitTime.until(d -> true);
         try {
-            Thread.sleep(seconds * 1000L);
+            Thread.sleep(milliseconds);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

@@ -120,4 +120,3 @@ public class DemoblazeTest extends AbstractTest {
     }
 
 }
-

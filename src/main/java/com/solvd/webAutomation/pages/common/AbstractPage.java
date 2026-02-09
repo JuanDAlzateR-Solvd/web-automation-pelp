@@ -57,4 +57,16 @@ public abstract class AbstractPage {
             return false;
         }
     }
+
+    protected Boolean isClickable(WebElement element) {
+        logger.info("Checking if clickable on element [{}]", element.getTagName());
+        try {
+            wait.until(ExpectedConditions.elementToBeClickable(element));
+            logger.info("Element [{}] is clickable", element.getTagName());
+            return true;
+        } catch (TimeoutException e) {
+            logger.warn("Element [{}] is not clickable", element.getTagName());
+            return false;
+        }
+    }
 }

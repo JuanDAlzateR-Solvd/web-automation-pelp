@@ -18,6 +18,10 @@ public class ProductGrid {
     @FindBy(css = "div[id='tbodyid']")
     private WebElement grid;
 
+    @FindBy(css = "button[id*='next']")
+    private WebElement nextButton;
+
+
     private List<WebElement> products;
 
     public ProductGrid(WebDriver driver) {
@@ -40,6 +44,10 @@ public class ProductGrid {
             productsList.add(product.getText());
         }
         return productsList;
+    }
+
+    public Boolean nextButtonIsClickable() {
+        return nextButton.isDisplayed();
     }
 
 }

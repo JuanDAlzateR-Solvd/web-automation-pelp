@@ -8,8 +8,10 @@ import com.solvd.webAutomation.pages.desktop.HomePage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class DemoblazeTest extends AbstractTest {
@@ -59,5 +61,35 @@ public class DemoblazeTest extends AbstractTest {
         Assert.assertFalse(productsList.isEmpty());
 
     }
+
+    @Test(testName = "Product Search by Category - Task3 TC-001",
+            description = "filters the products by a category, then verifies info from the last product of last page",
+    dataProvider = "Category MenuItem Provider")
+    public void SearchOfProductByCategoryTest(HomePage.MenuItem category) {
+
+        //The navActions pauses are to emulate a little more the behavior of human, not bot
+        //Problems with bot navigation detection
+
+        homePage.clickButton(category);
+
+        navActions.pause(1);
+
+        List<String> productsList = productGrid.productsList();
+        productsList.forEach(logger::info);
+
+        navActions.pause(3);
+
+        Assert.assertFalse(productsList.isEmpty());
+
+    }
+
+    //Data Providers
+    @DataProvider(name="Category MenuItem Provider")
+    public Object[][] HomePageMenuItem() {
+        return Arrays.stream(TopMenu.MenuItem.values())
+                .map(type -> new Object[]{type})
+                .toArray(Object[][]::new);
+    }
+
 }
 

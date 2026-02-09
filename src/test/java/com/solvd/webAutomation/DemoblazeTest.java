@@ -76,19 +76,20 @@ public class DemoblazeTest extends AbstractTest {
 
         homePage.clickButton(category);
 
-        navActions.pause(2000);
+        navActions.waitUntilPageIsReady();
 
         if (productGrid.nextButtonIsClickable() && category != HomePage.MenuItem.MONITORS) {
             //demoblaze.com has a bug, when click on category monitors it shows the next button, even thought it shouldn't.
             productGrid.clickNextButton();
         }
 
-        navActions.pause(2000);
+        navActions.waitUntilPageIsReady();
+
         List<WebElement> products = productGrid.getElementsList();
         WebElement lastProduct = products.get(products.size() - 1);
 
         logger.info(productGrid.getTextOf(lastProduct));
-        productGrid.clickProduct(lastProduct);
+        navActions.click(lastProduct);
 
         SoftAssert sa = new SoftAssert();
 

@@ -31,7 +31,12 @@ public class HomePage extends AbstractPage {
             case PHONES -> click(phonesButton, item.name);
             case LAPTOPS -> click(laptopsButton, item.name);
             case MONITORS -> click(monitorsButton, item.name);
+
         }
+    }
+
+    public void waitUntilPageLoads() {
+        waitUntilPageIsReady();
     }
 
     public enum MenuItem {
@@ -45,4 +50,4 @@ public class HomePage extends AbstractPage {
             this.name = name;
         }
     }
-}
+    }

@@ -1,6 +1,8 @@
 package com.solvd.webAutomation.actions;
 
 import org.jspecify.annotations.NonNull;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -9,18 +11,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
+import java.util.Objects;
 
 public class NavActions {
     private WebDriver driver;
     private WebDriverWait wait;
+    private static final By LOADER = By.cssSelector(".loader, .spinner, .loading");
 
     public NavActions(WebDriver driver) {
         this.driver = driver;
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(2));
     }
 
     public void click(@NonNull WebElement element) {
         wait.until(ExpectedConditions.elementToBeClickable(element));
+        scrollTo(element);
         element.click();
     }
 
@@ -42,10 +47,26 @@ public class NavActions {
     public void pause(int milliseconds) {
 //        WebDriverWait waitTime=new WebDriverWait(driver, Duration.ofSeconds(milliseconds/1000));
 //        waitTime.until(d -> true);
-        try {
-            Thread.sleep(milliseconds);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+//        try {
+//            Thread.sleep(milliseconds);
+//        } catch (InterruptedException e) {
+//            throw new RuntimeException(e);
+//        }
+    }
+
+    public void waitUntilPageIsReady() {
+        WebDriverWait pageWait = new WebDriverWait(driver, Duration.ofSeconds(2));
+        pageWait.until(driver ->
+                Objects.equals(((JavascriptExecutor) driver)
+                        .executeScript("return document.readyState"), "complete")
+        );
+
+        pageWait.until(ExpectedConditions.invisibilityOfElementLocated(LOADER));
+    }
+
+    public void scrollTo(@NonNull WebElement element) {
+        ((JavascriptExecutor) driver).executeScript(
+                "arguments[0].scrollIntoView({block:'center', inline:'nearest'});", element
+        );
     }
 }

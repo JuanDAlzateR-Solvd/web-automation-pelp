@@ -1,23 +1,22 @@
 package com.solvd.webAutomation.pages.common;
 
 import com.solvd.webAutomation.actions.NavActions;
-import com.solvd.webAutomation.components.ProductGrid;
-import com.solvd.webAutomation.components.TopMenu;
-import com.solvd.webAutomation.pages.desktop.HomePage;
-import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
+
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 public abstract class AbstractPage {
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
     protected WebDriver driver;
     protected WebDriverWait wait;
     protected NavActions navActions;
+
+
 
     public AbstractPage(WebDriver driver) {
         this.driver = driver;
@@ -90,4 +89,11 @@ public abstract class AbstractPage {
             return false;
         }
     }
+
+    protected void waitUntilPageIsReady() {
+        logger.info("Waiting for the page to load");
+        navActions.waitUntilPageIsReady();
+        logger.info("The page is ready");
+    }
+
 }

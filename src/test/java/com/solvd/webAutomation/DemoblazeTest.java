@@ -42,10 +42,10 @@ public class DemoblazeTest extends AbstractTest {
         int timePause = 2000;
         topMenu.pause(timePause);
 
-        topMenu.clickButton(TopMenu.MenuItem.HOME);
+        topMenu.clickBy(TopMenu.MenuItem.HOME);
 
         topMenu.pause(timePause);
-        topMenu.clickButton(TopMenu.MenuItem.CONTACT);
+        topMenu.clickBy(TopMenu.MenuItem.CONTACT);
 
     }
 
@@ -63,7 +63,7 @@ public class DemoblazeTest extends AbstractTest {
         //The navActions pauses are to emulate a little more the behavior of human, not bot
         //Problems with bot navigation detection
 
-        homePage.clickButton(HomePage.MenuItem.LAPTOPS);
+        homePage.clickBy(HomePage.MenuItem.LAPTOPS);
 
         homePage.pause(500);
 

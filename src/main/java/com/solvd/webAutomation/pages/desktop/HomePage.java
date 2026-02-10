@@ -1,13 +1,10 @@
 package com.solvd.webAutomation.pages.desktop;
 
-import com.solvd.webAutomation.actions.NavActions;
-import com.solvd.webAutomation.components.TopMenu;
 import com.solvd.webAutomation.pages.common.AbstractPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
 public class HomePage extends AbstractPage {
 
@@ -42,10 +39,6 @@ public class HomePage extends AbstractPage {
     public void clickBy(MenuItem item) {
         By by = By.cssSelector(item.cssSelector);
         click(by, item.name);
-    }
-
-    public void waitUntilPageLoads() {
-        waitUntilPageIsReady();
     }
 
     public enum MenuItem {

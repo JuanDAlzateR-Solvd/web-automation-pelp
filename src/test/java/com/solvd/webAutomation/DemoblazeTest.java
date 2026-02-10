@@ -1,12 +1,17 @@
 package com.solvd.webAutomation;
 
 
+import com.solvd.webAutomation.components.ProductGrid;
 import com.solvd.webAutomation.components.TopMenu;
 
+import com.solvd.webAutomation.driver.DriverFactory;
+import com.solvd.webAutomation.driver.DriverRunMode;
+import com.solvd.webAutomation.driver.DriverType;
 import com.solvd.webAutomation.pages.common.AbstractPage;
 import com.solvd.webAutomation.pages.desktop.HomePage;
 
 import com.solvd.webAutomation.pages.desktop.ProductPage;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,38 +29,43 @@ public class DemoblazeTest extends AbstractTest {
 
     @Test(testName = "Functionality of top menu", description = "verifies that home page loads,top Menu works correctly")
     public void buttonFunctionalityTest() {
+        WebDriver driver = DriverFactory.createDriver(DriverRunMode.LOCAL, DriverType.CHROME);
+        driver.manage().window().maximize();
+        driver.get("https://demoblaze.com/");
+
+        TopMenu topMenu = new TopMenu(driver);
+        topMenu.waitUntilPageIsReady();
+
+
 
         //wait 1 second, just to debug code
         int timePause = 2000;
-        navActions.pause(timePause);
+        topMenu.pause(timePause);
 
         topMenu.clickButton(TopMenu.MenuItem.HOME);
 
-        navActions.pause(timePause);
+        topMenu.pause(timePause);
         topMenu.clickButton(TopMenu.MenuItem.CONTACT);
 
-//        navActions.pause(timePause);
-//        topMenu.clickButton(TopMenu.MenuItem.ABOUT_US);
-//
-//        navActions.pause(timePause);
-//        topMenu.clickButton(TopMenu.MenuItem.CART);
-//
-//        navActions.pause(timePause);
-//        topMenu.clickButton(TopMenu.MenuItem.LOG_IN);
-//
-//        navActions.pause(timePause);
-//        topMenu.clickButton(TopMenu.MenuItem.SIGN_UP);
     }
 
     @Test(testName = "List of Products - Task1", description = "filters the products by category, then prints in console all the products")
     public void ListOfProductsTest() {
+        WebDriver driver = DriverFactory.createDriver(DriverRunMode.LOCAL, DriverType.CHROME);
+        driver.manage().window().maximize();
+        driver.get("https://demoblaze.com/");
+
+        HomePage homePage = new HomePage(driver);
+        ProductGrid productGrid = new ProductGrid(driver);
+
+        homePage.waitUntilPageIsReady();
 
         //The navActions pauses are to emulate a little more the behavior of human, not bot
         //Problems with bot navigation detection
 
         homePage.clickButton(HomePage.MenuItem.LAPTOPS);
 
-        navActions.pause(500);
+        homePage.pause(500);
 
         List<String> productsList = productGrid.productsList();
         productsList.forEach(logger::info);
@@ -70,26 +80,32 @@ public class DemoblazeTest extends AbstractTest {
             description = "filters the products by a category, then verifies info from the last product of last page",
             dataProvider = "Category MenuItem Provider")
     public void SearchOfProductByCategoryTest(HomePage.MenuItem category) {
+        WebDriver driver = DriverFactory.createDriver(DriverRunMode.LOCAL, DriverType.CHROME);
+        driver.manage().window().maximize();
+        driver.get("https://demoblaze.com/");
 
-        //The navActions pauses are to emulate a little more the behavior of human, not bot
-        //Problems with bot navigation detection
+        HomePage homePage = new HomePage(driver);
+        ProductGrid productGrid = new ProductGrid(driver);
+        ProductPage productPage = new ProductPage(driver);
+
+        homePage.waitUntilPageIsReady();
 
         homePage.clickBy(category);
 
-        navActions.waitUntilPageIsReady();
+        homePage.waitUntilPageIsReady();
 
         if (productGrid.nextButtonIsClickable() && category != HomePage.MenuItem.MONITORS) {
             //demoblaze.com has a bug, when click on category monitors it shows the next button, even thought it shouldn't.
             productGrid.clickNextButton();
         }
 
-        navActions.waitVisible(productGrid.getGrid());
+        homePage.waitVisible(productGrid.getGrid());
 
         List<WebElement> products = productGrid.getElementsList();
         WebElement lastProduct = products.get(products.size() - 1);
 
         logger.info(productGrid.getTextOf(lastProduct));
-        navActions.click(lastProduct);
+        homePage.click(lastProduct);
 
         SoftAssert sa = new SoftAssert();
 

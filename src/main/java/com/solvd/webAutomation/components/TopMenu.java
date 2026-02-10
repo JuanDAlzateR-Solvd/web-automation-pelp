@@ -1,14 +1,9 @@
 package com.solvd.webAutomation.components;
 
-import com.solvd.webAutomation.actions.NavActions;
 import com.solvd.webAutomation.pages.common.AbstractPage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
-import org.slf4j.LoggerFactory;
-
-import java.util.HashMap;
 
 public class TopMenu extends AbstractPage {
 

@@ -42,7 +42,6 @@ public class DemoblazeTest extends AbstractTest {
         topMenu.waitUntilPageIsReady();
 
 
-
         //wait 1 second, just to debug code
         int timePause = 2000;
         topMenu.pause(timePause);
@@ -170,15 +169,15 @@ public class DemoblazeTest extends AbstractTest {
         logger.info("products in cart:{}", cartProducts.size());
 
 
-        cartProducts.forEach(p-> {
+        cartProducts.forEach(p -> {
             logger.info(p.getText());
         });
 
         boolean productInCart = cartProducts.stream()
                 .map(WebElement::getText)
-                .anyMatch(s->s.contains(firstProductName));
+                .anyMatch(s -> s.contains(firstProductName));
 
-        sa.assertTrue(productInCart,"The product is not in the cart");
+        sa.assertTrue(productInCart, "The product is not in the cart");
         sa.assertFalse(cartPage.getTotalPrice().isEmpty(), "Total price is empty");
 
 //        productPage.pause(2000);
@@ -235,41 +234,40 @@ public class DemoblazeTest extends AbstractTest {
         logger.info("products in cart:{}", cartProducts.size());
         int cartSize = cartProducts.size();
 
-        cartProducts.forEach(p-> {
+        cartProducts.forEach(p -> {
             logger.info(p.getText());
         });
 
-        int productIndex=-1;
+        int productIndex = -1;
         List<WebElement> finalCartProducts = cartProducts;
-        OptionalInt index = IntStream.range(0,cartProducts.size())
-                .filter(i-> finalCartProducts.get(i).getText().contains(firstProductName))
+        OptionalInt index = IntStream.range(0, cartProducts.size())
+                .filter(i -> finalCartProducts.get(i).getText().contains(firstProductName))
                 .findFirst();
-        if (index.isPresent()){
+        if (index.isPresent()) {
             logger.info("Product is in the cart in position {}", index.getAsInt());
             productIndex = index.getAsInt();
-        }else{
+        } else {
             logger.info("Product is not in the cart");
         }
-        sa.assertTrue(productIndex!=-1, "Product not found in the cart");
+        sa.assertTrue(productIndex != -1, "Product not found in the cart");
 
-        if (productIndex!=-1){
-            cartPage.click(deleteButtons.get(productIndex),"deleteButton"+productIndex);
+        if (productIndex != -1) {
+            cartPage.click(deleteButtons.get(productIndex), "deleteButton" + productIndex);
             cartPage.waitUntilPageIsReady();
             cartPage.waitVisible(cartPage.getGrid());
         }
 
         cartPage.pause(1000);
-        //TODO: add wait to reload, and delete pause
+        //add wait to reload, and delete pause
 
         cartProducts = cartPage.getElementsList();
         deleteButtons = cartPage.getDeleteButtonsList();
 
-        sa.assertTrue(cartProducts.size()==cartSize-1,"The product was not deleted");
+        sa.assertTrue(cartProducts.size() == cartSize - 1, "The product was not deleted");
 
         sa.assertAll();
 
     }
-
 
 
     //Data Providers

@@ -16,7 +16,7 @@ import org.testng.annotations.BeforeMethod;
 
 public class AbstractTest {
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
-//    protected WebDriver driver;
+    //    protected WebDriver driver;
     protected WebDriverWait wait;
 
 
@@ -51,8 +51,8 @@ public class AbstractTest {
     public void tearDown() {
         try {
             DriverFactory.quitDriver();
-        }catch (Exception e){
-            logger.warn("Driver already closed: "+e.getMessage());
+        } catch (Exception e) {
+            logger.warn("Driver already closed: " + e.getMessage());
         }
     }
 

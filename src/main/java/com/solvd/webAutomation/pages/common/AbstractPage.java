@@ -25,9 +25,9 @@ public abstract class AbstractPage {
 
     public AbstractPage(WebDriver driver) {
         this.driver = driver;
-        this.wait=new WebDriverWait(driver, Duration.ofSeconds(10));
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         PageFactory.initElements(
-                new AjaxElementLocatorFactory(driver,10), this);
+                new AjaxElementLocatorFactory(driver, 10), this);
 
         logger.info("Page Created | Thread: {} | Driver: {}",
                 Thread.currentThread().getId(),
@@ -112,7 +112,7 @@ public abstract class AbstractPage {
         pageWait.until(driver ->
                 ((JavascriptExecutor) driver)
                         .executeScript("return document.readyState")
-                .equals("complete")
+                        .equals("complete")
         );
 
         pageWait.until(ExpectedConditions.invisibilityOfElementLocated(LOADER));

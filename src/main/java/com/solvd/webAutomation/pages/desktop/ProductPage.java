@@ -7,7 +7,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class ProductPage extends AbstractPage {
 
-    private static final String addToCartButtonCssSelector="a[onclick*='addToCart']";
+    private static final String addToCartButtonCssSelector = "a[onclick*='addToCart']";
 
     @FindBy(css = "div[class='item active']")
     private WebElement image;
@@ -51,16 +51,16 @@ public class ProductPage extends AbstractPage {
 
     public void clickAddToCartButton2() {//It doesn't work
         By by = By.cssSelector(addToCartButtonCssSelector);
-        click(by,"Add To Cart Button");
+        click(by, "Add To Cart Button");
     }
 
     public void clickAddToCartButton() {
-        click(addToCartButton,"Add To Cart Button");
+        click(addToCartButton, "Add To Cart Button");
     }
 
     public void acceptProductAddedAlert() {
         logger.info("accepting 'Product Added' Alert");
-        Alert alert =wait.until(ExpectedConditions.alertIsPresent());
+        Alert alert = wait.until(ExpectedConditions.alertIsPresent());
         alert.accept();
     }
 
@@ -69,7 +69,7 @@ public class ProductPage extends AbstractPage {
         try {
             wait.until(ExpectedConditions.alertIsPresent());
             return true;
-        }catch (TimeoutException e){
+        } catch (TimeoutException e) {
             return false;
         }
     }

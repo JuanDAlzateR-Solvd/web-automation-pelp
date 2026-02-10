@@ -45,7 +45,7 @@ public class ProductGrid extends AbstractPage {
 
     public void clickNextButton() {
 //        click(nextButton, "Next Button");
-        click(By.cssSelector("button[id*='next']"),"Next Button");
+        click(By.cssSelector("button[id*='next']"), "Next Button");
     }
 
     public String getTextOf(WebElement product) {

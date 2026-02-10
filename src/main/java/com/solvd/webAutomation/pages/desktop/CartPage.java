@@ -9,7 +9,7 @@ import java.util.List;
 
 public class CartPage extends AbstractPage {
 
-    private static final String addToCartButtonCssSelector="a[onclick*='addToCart']";
+    private static final String addToCartButtonCssSelector = "a[onclick*='addToCart']";
 
     @FindBy(css = "tbody[id='tbodyid']")
     private WebElement grid;
@@ -46,9 +46,6 @@ public class CartPage extends AbstractPage {
     public String getTotalPrice() {
         return getText(totalPrice, "totalPrice");
     }
-
-
-
 
 
 }

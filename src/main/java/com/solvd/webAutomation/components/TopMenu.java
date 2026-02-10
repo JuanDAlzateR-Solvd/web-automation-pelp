@@ -9,12 +9,12 @@ import org.openqa.selenium.support.FindBy;
 
 public class TopMenu extends AbstractPage {
 
-    private static final String homeButtonCssSelector="a[class='nav-link'][href='index.html']";
-    private static final String contactButtonCssSelector="a[class='nav-link'][data-target='#exampleModal']";
-    private static final String aboutUsButtonCssSelector="a[class='nav-link'][data-target='#videoModal']";
-    private static final String cartButtonCssSelector="a[class='nav-link'][id='cartur']";
-    private static final String logInButtonCssSelector="a[class='nav-link'][id='login2']";
-    private static final String signUpButtonCssSelector="a[class='nav-link'][id='signin2']";
+    private static final String homeButtonCssSelector = "a[class='nav-link'][href='index.html']";
+    private static final String contactButtonCssSelector = "a[class='nav-link'][data-target='#exampleModal']";
+    private static final String aboutUsButtonCssSelector = "a[class='nav-link'][data-target='#videoModal']";
+    private static final String cartButtonCssSelector = "a[class='nav-link'][id='cartur']";
+    private static final String logInButtonCssSelector = "a[class='nav-link'][id='login2']";
+    private static final String signUpButtonCssSelector = "a[class='nav-link'][id='signin2']";
 
     @FindBy(css = homeButtonCssSelector)
     private WebElement homeButton;
@@ -22,7 +22,7 @@ public class TopMenu extends AbstractPage {
     private WebElement contactButton;
     @FindBy(css = aboutUsButtonCssSelector)
     private WebElement aboutUsButton;
-    @FindBy(css =cartButtonCssSelector)
+    @FindBy(css = cartButtonCssSelector)
     private WebElement cartButton;
     @FindBy(css = logInButtonCssSelector)
     private WebElement logInButton;

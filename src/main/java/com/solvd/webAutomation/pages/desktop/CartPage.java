@@ -34,6 +34,10 @@ public class CartPage extends AbstractPage {
         return grid.findElements(By.cssSelector(":scope tr[class='success']"));
     }
 
+    public List<WebElement> getDeleteButtonsList() {
+        return grid.findElements(By.cssSelector(":scope a[onclick*='deleteItem']"));
+    }
+
     public String getTextOf(WebElement product) {
         String productName = getText(product).split("\n")[0];
         return getText(product, productName);

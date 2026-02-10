@@ -24,6 +24,9 @@ import org.testng.asserts.SoftAssert;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+import java.util.OptionalInt;
+import java.util.stream.IntStream;
 
 public class DemoblazeTest extends AbstractTest {
     private static final Logger logger =
@@ -179,6 +182,89 @@ public class DemoblazeTest extends AbstractTest {
         sa.assertFalse(cartPage.getTotalPrice().isEmpty(), "Total price is empty");
 
 //        productPage.pause(2000);
+
+        sa.assertAll();
+
+    }
+
+    @Test(testName = "Delete Product from Cart - Task3 TC-003",
+            description = "choose the first product from a category and add it to cart, then delete it, verifies info in shopping cart",
+            dataProvider = "Category MenuItem Provider")
+    public void DeleteProductFromCartTest(HomePage.MenuItem category) {
+        WebDriver driver = DriverFactory.createDriver(DriverRunMode.LOCAL, DriverType.CHROME);
+        driver.manage().window().maximize();
+        driver.get("https://demoblaze.com/");
+
+        HomePage homePage = new HomePage(driver);
+        ProductGrid productGrid = new ProductGrid(driver);
+        ProductPage productPage = new ProductPage(driver);
+        TopMenu topMenu = new TopMenu(driver);
+        CartPage cartPage = new CartPage(driver);
+
+        homePage.waitUntilPageIsReady();
+
+        homePage.clickBy(category);
+
+        homePage.waitUntilPageIsReady();
+
+        homePage.waitVisible(productGrid.getGrid());
+
+        List<WebElement> products = productGrid.getElementsList();
+        WebElement firstProduct = products.get(0);
+        String firstProductName = productGrid.getProductName(firstProduct);
+
+        logger.info(productGrid.getTextOf(firstProduct));
+
+//        productGrid.waitVisible(firstProduct);
+        productGrid.clickProduct(firstProduct);
+
+        SoftAssert sa = new SoftAssert();
+
+        productPage.clickAddToCartButton();
+        sa.assertTrue(productPage.isProductAddedAlertPresent());
+        productPage.acceptProductAddedAlert();
+
+        topMenu.clickBy(TopMenu.MenuItem.CART);
+
+        cartPage.waitUntilPageIsReady();
+
+        cartPage.waitVisible(cartPage.getGrid());
+
+        List<WebElement> cartProducts = cartPage.getElementsList();
+        List<WebElement> deleteButtons = cartPage.getDeleteButtonsList();
+        logger.info("products in cart:{}", cartProducts.size());
+        int cartSize = cartProducts.size();
+
+        cartProducts.forEach(p-> {
+            logger.info(p.getText());
+        });
+
+        int productIndex=-1;
+        List<WebElement> finalCartProducts = cartProducts;
+        OptionalInt index = IntStream.range(0,cartProducts.size())
+                .filter(i-> finalCartProducts.get(i).getText().contains(firstProductName))
+                .findFirst();
+        if (index.isPresent()){
+            logger.info("Product is in the cart in position {}", index.getAsInt());
+            productIndex = index.getAsInt();
+        }else{
+            logger.info("Product is not in the cart");
+        }
+        sa.assertTrue(productIndex!=-1, "Product not found in the cart");
+
+        if (productIndex!=-1){
+            cartPage.click(deleteButtons.get(productIndex),"deleteButton"+productIndex);
+            cartPage.waitUntilPageIsReady();
+            cartPage.waitVisible(cartPage.getGrid());
+        }
+
+        cartPage.pause(1000);
+        //TODO: add wait to reload, and delete pause
+
+        cartProducts = cartPage.getElementsList();
+        deleteButtons = cartPage.getDeleteButtonsList();
+
+        sa.assertTrue(cartProducts.size()==cartSize-1,"The product was not deleted");
 
         sa.assertAll();
 

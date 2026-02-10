@@ -1,11 +1,16 @@
 package com.solvd.webAutomation.pages.desktop;
 
 import com.solvd.webAutomation.pages.common.AbstractPage;
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class ProductPage extends AbstractPage {
+
+    private static final String addToCartButtonCssSelector="a[onclick*='addToCart']";
 
     @FindBy(css = "div[class='item active']")
     private WebElement image;
@@ -15,6 +20,9 @@ public class ProductPage extends AbstractPage {
     private WebElement price;
     @FindBy(css = "div[id='tbodyid'] div[id='more-information']")
     private WebElement description;
+    @FindBy(css = addToCartButtonCssSelector)
+    private WebElement addToCartButton;
+
 
     public ProductPage(WebDriver driver) {
         super(driver);
@@ -44,6 +52,21 @@ public class ProductPage extends AbstractPage {
         return false;
     }
 
+    public void clickAddToCartButton() {
+        By by = By.cssSelector(addToCartButtonCssSelector);
+        click(by,"Add To Cart Button");
+    }
+
+    public void clickAddToCartButton2() {
+        click(addToCartButton,"Add To Cart Button");
+    }
+
+    public void acceptProductAddedAlert() {
+        logger.info("accepting 'Product Added' Alert");
+        Alert alert =wait.until(ExpectedConditions.alertIsPresent());
+        alert.accept();
+    }
+
     public enum InfoItem {
         IMAGE("Product Image"),
         TITLE("Product Title"),
@@ -56,4 +79,6 @@ public class ProductPage extends AbstractPage {
             this.name = name;
         }
     }
+
+
 }

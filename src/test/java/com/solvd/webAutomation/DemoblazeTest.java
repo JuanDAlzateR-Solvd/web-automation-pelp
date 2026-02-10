@@ -11,6 +11,7 @@ import com.solvd.webAutomation.pages.common.AbstractPage;
 import com.solvd.webAutomation.pages.desktop.HomePage;
 
 import com.solvd.webAutomation.pages.desktop.ProductPage;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
@@ -117,6 +118,46 @@ public class DemoblazeTest extends AbstractTest {
         sa.assertAll();
 
     }
+
+    @Test(testName = "Add Product to Cart - Task3 TC-002",
+            description = "choose the first product from a category and add it to cart, then verifies info in shopping cart",
+            dataProvider = "Category MenuItem Provider")
+    public void AddProductToCartTest(HomePage.MenuItem category) {
+        WebDriver driver = DriverFactory.createDriver(DriverRunMode.LOCAL, DriverType.CHROME);
+        driver.manage().window().maximize();
+        driver.get("https://demoblaze.com/");
+
+        HomePage homePage = new HomePage(driver);
+        ProductGrid productGrid = new ProductGrid(driver);
+        ProductPage productPage = new ProductPage(driver);
+
+        homePage.waitUntilPageIsReady();
+
+        homePage.clickBy(category);
+
+        homePage.waitUntilPageIsReady();
+
+        homePage.waitVisible(productGrid.getGrid());
+
+        List<WebElement> products = productGrid.getElementsList();
+        WebElement firstProduct = products.get(0);
+
+        logger.info(productGrid.getTextOf(firstProduct));
+        homePage.click(firstProduct);
+
+        SoftAssert sa = new SoftAssert();
+
+        productPage.clickAddToCartButton2();
+
+       productPage.acceptProductAddedAlert();
+
+        productPage.pause(5000);
+
+        sa.assertAll();
+
+    }
+
+
 
     //Data Providers
     @DataProvider(name = "Category MenuItem Provider")

@@ -48,7 +48,7 @@ public abstract class AbstractPage {
 
     public void click(By locator, String elementName) {
         logger.info("Clicking on element [{}]", elementName);
-        waitUntilModalIsGone();
+//        waitUntilModalIsGone();
         WebElement element = driver.findElement(locator);
         wait.until(ExpectedConditions.elementToBeClickable(element));
         scrollTo(element);

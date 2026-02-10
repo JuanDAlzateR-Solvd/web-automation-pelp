@@ -23,7 +23,8 @@ public abstract class AbstractPage {
     public AbstractPage(WebDriver driver) {
         this.driver = driver;
         this.wait=new WebDriverWait(driver, Duration.ofSeconds(10));
-        PageFactory.initElements(driver, this);
+        PageFactory.initElements(
+                new AjaxElementLocatorFactory(driver,10), this);
         this.navActions = new NavActions(driver,wait);
     }
 

@@ -48,11 +48,20 @@ public class AbstractTest {
         //wait 1 second, just to debug code
 //        int timePause = 1000;
 //        navActions.pause(timePause);
+
+        logger.info("Thread: {} | Driver: {}",
+                Thread.currentThread().getName(),
+                System.identityHashCode(driver));
+
     }
 
     @AfterMethod(alwaysRun = true)
     public void tearDown() {
-        DriverFactory.quitDriver();
+        try {
+            DriverFactory.quitDriver();
+        }catch (Exception e){
+            logger.warn("Driver already closed: "+e.getMessage());
+        }
     }
 
     //

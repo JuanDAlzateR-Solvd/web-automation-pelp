@@ -1,10 +1,7 @@
 package com.solvd.webAutomation.pages.desktop;
 
 import com.solvd.webAutomation.pages.common.AbstractPage;
-import org.openqa.selenium.Alert;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
@@ -52,12 +49,12 @@ public class ProductPage extends AbstractPage {
         return false;
     }
 
-    public void clickAddToCartButton() {
+    public void clickAddToCartButton2() {//It doesn't work
         By by = By.cssSelector(addToCartButtonCssSelector);
         click(by,"Add To Cart Button");
     }
 
-    public void clickAddToCartButton2() {
+    public void clickAddToCartButton() {
         click(addToCartButton,"Add To Cart Button");
     }
 
@@ -65,6 +62,16 @@ public class ProductPage extends AbstractPage {
         logger.info("accepting 'Product Added' Alert");
         Alert alert =wait.until(ExpectedConditions.alertIsPresent());
         alert.accept();
+    }
+
+    public boolean isProductAddedAlertPresent() {
+        logger.info("checking 'Product Added' Alert Present");
+        try {
+            wait.until(ExpectedConditions.alertIsPresent());
+            return true;
+        }catch (TimeoutException e){
+            return false;
+        }
     }
 
     public enum InfoItem {

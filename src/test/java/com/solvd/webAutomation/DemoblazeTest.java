@@ -130,6 +130,7 @@ public class DemoblazeTest extends AbstractTest {
         HomePage homePage = new HomePage(driver);
         ProductGrid productGrid = new ProductGrid(driver);
         ProductPage productPage = new ProductPage(driver);
+        TopMenu topMenu = new TopMenu(driver);
 
         homePage.waitUntilPageIsReady();
 
@@ -141,17 +142,26 @@ public class DemoblazeTest extends AbstractTest {
 
         List<WebElement> products = productGrid.getElementsList();
         WebElement firstProduct = products.get(0);
+        String firstProductName = productGrid.getProductName(firstProduct);
 
         logger.info(productGrid.getTextOf(firstProduct));
-        homePage.click(firstProduct);
+
+//        productGrid.waitVisible(firstProduct);
+        productGrid.clickProduct(firstProduct);
 
         SoftAssert sa = new SoftAssert();
 
-        productPage.clickAddToCartButton2();
+        productPage.clickAddToCartButton();
+        sa.assertTrue(productPage.isProductAddedAlertPresent());
+        productPage.acceptProductAddedAlert();
 
-       productPage.acceptProductAddedAlert();
+        topMenu.clickBy(TopMenu.MenuItem.CART);
 
-        productPage.pause(5000);
+        topMenu.waitUntilPageIsReady();
+
+
+
+        productPage.pause(2000);
 
         sa.assertAll();
 

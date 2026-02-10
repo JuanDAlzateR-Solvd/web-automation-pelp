@@ -54,8 +54,12 @@ public class ProductGrid extends AbstractPage {
     }
 
     public void clickProduct(WebElement product) {
-        String productName = getText(product).split("\n")[0];
+        String productName = getProductName(product);
         click(product, productName);
+    }
+
+    public String getProductName(WebElement product) {
+        return getText(product).split("\n")[0];
     }
 
     public WebElement getGrid() {

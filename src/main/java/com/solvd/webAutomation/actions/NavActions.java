@@ -11,6 +11,7 @@ import java.time.Duration;
 import java.util.Objects;
 
 public class NavActions {
+    protected Logger logger = LoggerFactory.getLogger(this.getClass());
     private WebDriver driver;
     private WebDriverWait wait;
     private static final By LOADER = By.cssSelector(".loader, .spinner, .loading");
@@ -33,6 +34,7 @@ public class NavActions {
                 waitUntilModalIsGone();
                 WebElement element = driver.findElement(locator);
                 wait.until(ExpectedConditions.elementToBeClickable(element));
+                scrollTo(element);
                 element.click();
                 return true;
             } catch (StaleElementReferenceException e) {
@@ -63,11 +65,11 @@ public class NavActions {
     public void pause(int milliseconds) {
 //        WebDriverWait waitTime=new WebDriverWait(driver, Duration.ofSeconds(milliseconds/1000));
 //        waitTime.until(d -> true);
-//        try {
-//            Thread.sleep(milliseconds);
-//        } catch (InterruptedException e) {
-//            throw new RuntimeException(e);
-//        }
+        try {
+            Thread.sleep(milliseconds);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void waitUntilPageIsReady() {
@@ -89,9 +91,10 @@ public class NavActions {
     private void waitUntilModalIsGone() {
         By modal = By.cssSelector("div[id='exampleModal']");
         try {
+            logger.info("Waiting for modal to be invisible");
             wait.until(ExpectedConditions.invisibilityOfElementLocated(modal));
         } catch (TimeoutException e) {
-            // no modal
+            logger.info("Modal is not visible, continuing");
         }
 
 

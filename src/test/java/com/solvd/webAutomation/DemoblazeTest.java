@@ -8,6 +8,7 @@ import com.solvd.webAutomation.driver.DriverFactory;
 import com.solvd.webAutomation.driver.DriverRunMode;
 import com.solvd.webAutomation.driver.DriverType;
 import com.solvd.webAutomation.pages.common.AbstractPage;
+import com.solvd.webAutomation.pages.desktop.CartPage;
 import com.solvd.webAutomation.pages.desktop.HomePage;
 
 import com.solvd.webAutomation.pages.desktop.ProductPage;
@@ -131,6 +132,7 @@ public class DemoblazeTest extends AbstractTest {
         ProductGrid productGrid = new ProductGrid(driver);
         ProductPage productPage = new ProductPage(driver);
         TopMenu topMenu = new TopMenu(driver);
+        CartPage cartPage = new CartPage(driver);
 
         homePage.waitUntilPageIsReady();
 
@@ -157,11 +159,26 @@ public class DemoblazeTest extends AbstractTest {
 
         topMenu.clickBy(TopMenu.MenuItem.CART);
 
-        topMenu.waitUntilPageIsReady();
+        cartPage.waitUntilPageIsReady();
+
+        cartPage.waitVisible(cartPage.getGrid());
+
+        List<WebElement> cartProducts = cartPage.getElementsList();
+        logger.info("products in cart:{}", cartProducts.size());
 
 
+        cartProducts.forEach(p-> {
+            logger.info(p.getText());
+        });
 
-        productPage.pause(2000);
+        boolean productInCart = cartProducts.stream()
+                .map(WebElement::getText)
+                .anyMatch(s->s.contains(firstProductName));
+
+        sa.assertTrue(productInCart,"The product is not in the cart");
+        sa.assertFalse(cartPage.getTotalPrice().isEmpty(), "Total price is empty");
+
+//        productPage.pause(2000);
 
         sa.assertAll();
 

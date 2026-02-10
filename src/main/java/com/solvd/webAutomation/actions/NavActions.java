@@ -21,6 +21,11 @@ public class NavActions {
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(2));
     }
 
+    public NavActions(WebDriver driver,WebDriverWait wait) {
+        this.driver = driver;
+        this.wait = wait;
+    }
+
     public void click(@NonNull WebElement element) {
         wait.until(ExpectedConditions.elementToBeClickable(element));
         scrollTo(element);

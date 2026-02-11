@@ -92,6 +92,12 @@ public class AbstractTest {
         cartPage.waitVisible(cartPage.getGrid());
     }
 
+    public void clickContact(TopMenu topMenu, CartPage cartPage) {
+        topMenu.clickMenuItem(TopMenu.MenuItem.CONTACT);
+        cartPage.waitUntilPageIsReady();
+        cartPage.waitVisible(cartPage.getGrid());
+    }
+
     public List<WebElement> getCartProducts(CartPage cartPage) {
         List<WebElement> cartProducts = cartPage.getElementsList();
         logger.info("products in cart:{}", cartProducts.size());
@@ -117,10 +123,18 @@ public class AbstractTest {
     }
 
     public void deleteProduct(CartPage cartPage,int productIndex) {
+        List<WebElement> products = cartPage.getElementsList();
         List<WebElement> deleteButtons = cartPage.getDeleteButtonsList();
+        WebElement productToDelete = products.get(productIndex);
+        String productName = cartPage.getTextOf(productToDelete);
+        logger.info("Deleting product {}", productName);
         cartPage.click(deleteButtons.get(productIndex), "deleteButton" + productIndex);
+        cartPage.pause(1000);
         cartPage.waitUntilPageIsReady();
-        cartPage.waitVisible(cartPage.getGrid());
+        if (deleteButtons.size() > 1) {
+            cartPage.waitVisible(cartPage.getGrid());
+        }
+
     }
 
     public String addProductToCart(ProductGrid productGrid,int productIndex,ProductPage productPage, TopMenu topMenu) {
@@ -138,6 +152,7 @@ public class AbstractTest {
     }
 
     public String addRandomProductToCart(ProductGrid productGrid,ProductPage productPage, TopMenu topMenu) {
+        productGrid.waitVisible(productGrid.getGrid());
         List<WebElement> products = productGrid.getElementsList();
         int size = products.size();
 

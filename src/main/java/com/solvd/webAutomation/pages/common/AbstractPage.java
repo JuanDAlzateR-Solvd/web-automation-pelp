@@ -55,6 +55,26 @@ public abstract class AbstractPage {
         element.click();
     }
 
+    public void type(By locator, String elementName, String text) {
+        logger.info("Typing into element [{}] value [{}]", elementName, text);
+        WebElement element = driver.findElement(locator);
+
+        wait.until(driver -> {
+            try {
+                wait.until(ExpectedConditions.visibilityOf(element));
+                scrollTo(element);
+                element.clear();
+                element.sendKeys(text);
+                return true;
+            } catch (StaleElementReferenceException e) {
+                logger.warn("Stale element while typing [{}], retrying...", elementName);
+                return false;
+            }
+        });
+
+
+    }
+
 
     protected void type(WebElement element, String text) {
         logger.info("Typing on element [{}]", element.getTagName());

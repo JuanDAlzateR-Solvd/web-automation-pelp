@@ -1,6 +1,7 @@
 package com.solvd.webAutomation;
 
 
+import com.solvd.webAutomation.components.ContactModal;
 import com.solvd.webAutomation.components.ProductGrid;
 import com.solvd.webAutomation.components.TopMenu;
 
@@ -73,7 +74,7 @@ public class DemoblazeTest extends AbstractTest {
 
 //        navActions.pause(500);
 
-        Assert.assertFalse(productsList.isEmpty());
+        Assert.assertFalse(productsList.isEmpty(),"There are no products in the grid");
 
     }
 
@@ -213,48 +214,69 @@ public class DemoblazeTest extends AbstractTest {
     }
 
     @Test(testName = "Empty Shopping Cart - Task3 TC-004",
-            description = "choose the first product from a category and add it to cart, then delete it, verifies info in shopping cart")
+            description = "add random products to the shopping cart, then empties the cart")
     public void EmptyShoppingCartTest() {
-//        WebDriver driver = initializeDriver();
+        WebDriver driver = initializeDriver();
+
+        HomePage homePage = new HomePage(driver);
+        ProductGrid productGrid = new ProductGrid(driver);
+        ProductPage productPage = new ProductPage(driver);
+        TopMenu topMenu = new TopMenu(driver);
+        CartPage cartPage = new CartPage(driver);
+
+        homePage.waitUntilPageIsReady();
+
+        String productName = "";
+        for (int i = 0; i < 5; i++) {
+            productName = addRandomProductToCart(productGrid, productPage, topMenu);
+        }
+
+        SoftAssert sa = new SoftAssert();
+        clickCart(topMenu, cartPage);
+
+        List<WebElement> cartProducts = getCartProducts(cartPage);
+//        List<WebElement> deleteButtons = cartPage.getDeleteButtonsList();
+        sa.assertFalse(cartProducts.isEmpty(), "the shopping cart is empty");
 //
-//        HomePage homePage = new HomePage(driver);
-//        ProductGrid productGrid = new ProductGrid(driver);
-//        ProductPage productPage = new ProductPage(driver);
-//        TopMenu topMenu = new TopMenu(driver);
-//        CartPage cartPage = new CartPage(driver);
-//
-//        homePage.waitUntilPageIsReady();
-//
-//        String productName = "";
-//        for (int i = 0; i < 5; i++) {
-//            productName = addRandomProductToCart(productGrid, productPage, topMenu);
-//        }
-//
-//        SoftAssert sa = new SoftAssert();
-//        clickCart(topMenu, cartPage);
-//
-//        clickCart(topMenu, cartPage);
-//
-//        List<WebElement> cartProducts = getCartProducts(cartPage);
-////        List<WebElement> deleteButtons = cartPage.getDeleteButtonsList();
-//        sa.assertFalse(cartProducts.isEmpty(), "the shopping cart is empty");
-//
-//        int productIndex = findProductIndexInCart(cartProducts, firstProductName);
-//
-//        sa.assertTrue(productIndex != -1, "Product not found in the cart");
-//
-//        if (productIndex != -1) {
-//            deleteProduct(cartPage, productIndex);
-//        }
-//
-//        cartPage.pause(1000);
-//        //add wait to reload, and delete pause
-//
-//        List<WebElement> newCartProducts = cartPage.getElementsList();
-//
-//        sa.assertTrue(newCartProducts.size() == cartProducts.size() - 1, "The product was not deleted");
-//
-//        sa.assertAll();
+        while(!cartPage.isCartEmpty()) {
+            deleteProduct(cartPage, 0);
+        }
+
+
+//        cartPage.pause(5000); //to debug
+
+
+        List<WebElement> newCartProducts = cartPage.getElementsList();
+
+        sa.assertTrue(newCartProducts.isEmpty(), "The shooping cart is not empty");
+
+        sa.assertAll();
+
+    }
+
+    @Test(testName = "Empty Shopping Cart - Task3 TC-005",
+            description = "choose the first product from a category and add it to cart, then delete it, verifies info in shopping cart")
+    public void FillContactFormTest() {
+        WebDriver driver = initializeDriver();
+
+        HomePage homePage = new HomePage(driver);
+        TopMenu topMenu = new TopMenu(driver);
+        ContactModal contactModal = new ContactModal(driver);
+
+
+        homePage.waitUntilPageIsReady();
+
+        topMenu.clickMenuItem(TopMenu.MenuItem.CONTACT);
+
+        contactModal.type(ContactModal.MenuItem.EMAIL,"example@email.com");
+        contactModal.type(ContactModal.MenuItem.NAME,"Example Name");
+        contactModal.type(ContactModal.MenuItem.MESSAGE,"This is a test message");
+
+        contactModal.pause(5000);
+
+        SoftAssert sa = new SoftAssert();
+
+        sa.assertAll();
 
     }
 

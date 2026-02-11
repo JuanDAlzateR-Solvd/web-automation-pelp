@@ -47,5 +47,9 @@ public class CartPage extends AbstractPage {
         return getText(totalPrice, "totalPrice");
     }
 
+    public boolean isCartEmpty() {
+        return getElementsList().isEmpty();
+    }
+
 
 }

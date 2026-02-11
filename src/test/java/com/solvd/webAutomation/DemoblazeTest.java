@@ -84,9 +84,7 @@ public class DemoblazeTest extends AbstractTest {
             description = "filters the products by a category, then verifies info from the last product of last page",
             dataProvider = "Category MenuItem Provider")
     public void SearchOfProductByCategoryTest(HomePage.MenuItem category) {
-        WebDriver driver = DriverFactory.createDriver(DriverRunMode.LOCAL, DriverType.CHROME);
-        driver.manage().window().maximize();
-        driver.get("https://demoblaze.com/");
+        WebDriver driver=initializeDriver();
 
         HomePage homePage = new HomePage(driver);
         ProductGrid productGrid = new ProductGrid(driver);
@@ -98,10 +96,7 @@ public class DemoblazeTest extends AbstractTest {
 
         homePage.waitUntilPageIsReady();
 
-        if (productGrid.nextButtonIsClickable() && category != HomePage.MenuItem.MONITORS) {
-            //demoblaze.com has a bug, when click on category monitors it shows the next button, even thought it shouldn't.
-            productGrid.clickNextButton();
-        }
+        productGrid.clickNextButtonIfPossible(category);
 
         homePage.waitVisible(productGrid.getGrid());
 
@@ -109,7 +104,8 @@ public class DemoblazeTest extends AbstractTest {
         WebElement lastProduct = products.get(products.size() - 1);
 
         logger.info(productGrid.getTextOf(lastProduct));
-        homePage.click(lastProduct);
+
+        productGrid.clickProduct(lastProduct);
 
         SoftAssert sa = new SoftAssert();
 

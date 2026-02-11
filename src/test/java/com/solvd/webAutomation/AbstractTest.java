@@ -1,6 +1,7 @@
 package com.solvd.webAutomation;
 
 import com.solvd.webAutomation.components.ContactModal;
+import com.solvd.webAutomation.components.LogInModal;
 import com.solvd.webAutomation.components.ProductGrid;
 import com.solvd.webAutomation.components.TopMenu;
 import com.solvd.webAutomation.driver.DriverFactory;
@@ -16,7 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
-import org.testng.asserts.SoftAssert;
+
 
 import java.util.List;
 import java.util.OptionalInt;
@@ -73,17 +74,17 @@ public class AbstractTest {
         return driver;
     }
 
-    public void clickCategory(HomePage homePage,HomePage.MenuItem category, ProductGrid productGrid) {
+    public void clickCategory(HomePage homePage, HomePage.MenuItem category, ProductGrid productGrid) {
         homePage.clickBy(category);
         homePage.waitUntilPageIsReady();
         homePage.waitVisible(productGrid.getGrid());
     }
 
-    public WebElement getProductNumber(ProductGrid productGrid,int productNumber) {
+    public WebElement getProductNumber(ProductGrid productGrid, int productNumber) {
         List<WebElement> products = productGrid.getElementsList();
         WebElement product = products.get(productNumber);
         logger.info(productGrid.getTextOf(product));
-    //  productGrid.waitVisible(firstProduct);
+        //  productGrid.waitVisible(firstProduct);
         return product;
     }
 
@@ -99,6 +100,12 @@ public class AbstractTest {
         contactModal.waitVisible(contactModal.getTitle());
     }
 
+    public void clickLogIn(TopMenu topMenu, LogInModal logInModal) {
+        topMenu.clickMenuItem(TopMenu.MenuItem.LOG_IN);
+        logInModal.waitUntilPageIsReady();
+        logInModal.waitVisible(logInModal.getTitle());
+    }
+
     public List<WebElement> getCartProducts(CartPage cartPage) {
         List<WebElement> cartProducts = cartPage.getElementsList();
         logger.info("products in cart:{}", cartProducts.size());
@@ -108,7 +115,7 @@ public class AbstractTest {
         return cartProducts;
     }
 
-    public int findProductIndexInCart(List<WebElement> cartProducts,String productName) {
+    public int findProductIndexInCart(List<WebElement> cartProducts, String productName) {
         int productIndex = -1;
 
         OptionalInt index = IntStream.range(0, cartProducts.size())
@@ -123,7 +130,7 @@ public class AbstractTest {
         return productIndex;
     }
 
-    public void deleteProduct(CartPage cartPage,int productIndex) {
+    public void deleteProduct(CartPage cartPage, int productIndex) {
         List<WebElement> products = cartPage.getElementsList();
         List<WebElement> deleteButtons = cartPage.getDeleteButtonsList();
         WebElement productToDelete = products.get(productIndex);
@@ -138,7 +145,7 @@ public class AbstractTest {
 
     }
 
-    public String addProductToCart(ProductGrid productGrid,int productIndex,ProductPage productPage, TopMenu topMenu) {
+    public String addProductToCart(ProductGrid productGrid, int productIndex, ProductPage productPage, TopMenu topMenu) {
         WebElement product = getProductNumber(productGrid, productIndex);
         String productName = productGrid.getProductName(product);
         productGrid.clickProduct(product);
@@ -152,7 +159,7 @@ public class AbstractTest {
         return productName;
     }
 
-    public String addRandomProductToCart(ProductGrid productGrid,ProductPage productPage, TopMenu topMenu) {
+    public String addRandomProductToCart(ProductGrid productGrid, ProductPage productPage, TopMenu topMenu) {
         productGrid.waitVisible(productGrid.getGrid());
         List<WebElement> products = productGrid.getElementsList();
         int size = products.size();
@@ -160,11 +167,7 @@ public class AbstractTest {
         Random rand = new Random();
         int randomNum = rand.nextInt(size);
 
-        return addProductToCart(productGrid,randomNum,productPage,topMenu);
-    }
-
-    public void acceptContactMessageAlert(TopMenu topMenu,ContactModal contactModal) {
-        contactModal.acceptMessageAlert();
+        return addProductToCart(productGrid, randomNum, productPage, topMenu);
     }
 
 }

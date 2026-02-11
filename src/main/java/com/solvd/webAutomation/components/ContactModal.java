@@ -8,8 +8,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
-import static com.solvd.webAutomation.pages.desktop.HomePage.MenuItem.MONITORS;
-
 public class ContactModal extends AbstractPage {
 
     private static final String inputEmailCssSelector = "input[id='recipient-email']";
@@ -40,7 +38,7 @@ public class ContactModal extends AbstractPage {
     }
 
     public void clickSendButton() {
-       click(sendButton, "Send Button");
+        click(sendButton, "Send Button");
     }
 
     public void click(MenuItem item) {
@@ -50,7 +48,7 @@ public class ContactModal extends AbstractPage {
 
     public void type(MenuItem item, String text) {
         By by = By.cssSelector(item.cssSelector);
-        type(by, item.name,text);
+        type(by, item.name, text);
     }
 
     public boolean isContactModalVisible() {
@@ -62,6 +60,7 @@ public class ContactModal extends AbstractPage {
         Alert alert = wait.until(ExpectedConditions.alertIsPresent());
         alert.accept();
     }
+
 
     public enum MenuItem {
         EMAIL("Input Email", inputEmailCssSelector),

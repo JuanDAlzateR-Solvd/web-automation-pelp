@@ -2,18 +2,17 @@ package com.solvd.webAutomation;
 
 
 import com.solvd.webAutomation.components.ContactModal;
+import com.solvd.webAutomation.components.LogInModal;
 import com.solvd.webAutomation.components.ProductGrid;
 import com.solvd.webAutomation.components.TopMenu;
 
 import com.solvd.webAutomation.driver.DriverFactory;
 import com.solvd.webAutomation.driver.DriverRunMode;
 import com.solvd.webAutomation.driver.DriverType;
-import com.solvd.webAutomation.pages.common.AbstractPage;
 import com.solvd.webAutomation.pages.desktop.CartPage;
 import com.solvd.webAutomation.pages.desktop.HomePage;
 
 import com.solvd.webAutomation.pages.desktop.ProductPage;
-import org.openqa.selenium.Alert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
@@ -24,7 +23,6 @@ import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
 import java.util.*;
-import java.util.stream.IntStream;
 
 public class DemoblazeTest extends AbstractTest {
     private static final Logger logger =
@@ -74,7 +72,7 @@ public class DemoblazeTest extends AbstractTest {
 
 //        navActions.pause(500);
 
-        Assert.assertFalse(productsList.isEmpty(),"There are no products in the grid");
+        Assert.assertFalse(productsList.isEmpty(), "There are no products in the grid");
 
     }
 
@@ -238,7 +236,7 @@ public class DemoblazeTest extends AbstractTest {
 //        List<WebElement> deleteButtons = cartPage.getDeleteButtonsList();
         sa.assertFalse(cartProducts.isEmpty(), "the shopping cart is empty");
 //
-        while(!cartPage.isCartEmpty()) {
+        while (!cartPage.isCartEmpty()) {
             deleteProduct(cartPage, 0);
         }
 
@@ -270,14 +268,45 @@ public class DemoblazeTest extends AbstractTest {
         SoftAssert sa = new SoftAssert();
         sa.assertTrue(contactModal.isContactModalVisible(), "Contact modal is not visible");
 
-        contactModal.type(ContactModal.MenuItem.EMAIL,"example@email.com");
-        contactModal.type(ContactModal.MenuItem.NAME,"Example Name");
-        contactModal.type(ContactModal.MenuItem.MESSAGE,"This is a test message");
+        contactModal.type(ContactModal.MenuItem.EMAIL, "example@email.com");
+        contactModal.type(ContactModal.MenuItem.NAME, "Example Name");
+        contactModal.type(ContactModal.MenuItem.MESSAGE, "This is a test message");
 
         contactModal.clickSendButton();
-        acceptContactMessageAlert(topMenu, contactModal);
+        sa.assertTrue(contactModal.isAlertPresent());
+        contactModal.acceptMessageAlert();
 
-        contactModal.pause(5000);
+//        contactModal.pause(5000);
+
+        sa.assertAll();
+
+    }
+
+    @Test(testName = "Log In with wrong credentials - Task3 TC-006",
+            description = "click on log in, then fills the form and click log in button")
+    public void LogInWrongCredentialsTest() {
+        WebDriver driver = initializeDriver();
+
+        HomePage homePage = new HomePage(driver);
+        TopMenu topMenu = new TopMenu(driver);
+        LogInModal logInModal = new LogInModal(driver);
+
+
+        homePage.waitUntilPageIsReady();
+
+        clickLogIn(topMenu, logInModal);
+        SoftAssert sa = new SoftAssert();
+        sa.assertTrue(logInModal.isLogInModalVisible(), "Log In modal is not visible");
+
+        logInModal.type(LogInModal.MenuItem.USERNAME, "example@email.com");
+        logInModal.type(LogInModal.MenuItem.PASSWORD, "Example Password");
+
+
+        logInModal.clickLogInButton();
+        sa.assertTrue(logInModal.isAlertPresent());
+        logInModal.acceptWrongPasswordAlert();
+
+//        logInModal.pause(5000);
 
         sa.assertAll();
 

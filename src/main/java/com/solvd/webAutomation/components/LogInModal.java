@@ -18,6 +18,8 @@ public class LogInModal extends AbstractPage {
     private WebElement title;
     @FindBy(css = "button[onclick='logIn()']")
     private WebElement logInButton;
+    @FindBy(css = "button[class='btn btn-secondary']")
+    private WebElement closeButton;
     @FindBy(css = inputUsernameCssSelector)
     private WebElement inputEmail;
     @FindBy(css = inputPasswordCssSelector)
@@ -37,7 +39,11 @@ public class LogInModal extends AbstractPage {
     }
 
     public void clickLogInButton() {
-       click(logInButton, "Log In Button");
+        click(logInButton, "Log In Button");
+    }
+
+    public void clickCloseButton() {
+        click(closeButton, "Close Button");
     }
 
     public void click(MenuItem item) {
@@ -47,7 +53,7 @@ public class LogInModal extends AbstractPage {
 
     public void type(MenuItem item, String text) {
         By by = By.cssSelector(item.cssSelector);
-        type(by, item.name,text);
+        type(by, item.name, text);
     }
 
     public boolean isLogInModalVisible() {

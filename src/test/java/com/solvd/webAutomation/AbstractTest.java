@@ -17,6 +17,8 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
 import java.util.List;
+import java.util.OptionalInt;
+import java.util.stream.IntStream;
 
 public class AbstractTest {
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -95,6 +97,28 @@ public class AbstractTest {
             logger.info(p.getText());
         });
         return cartProducts;
+    }
+
+    public int findProductIndexInCart(List<WebElement> cartProducts,String productName) {
+        int productIndex = -1;
+
+        OptionalInt index = IntStream.range(0, cartProducts.size())
+                .filter(i -> cartProducts.get(i).getText().contains(productName))
+                .findFirst();
+        if (index.isPresent()) {
+            logger.info("Product is in the cart in position {}", index.getAsInt());
+            productIndex = index.getAsInt();
+        } else {
+            logger.info("Product is not in the cart");
+        }
+        return productIndex;
+    }
+
+    public void deleteProduct(CartPage cartPage,int productIndex) {
+        List<WebElement> deleteButtons = cartPage.getDeleteButtonsList();
+        cartPage.click(deleteButtons.get(productIndex), "deleteButton" + productIndex);
+        cartPage.waitUntilPageIsReady();
+        cartPage.waitVisible(cartPage.getGrid());
     }
 
 }

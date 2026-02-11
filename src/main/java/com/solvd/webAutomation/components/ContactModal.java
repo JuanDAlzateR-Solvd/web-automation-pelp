@@ -1,10 +1,12 @@
 package com.solvd.webAutomation.components;
 
 import com.solvd.webAutomation.pages.common.AbstractPage;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import static com.solvd.webAutomation.pages.desktop.HomePage.MenuItem.MONITORS;
 
@@ -16,6 +18,8 @@ public class ContactModal extends AbstractPage {
 
     @FindBy(css = "h5[id='exampleModalLabel']")
     private WebElement title;
+    @FindBy(css = "button[onclick='send()']")
+    private WebElement sendButton;
     @FindBy(css = inputEmailCssSelector)
     private WebElement inputEmail;
     @FindBy(css = inputNameCssSelector)
@@ -27,8 +31,16 @@ public class ContactModal extends AbstractPage {
         super(driver);
     }
 
+    public WebElement getTitle() {
+        return title;
+    }
+
     public WebDriver getDriver() {
         return driver;
+    }
+
+    public void clickSendButton() {
+       click(sendButton, "Send Button");
     }
 
     public void click(MenuItem item) {
@@ -39,6 +51,16 @@ public class ContactModal extends AbstractPage {
     public void type(MenuItem item, String text) {
         By by = By.cssSelector(item.cssSelector);
         type(by, item.name,text);
+    }
+
+    public boolean isContactModalVisible() {
+        return title.isDisplayed();
+    }
+
+    public void acceptMessageAlert() {
+        logger.info("accepting 'Thanks for message' Alert");
+        Alert alert = wait.until(ExpectedConditions.alertIsPresent());
+        alert.accept();
     }
 
     public enum MenuItem {

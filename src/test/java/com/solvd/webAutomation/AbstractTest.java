@@ -1,5 +1,6 @@
 package com.solvd.webAutomation;
 
+import com.solvd.webAutomation.components.ContactModal;
 import com.solvd.webAutomation.components.ProductGrid;
 import com.solvd.webAutomation.components.TopMenu;
 import com.solvd.webAutomation.driver.DriverFactory;
@@ -92,10 +93,10 @@ public class AbstractTest {
         cartPage.waitVisible(cartPage.getGrid());
     }
 
-    public void clickContact(TopMenu topMenu, CartPage cartPage) {
+    public void clickContact(TopMenu topMenu, ContactModal contactModal) {
         topMenu.clickMenuItem(TopMenu.MenuItem.CONTACT);
-        cartPage.waitUntilPageIsReady();
-        cartPage.waitVisible(cartPage.getGrid());
+        contactModal.waitUntilPageIsReady();
+        contactModal.waitVisible(contactModal.getTitle());
     }
 
     public List<WebElement> getCartProducts(CartPage cartPage) {
@@ -160,6 +161,10 @@ public class AbstractTest {
         int randomNum = rand.nextInt(size);
 
         return addProductToCart(productGrid,randomNum,productPage,topMenu);
+    }
+
+    public void acceptContactMessageAlert(TopMenu topMenu,ContactModal contactModal) {
+        contactModal.acceptMessageAlert();
     }
 
 }

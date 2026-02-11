@@ -254,8 +254,8 @@ public class DemoblazeTest extends AbstractTest {
 
     }
 
-    @Test(testName = "Empty Shopping Cart - Task3 TC-005",
-            description = "choose the first product from a category and add it to cart, then delete it, verifies info in shopping cart")
+    @Test(testName = "Fill Contact Form - Task3 TC-005",
+            description = "click on contact, then fills the form and sends it")
     public void FillContactFormTest() {
         WebDriver driver = initializeDriver();
 
@@ -266,15 +266,18 @@ public class DemoblazeTest extends AbstractTest {
 
         homePage.waitUntilPageIsReady();
 
-        topMenu.clickMenuItem(TopMenu.MenuItem.CONTACT);
+        clickContact(topMenu, contactModal);
+        SoftAssert sa = new SoftAssert();
+        sa.assertTrue(contactModal.isContactModalVisible(), "Contact modal is not visible");
 
         contactModal.type(ContactModal.MenuItem.EMAIL,"example@email.com");
         contactModal.type(ContactModal.MenuItem.NAME,"Example Name");
         contactModal.type(ContactModal.MenuItem.MESSAGE,"This is a test message");
 
-        contactModal.pause(5000);
+        contactModal.clickSendButton();
+        acceptContactMessageAlert(topMenu, contactModal);
 
-        SoftAssert sa = new SoftAssert();
+        contactModal.pause(5000);
 
         sa.assertAll();
 

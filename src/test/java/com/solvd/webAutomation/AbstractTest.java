@@ -5,14 +5,18 @@ import com.solvd.webAutomation.components.TopMenu;
 import com.solvd.webAutomation.driver.DriverFactory;
 import com.solvd.webAutomation.driver.DriverRunMode;
 import com.solvd.webAutomation.driver.DriverType;
+import com.solvd.webAutomation.pages.desktop.CartPage;
 import com.solvd.webAutomation.pages.desktop.HomePage;
 import com.solvd.webAutomation.pages.desktop.ProductPage;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
+
+import java.util.List;
 
 public class AbstractTest {
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -64,6 +68,33 @@ public class AbstractTest {
         return driver;
     }
 
+    public void clickCategory(HomePage homePage,HomePage.MenuItem category, ProductGrid productGrid) {
+        homePage.clickBy(category);
+        homePage.waitUntilPageIsReady();
+        homePage.waitVisible(productGrid.getGrid());
+    }
 
+    public WebElement getProductNumber(ProductGrid productGrid,int productNumber) {
+        List<WebElement> products = productGrid.getElementsList();
+        WebElement product = products.get(productNumber);
+        logger.info(productGrid.getTextOf(product));
+    //  productGrid.waitVisible(firstProduct);
+        return product;
+    }
+
+    public void clickCart(TopMenu topMenu, CartPage cartPage) {
+        topMenu.clickMenuItem(TopMenu.MenuItem.CART);
+        cartPage.waitUntilPageIsReady();
+        cartPage.waitVisible(cartPage.getGrid());
+    }
+
+    public List<WebElement> getCartProducts(CartPage cartPage) {
+        List<WebElement> cartProducts = cartPage.getElementsList();
+        logger.info("products in cart:{}", cartProducts.size());
+        cartProducts.forEach(p -> {
+            logger.info(p.getText());
+        });
+        return cartProducts;
+    }
 
 }

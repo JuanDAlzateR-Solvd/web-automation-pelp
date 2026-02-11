@@ -46,10 +46,10 @@ public class DemoblazeTest extends AbstractTest {
         int timePause = 2000;
         topMenu.pause(timePause);
 
-        topMenu.clickBy(TopMenu.MenuItem.HOME);
+        topMenu.clickMenuItem(TopMenu.MenuItem.HOME);
 
         topMenu.pause(timePause);
-        topMenu.clickBy(TopMenu.MenuItem.CONTACT);
+        topMenu.clickMenuItem(TopMenu.MenuItem.CONTACT);
 
     }
 
@@ -122,9 +122,7 @@ public class DemoblazeTest extends AbstractTest {
             description = "choose the first product from a category and add it to cart, then verifies info in shopping cart",
             dataProvider = "Category MenuItem Provider")
     public void AddProductToCartTest(HomePage.MenuItem category) {
-        WebDriver driver = DriverFactory.createDriver(DriverRunMode.LOCAL, DriverType.CHROME);
-        driver.manage().window().maximize();
-        driver.get("https://demoblaze.com/");
+        WebDriver driver=initializeDriver();
 
         HomePage homePage = new HomePage(driver);
         ProductGrid productGrid = new ProductGrid(driver);
@@ -134,40 +132,22 @@ public class DemoblazeTest extends AbstractTest {
 
         homePage.waitUntilPageIsReady();
 
-        homePage.clickBy(category);
+        clickCategory(homePage,category,productGrid);
 
-        homePage.waitUntilPageIsReady();
-
-        homePage.waitVisible(productGrid.getGrid());
-
-        List<WebElement> products = productGrid.getElementsList();
-        WebElement firstProduct = products.get(0);
+        WebElement firstProduct = getProductNumber(productGrid,0);
         String firstProductName = productGrid.getProductName(firstProduct);
 
-        logger.info(productGrid.getTextOf(firstProduct));
-
-//        productGrid.waitVisible(firstProduct);
         productGrid.clickProduct(firstProduct);
 
         SoftAssert sa = new SoftAssert();
 
         productPage.clickAddToCartButton();
-        sa.assertTrue(productPage.isProductAddedAlertPresent());
+        sa.assertTrue(productPage.isProductAddedAlertPresent(), "No 'product added' popup showed up");
         productPage.acceptProductAddedAlert();
 
-        topMenu.clickBy(TopMenu.MenuItem.CART);
+        clickCart(topMenu,cartPage);
 
-        cartPage.waitUntilPageIsReady();
-
-        cartPage.waitVisible(cartPage.getGrid());
-
-        List<WebElement> cartProducts = cartPage.getElementsList();
-        logger.info("products in cart:{}", cartProducts.size());
-
-
-        cartProducts.forEach(p -> {
-            logger.info(p.getText());
-        });
+        List<WebElement> cartProducts = getCartProducts(cartPage);
 
         boolean productInCart = cartProducts.stream()
                 .map(WebElement::getText)
@@ -186,9 +166,7 @@ public class DemoblazeTest extends AbstractTest {
             description = "choose the first product from a category and add it to cart, then delete it, verifies info in shopping cart",
             dataProvider = "Category MenuItem Provider")
     public void DeleteProductFromCartTest(HomePage.MenuItem category) {
-        WebDriver driver = DriverFactory.createDriver(DriverRunMode.LOCAL, DriverType.CHROME);
-        driver.manage().window().maximize();
-        driver.get("https://demoblaze.com/");
+        WebDriver driver=initializeDriver();
 
         HomePage homePage = new HomePage(driver);
         ProductGrid productGrid = new ProductGrid(driver);
@@ -198,19 +176,10 @@ public class DemoblazeTest extends AbstractTest {
 
         homePage.waitUntilPageIsReady();
 
-        homePage.clickBy(category);
+        clickCategory(homePage,category,productGrid);
 
-        homePage.waitUntilPageIsReady();
 
-        homePage.waitVisible(productGrid.getGrid());
-
-        List<WebElement> products = productGrid.getElementsList();
-        WebElement firstProduct = products.get(0);
-        String firstProductName = productGrid.getProductName(firstProduct);
-
-        logger.info(productGrid.getTextOf(firstProduct));
-
-//        productGrid.waitVisible(firstProduct);
+        WebElement firstProduct = getProductNumber(productGrid,0);
         productGrid.clickProduct(firstProduct);
 
         SoftAssert sa = new SoftAssert();
@@ -219,13 +188,10 @@ public class DemoblazeTest extends AbstractTest {
         sa.assertTrue(productPage.isProductAddedAlertPresent());
         productPage.acceptProductAddedAlert();
 
-        topMenu.clickBy(TopMenu.MenuItem.CART);
-
-        cartPage.waitUntilPageIsReady();
-
-        cartPage.waitVisible(cartPage.getGrid());
+       clickCart(topMenu,cartPage);
 
         List<WebElement> cartProducts = cartPage.getElementsList();
+        sa.assertFalse(cartProducts.isEmpty(),"the shopping cart is empty");
         List<WebElement> deleteButtons = cartPage.getDeleteButtonsList();
         logger.info("products in cart:{}", cartProducts.size());
         int cartSize = cartProducts.size();

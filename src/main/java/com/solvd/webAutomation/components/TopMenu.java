@@ -48,7 +48,7 @@ public class TopMenu extends AbstractPage {
         }
     }
 
-    public void clickBy(MenuItem item) {
+    public void clickMenuItem(MenuItem item) {
         By by = By.cssSelector(item.cssSelector);
         click(by, item.name);
     }

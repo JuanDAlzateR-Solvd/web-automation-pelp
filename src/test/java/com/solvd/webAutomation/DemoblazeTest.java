@@ -22,10 +22,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.OptionalInt;
+import java.util.*;
 import java.util.stream.IntStream;
 
 public class DemoblazeTest extends AbstractTest {
@@ -132,19 +129,12 @@ public class DemoblazeTest extends AbstractTest {
 
         homePage.waitUntilPageIsReady();
 
-        clickCategory(homePage, category, productGrid);
-
-        WebElement firstProduct = getProductNumber(productGrid, 0);
-        String firstProductName = productGrid.getProductName(firstProduct);
-
-        productGrid.clickProduct(firstProduct);
+        String productName = "";
+        for (int i = 0; i < 5; i++) {
+            productName = addRandomProductToCart(productGrid, productPage, topMenu);
+        }
 
         SoftAssert sa = new SoftAssert();
-
-        productPage.clickAddToCartButton();
-        sa.assertTrue(productPage.isProductAddedAlertPresent(), "No 'product added' popup showed up");
-        productPage.acceptProductAddedAlert();
-
         clickCart(topMenu, cartPage);
 
         List<WebElement> cartProducts = getCartProducts(cartPage);
@@ -214,7 +204,7 @@ public class DemoblazeTest extends AbstractTest {
     }
 
     @Test(testName = "Empty Shopping Cart - Task3 TC-004",
-            description = "choose the first product from a category and add it to cart, then delete it, verifies info in shopping cart",)
+            description = "choose the first product from a category and add it to cart, then delete it, verifies info in shopping cart")
     public void EmptyShoppingCartTest() {
         WebDriver driver = initializeDriver();
 
@@ -226,7 +216,7 @@ public class DemoblazeTest extends AbstractTest {
 
         homePage.waitUntilPageIsReady();
 
-        clickCategory(homePage, category, productGrid);
+        clickCategory(homePage, HomePage.MenuItem.PHONES, productGrid);
 
         WebElement firstProduct = getProductNumber(productGrid, 0);
         String firstProductName = productGrid.getProductName(firstProduct);

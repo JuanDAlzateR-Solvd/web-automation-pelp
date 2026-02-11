@@ -15,9 +15,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
+import org.testng.asserts.SoftAssert;
 
 import java.util.List;
 import java.util.OptionalInt;
+import java.util.Random;
 import java.util.stream.IntStream;
 
 public class AbstractTest {
@@ -119,6 +121,30 @@ public class AbstractTest {
         cartPage.click(deleteButtons.get(productIndex), "deleteButton" + productIndex);
         cartPage.waitUntilPageIsReady();
         cartPage.waitVisible(cartPage.getGrid());
+    }
+
+    public String addProductToCart(ProductGrid productGrid,int productIndex,ProductPage productPage, TopMenu topMenu) {
+        WebElement product = getProductNumber(productGrid, productIndex);
+        String productName = productGrid.getProductName(product);
+        productGrid.clickProduct(product);
+
+        productPage.clickAddToCartButton();
+        productPage.acceptProductAddedAlert();
+
+        topMenu.clickMenuItem(TopMenu.MenuItem.HOME);
+        topMenu.waitUntilPageIsReady();
+
+        return productName;
+    }
+
+    public String addRandomProductToCart(ProductGrid productGrid,ProductPage productPage, TopMenu topMenu) {
+        List<WebElement> products = productGrid.getElementsList();
+        int size = products.size();
+
+        Random rand = new Random();
+        int randomNum = rand.nextInt(size);
+
+        return addProductToCart(productGrid,randomNum,productPage,topMenu);
     }
 
 }

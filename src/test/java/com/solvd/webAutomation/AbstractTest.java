@@ -29,34 +29,6 @@ public class AbstractTest {
     //    protected WebDriver driver;
     protected WebDriverWait wait;
 
-
-    @BeforeMethod
-    public void setUp() {
-//        WebDriver driver = DriverFactory.createDriver(DriverRunMode.LOCAL, DriverType.CHROME);
-        //DriverRunMode LOCAL or REMOTE. REMOTE Requires Selenium server standalone.
-
-//        driver.manage().window().maximize();
-//        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(1)); //not mix implicitly wait with explicitly wait
-//        driver.get("https://demoblaze.com/");
-
-        //IMPORTANT: never initialize Page Objects, before driver.get
-//        homePage = new HomePage(driver);
-//        productPage = new ProductPage(driver);
-//        topMenu = new TopMenu(driver);
-//        productGrid = new ProductGrid(driver);
-//
-//        homePage.waitUntilPageLoads();
-
-        //wait 1 second, just to debug code
-//        int timePause = 1000;
-//        navActions.pause(timePause);
-
-//        logger.info("Thread: {} | Driver: {}",
-//                Thread.currentThread().getName(),
-//                System.identityHashCode(driver));
-
-    }
-
     @AfterMethod(alwaysRun = true)
     public void tearDown() {
         try {

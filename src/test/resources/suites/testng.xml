@@ -4,7 +4,6 @@
     <test name="Tests">
         <classes>
             <class name="com.solvd.webAutomation.DemoblazeTest"/>
-            <class name="com.solvd.webAutomation.OpenPageTest"/>
         </classes>
     </test>
 

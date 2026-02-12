@@ -67,7 +67,7 @@ public class DemoblazeTest extends AbstractTest {
 
         homePage.pause(500);
 
-        List<String> productsList = productGrid.productsList();
+        List<String> productsList = productGrid.getProductTitles();
         productsList.forEach(logger::info);
 
 //        navActions.pause(500);

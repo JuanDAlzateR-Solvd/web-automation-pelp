@@ -3,9 +3,15 @@ package com.solvd.webAutomation.components;
 import com.solvd.webAutomation.pages.common.AbstractPage;
 import com.solvd.webAutomation.pages.desktop.HomePage;
 import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
 
 public class TopMenu extends AbstractPage {
 
@@ -29,12 +35,17 @@ public class TopMenu extends AbstractPage {
     @FindBy(css = signUpButtonCssSelector)
     private WebElement signUpButton;
 
+    @FindBy(css = "div[id='exampleModal'] button[class='close']")
+    private WebElement contactCloseButton;
+    @FindBy(css = "div[id='videoModal'] button[class='close']")
+    private WebElement aboutUsCloseButton;
+    @FindBy(css = "div[id='logInModal'] button[class='close']")
+    private WebElement logInCloseButton;
+    @FindBy(css = "div[id='signInModal'] button[class='close']")
+    private WebElement signUpCloseButton;
+
     public TopMenu(WebDriver driver) {
         super(driver);
-    }
-
-    public WebDriver getDriver() {
-        return driver;
     }
 
     public void clickButton(MenuItem item) {
@@ -51,6 +62,29 @@ public class TopMenu extends AbstractPage {
     public void clickMenuItem(MenuItem item) {
         By by = By.cssSelector(item.cssSelector);
         click(by, item.name);
+    }
+
+    public void clickCloseButton(MenuItem item) {
+
+        switch (item) {
+            case CONTACT -> click(contactCloseButton);
+            case ABOUT_US -> click(aboutUsCloseButton);
+            case LOG_IN -> click(logInCloseButton);
+            case SIGN_UP -> click(signUpCloseButton);
+        }
+    }
+
+    public boolean isVisible(MenuItem item) {
+        Boolean result = false;
+        switch (item) {
+            case HOME -> result = driver.getCurrentUrl().contains("index.html");
+            case CONTACT -> result = isVisible(contactCloseButton);
+            case ABOUT_US -> result = isVisible(aboutUsCloseButton);
+            case CART -> result = driver.getCurrentUrl().contains("cart.html");
+            case LOG_IN -> result = isVisible(logInCloseButton);
+            case SIGN_UP -> result = isVisible(signUpCloseButton);
+        }
+        return result;
     }
 
     public enum MenuItem {

@@ -26,8 +26,8 @@ public class ProductGrid {
         this.navActions = new NavActions(driver);
     }
 
-    public WebDriver getDriver() {
-        return driver;
+    public WebElement getGrid() {
+        return grid;
     }
 
     public List<WebElement> getElementsList() {

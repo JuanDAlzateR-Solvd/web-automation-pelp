@@ -63,23 +63,20 @@ public class DemoblazeTest {
     @Test(testName = "List of Products - Task1", description = "filters the products by category, then prints in console all the products")
     public void verifyProductsDisplayedForSelectedCategory() {
 
-
         HomePage homePage = new HomePage(driver);
         TopMenu topMenu = new TopMenu(driver);
         NavActions navActions = new NavActions(driver);
         ProductGrid productGrid = new ProductGrid(driver);
 
-
         navActions.waitUntilPageIsReady(homePage);
 
         homePage.clickLaptopsButton();
 
-        navActions.pause(1);
+        navActions.waitUntilPageIsReady(homePage);
+        navActions.waitVisible(productGrid.getGrid());
 
         List<String> productsList = productGrid.getProductTitles();
         productsList.forEach(logger::info);
-
-        navActions.pause(3);
 
         Assert.assertFalse(productsList.isEmpty());
 

@@ -33,16 +33,6 @@ public class NavActions {
         wait.until(ExpectedConditions.visibilityOf(element));
     }
 
-    public void pause(int seconds) {
-//        WebDriverWait waitTime=new WebDriverWait(driver, Duration.ofSeconds(seconds));
-//        wait.until(d -> true);
-        try {
-            Thread.sleep(seconds * 1000L);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public void waitUntilPageIsReady(HomePage homePage) {
         WebDriverWait waitTime = new WebDriverWait(driver, Duration.ofSeconds(10));
         waitTime.until(driver ->

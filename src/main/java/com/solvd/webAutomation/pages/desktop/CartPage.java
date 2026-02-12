@@ -27,6 +27,11 @@ public class CartPage extends AbstractPage {
         return grid;
     }
 
+    @Override
+    protected By getPageLoadedIndicator() {
+        return By.cssSelector("div[class='table-responsive']");
+    }
+
     public List<WebElement> getElementsList() {
         return grid.findElements(By.cssSelector(":scope tr[class='success']"));
     }

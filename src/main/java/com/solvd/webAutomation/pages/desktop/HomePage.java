@@ -23,6 +23,10 @@ public class HomePage extends AbstractPage {
         super(driver);
     }
 
+    @Override
+    protected By getPageLoadedIndicator() {
+        return By.cssSelector("div[id='tbodyid'] [class='card-img-top img-fluid']");
+    }
 
     public void clickButton(MenuItem item) {
         switch (item) {

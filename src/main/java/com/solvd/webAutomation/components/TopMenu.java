@@ -48,6 +48,11 @@ public class TopMenu extends AbstractPage {
         super(driver);
     }
 
+    @Override
+    protected By getPageLoadedIndicator() {
+        return By.cssSelector("a[id='nava'] img");
+    }
+
     public void clickButton(MenuItem item) {
         switch (item) {
             case HOME -> click(homeButton, item.name);

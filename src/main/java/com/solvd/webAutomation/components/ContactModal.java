@@ -29,6 +29,11 @@ public class ContactModal extends AbstractPage {
         super(driver);
     }
 
+    @Override
+    protected By getPageLoadedIndicator() {
+        return By.cssSelector("h5[id='exampleModalLabel']");
+    }
+
     public WebElement getTitle() {
         return title;
     }

@@ -25,6 +25,11 @@ public class ProductPage extends AbstractPage {
         super(driver);
     }
 
+    @Override
+    protected By getPageLoadedIndicator() {
+        return By.cssSelector("div[id='myCarousel-2'] img");
+    }
+
     public Boolean isVisible(InfoItem item) {
         switch (item) {
             case IMAGE -> {

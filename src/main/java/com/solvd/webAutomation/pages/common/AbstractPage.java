@@ -33,6 +33,8 @@ public abstract class AbstractPage {
         );
     }
 
+    protected abstract By getPageLoadedIndicator();
+
     public void click(WebElement element) {
         click(element, element.getTagName());
     }
@@ -135,6 +137,13 @@ public abstract class AbstractPage {
 
         pageWait.until(ExpectedConditions.invisibilityOfElementLocated(LOADER));
         logger.info("The page is ready");
+    }
+
+    public void waitUntilPageIsLoaded() {
+        logger.info("Waiting for the page to load");
+        waitUntilPageIsReady();
+        wait.until(ExpectedConditions.visibilityOfElementLocated(getPageLoadedIndicator()));
+        logger.info("The page is loaded");
     }
 
     protected void scrollTo(@NonNull WebElement element) {

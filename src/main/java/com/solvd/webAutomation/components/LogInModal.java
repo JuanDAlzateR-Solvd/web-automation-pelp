@@ -30,6 +30,11 @@ public class LogInModal extends AbstractPage {
         super(driver);
     }
 
+    @Override
+    protected By getPageLoadedIndicator() {
+        return By.cssSelector("h5[id='logInModalLabel']");
+    }
+
     public WebElement getTitle() {
         return title;
     }

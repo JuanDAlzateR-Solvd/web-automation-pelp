@@ -28,6 +28,11 @@ public class ProductGrid extends AbstractPage {
         return driver;
     }
 
+    @Override
+    protected By getPageLoadedIndicator() {
+        return By.cssSelector("div[id='tbodyid'] [class='card-img-top img-fluid']");
+    }
+
     public List<WebElement> getElementsList() {
         return grid.findElements(By.cssSelector(":scope >* a[class='hrefch']"));
     }

@@ -1,12 +1,15 @@
 package com.solvd.webAutomation.actions;
 
+import com.solvd.webAutomation.pages.desktop.HomePage;
 import org.jspecify.annotations.NonNull;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.Objects;
 
 public class NavActions {
     private WebDriver driver;
@@ -39,5 +42,13 @@ public class NavActions {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void waitUntilPageIsReady(HomePage homePage) {
+        WebDriverWait waitTime=new WebDriverWait(driver, Duration.ofSeconds(10));
+        waitTime.until(driver->
+                ((JavascriptExecutor) driver)
+                        .executeScript("return document.readyState")
+                        .equals("complete"));
     }
 }

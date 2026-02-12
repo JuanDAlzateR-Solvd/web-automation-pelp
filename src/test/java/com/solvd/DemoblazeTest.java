@@ -11,6 +11,8 @@ import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.time.Duration;
@@ -19,76 +21,74 @@ import java.util.List;
 public class DemoblazeTest {
     private static final Logger logger =
             LoggerFactory.getLogger(DemoblazeTest.class);
+    private WebDriver driver;
+
+    @BeforeMethod
+    public void setUp() {
+        driver = DriverFactory.createDriver(DriverRunMode.LOCAL, DriverType.CHROME);
+        //DriverRunMode LOCAL or REMOTE. REMOTE Requires Selenium server standalone.
+        driver.manage().window().maximize();
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        driver.get("https://demoblaze.com/");
+    }
+
+    @AfterMethod(alwaysRun = true)
+    public void tearDown() {
+        driver.quit();
+    }
 
     @Test(testName = "Functionality of top menu", description = "verifies that home page loads,top Menu works correctly")
-    public void buttonFunctionalityTest() {
-
-        WebDriver driver = DriverFactory.createDriver(DriverRunMode.LOCAL, DriverType.CHROME);
+    public void verifyTopMenuNavigation() {
 
         HomePage homePage = new HomePage(driver);
         TopMenu topMenu = new TopMenu(driver);
         NavActions navActions = new NavActions(driver);
 
-        driver.manage().window().maximize();
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-
-        driver.get("https://demoblaze.com/");
-
-        //wait 1 second, just to debug code
-        int timePause = 1;
-        navActions.pause(timePause);
+        navActions.waitUntilPageIsReady(homePage);
 
         topMenu.clickButton(TopMenu.MenuItem.HOME);
 
-        navActions.pause(timePause);
+        navActions.waitUntilPageIsReady(homePage);
         topMenu.clickButton(TopMenu.MenuItem.CONTACT);
 
-        navActions.pause(timePause);
+        navActions.waitUntilPageIsReady(homePage);
         topMenu.clickButton(TopMenu.MenuItem.ABOUT_US);
 
-        navActions.pause(timePause);
+        navActions.waitUntilPageIsReady(homePage);
         topMenu.clickButton(TopMenu.MenuItem.CART);
 
-        navActions.pause(timePause);
+        navActions.waitUntilPageIsReady(homePage);
         topMenu.clickButton(TopMenu.MenuItem.LOG_IN);
 
-        navActions.pause(timePause);
+        navActions.waitUntilPageIsReady(homePage);
         topMenu.clickButton(TopMenu.MenuItem.SIGN_UP);
 
-        driver.quit();
     }
 
     @Test(testName = "List of Products - Task1", description = "filters the products by category, then prints in console all the products")
-    public void ListOfProductsTest() {
+    public void verifyProductsDisplayedForSelectedCategory() {
 
-        WebDriver driver = DriverFactory.createDriver(DriverRunMode.REMOTE, DriverType.CHROME);
-        //DriverRunMode LOCAL or REMOTE. REMOTE Requires Selenium server standalone.
 
         HomePage homePage = new HomePage(driver);
         TopMenu topMenu = new TopMenu(driver);
         NavActions navActions = new NavActions(driver);
         ProductGrid productGrid = new ProductGrid(driver);
 
-        driver.manage().window().maximize();
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 
-        driver.get("https://demoblaze.com/");
 
-        //The navActions pauses are to emulate a little more the behavior of human, not bot
-        //Problems with bot navigation detection
-        navActions.pause(1);
+        navActions.waitUntilPageIsReady(homePage);
+
         homePage.clickLaptopsButton();
 
         navActions.pause(1);
 
-        List<String> productsList = productGrid.productsList();
+        List<String> productsList = productGrid.getProductTitles();
         productsList.forEach(logger::info);
 
         navActions.pause(3);
 
         Assert.assertFalse(productsList.isEmpty());
 
-        driver.quit();
     }
 }
 

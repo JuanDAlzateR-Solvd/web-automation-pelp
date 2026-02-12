@@ -25,9 +25,6 @@ public class HomePage {
 
     }
 
-    public WebDriver getDriver() {
-        return driver;
-    }
 
     public void clickPhonesButton() {
         navActions.click(phonesButton);

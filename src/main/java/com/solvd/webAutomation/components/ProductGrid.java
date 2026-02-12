@@ -34,7 +34,7 @@ public class ProductGrid {
         return grid.findElements(By.cssSelector(":scope >*"));
     }
 
-    public List<String> productsList() {
+    public List<String> getProductTitles() {
         List<String> productsList = new ArrayList<>();
         for (WebElement product : getElementsList()) {
             productsList.add(product.getText());

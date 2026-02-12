@@ -29,7 +29,7 @@ public class DemoblazeTest extends AbstractTest {
             LoggerFactory.getLogger(DemoblazeTest.class);
 
     @Test(testName = "Functionality of top menu", description = "verifies that home page loads,top Menu works correctly")
-    public void buttonFunctionalityTest() {
+    public void verifyTopMenuNavigation() {
         WebDriver driver = DriverFactory.createDriver(DriverRunMode.LOCAL, DriverType.CHROME);
         driver.manage().window().maximize();
         driver.get("https://demoblaze.com/");
@@ -50,7 +50,7 @@ public class DemoblazeTest extends AbstractTest {
     }
 
     @Test(testName = "List of Products - Task1", description = "filters the products by category, then prints in console all the products")
-    public void ListOfProductsTest() {
+    public void verifyProductsDisplayedForSelectedCategory() {
         WebDriver driver = DriverFactory.createDriver(DriverRunMode.LOCAL, DriverType.CHROME);
         driver.manage().window().maximize();
         driver.get("https://demoblaze.com/");
@@ -65,7 +65,8 @@ public class DemoblazeTest extends AbstractTest {
 
         homePage.clickBy(HomePage.MenuItem.LAPTOPS);
 
-        homePage.pause(500);
+        homePage.waitUntilPageIsReady();
+        productGrid.waitVisible(productGrid.getGrid());
 
         List<String> productsList = productGrid.getProductTitles();
         productsList.forEach(logger::info);

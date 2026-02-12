@@ -170,6 +170,7 @@ public abstract class AbstractPage {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+        //Remove pause
     }
 
     public boolean isAlertPresent() {

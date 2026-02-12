@@ -21,10 +21,6 @@ public class CartPage extends AbstractPage {
         super(driver);
     }
 
-    public WebDriver getDriver() {
-        return driver;
-    }
-
     public WebElement getGrid() {
         return grid;
     }

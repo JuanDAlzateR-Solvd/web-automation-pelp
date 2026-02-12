@@ -25,11 +25,6 @@ public class ProductPage extends AbstractPage {
         super(driver);
     }
 
-    public WebDriver getDriver() {
-        return driver;
-    }
-
-
     public Boolean isVisible(InfoItem item) {
         switch (item) {
             case IMAGE -> {

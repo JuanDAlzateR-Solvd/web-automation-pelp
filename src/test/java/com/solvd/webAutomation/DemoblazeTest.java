@@ -63,8 +63,7 @@ public class DemoblazeTest extends AbstractTest {
 
         homePage.clickBy(HomePage.MenuItem.LAPTOPS);
 
-        homePage.waitUntilPageIsReady();
-        productGrid.waitVisible(productGrid.getGrid());
+        homePage.waitUntilPageIsLoaded();
 
         List<String> productsList = productGrid.getProductTitles();
         productsList.forEach(logger::info);

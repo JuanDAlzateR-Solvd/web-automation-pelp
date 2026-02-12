@@ -32,7 +32,7 @@ public class ProductGrid extends AbstractPage {
         return grid.findElements(By.cssSelector(":scope >* a[class='hrefch']"));
     }
 
-    public List<String> productsList() {
+    public List<String> getProductTitles() {
         List<String> productsList = new ArrayList<>();
         for (WebElement product : getElementsList()) {
             productsList.add(getText(product));

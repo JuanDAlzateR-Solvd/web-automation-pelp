@@ -23,9 +23,6 @@ public class HomePage extends AbstractPage {
         super(driver);
     }
 
-    public WebDriver getDriver() {
-        return driver;
-    }
 
     public void clickButton(MenuItem item) {
         switch (item) {

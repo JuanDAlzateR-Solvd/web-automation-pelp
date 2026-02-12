@@ -14,8 +14,10 @@ import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
 
 import java.time.Duration;
+import java.util.Arrays;
 import java.util.List;
 
 public class DemoblazeTest {
@@ -46,23 +48,16 @@ public class DemoblazeTest {
 
         navActions.waitUntilPageIsReady(homePage);
 
-        topMenu.clickButton(TopMenu.MenuItem.HOME);
+        SoftAssert sa = new SoftAssert();
 
-        navActions.waitUntilPageIsReady(homePage);
-        topMenu.clickButton(TopMenu.MenuItem.CONTACT);
+        Arrays.stream(TopMenu.MenuItem.values())
+                .forEach(menuItem -> {
+                    topMenu.clickButton(menuItem);
+                    sa.assertTrue(topMenu.isVisible(menuItem));
+                    topMenu.clickCloseButton(menuItem);
+                });
 
-        navActions.waitUntilPageIsReady(homePage);
-        topMenu.clickButton(TopMenu.MenuItem.ABOUT_US);
-
-        navActions.waitUntilPageIsReady(homePage);
-        topMenu.clickButton(TopMenu.MenuItem.CART);
-
-        navActions.waitUntilPageIsReady(homePage);
-        topMenu.clickButton(TopMenu.MenuItem.LOG_IN);
-
-        navActions.waitUntilPageIsReady(homePage);
-        topMenu.clickButton(TopMenu.MenuItem.SIGN_UP);
-
+        sa.assertAll();
     }
 
     @Test(testName = "List of Products - Task1", description = "filters the products by category, then prints in console all the products")
@@ -73,7 +68,6 @@ public class DemoblazeTest {
         TopMenu topMenu = new TopMenu(driver);
         NavActions navActions = new NavActions(driver);
         ProductGrid productGrid = new ProductGrid(driver);
-
 
 
         navActions.waitUntilPageIsReady(homePage);

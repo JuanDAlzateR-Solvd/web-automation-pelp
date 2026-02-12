@@ -9,7 +9,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
-import java.util.Objects;
 
 public class NavActions {
     private WebDriver driver;
@@ -45,8 +44,8 @@ public class NavActions {
     }
 
     public void waitUntilPageIsReady(HomePage homePage) {
-        WebDriverWait waitTime=new WebDriverWait(driver, Duration.ofSeconds(10));
-        waitTime.until(driver->
+        WebDriverWait waitTime = new WebDriverWait(driver, Duration.ofSeconds(10));
+        waitTime.until(driver ->
                 ((JavascriptExecutor) driver)
                         .executeScript("return document.readyState")
                         .equals("complete"));

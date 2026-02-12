@@ -30,23 +30,23 @@ public class DemoblazeTest extends AbstractTest {
 
     @Test(testName = "Functionality of top menu", description = "verifies that home page loads,top Menu works correctly")
     public void verifyTopMenuNavigation() {
-        WebDriver driver = DriverFactory.createDriver(DriverRunMode.LOCAL, DriverType.CHROME);
-        driver.manage().window().maximize();
-        driver.get("https://demoblaze.com/");
+        WebDriver driver = initializeDriver();
 
+        HomePage homePage = new HomePage(driver);
         TopMenu topMenu = new TopMenu(driver);
-        topMenu.waitUntilPageIsReady();
 
+        homePage.waitUntilPageIsReady();
 
-        //wait 1 second, just to debug code
-        int timePause = 2000;
-        topMenu.pause(timePause);
+        SoftAssert sa = new SoftAssert();
 
-        topMenu.clickMenuItem(TopMenu.MenuItem.HOME);
+        Arrays.stream(TopMenu.MenuItem.values())
+                .forEach(menuItem -> {
+                    topMenu.clickButton(menuItem);
+                    sa.assertTrue(topMenu.isVisible(menuItem));
+                    topMenu.clickCloseButton(menuItem);
+                });
 
-        topMenu.pause(timePause);
-        topMenu.clickMenuItem(TopMenu.MenuItem.CONTACT);
-
+        sa.assertAll();
     }
 
     @Test(testName = "List of Products - Task1", description = "filters the products by category, then prints in console all the products")
@@ -60,9 +60,6 @@ public class DemoblazeTest extends AbstractTest {
 
         homePage.waitUntilPageIsReady();
 
-        //The navActions pauses are to emulate a little more the behavior of human, not bot
-        //Problems with bot navigation detection
-
         homePage.clickBy(HomePage.MenuItem.LAPTOPS);
 
         homePage.waitUntilPageIsReady();
@@ -71,8 +68,6 @@ public class DemoblazeTest extends AbstractTest {
         List<String> productsList = productGrid.getProductTitles();
         productsList.forEach(logger::info);
 
-//        navActions.pause(500);
-
         Assert.assertFalse(productsList.isEmpty(), "There are no products in the grid");
 
     }
@@ -80,7 +75,7 @@ public class DemoblazeTest extends AbstractTest {
     @Test(testName = "Product Search by Category - Task3 TC-001",
             description = "filters the products by a category, then verifies info from the last product of last page",
             dataProvider = "Category MenuItem Provider")
-    public void SearchOfProductByCategoryTest(HomePage.MenuItem category) {
+    public void verifyInfoOfLastProductOfACategory(HomePage.MenuItem category) {
         WebDriver driver = initializeDriver();
 
         HomePage homePage = new HomePage(driver);
@@ -118,7 +113,7 @@ public class DemoblazeTest extends AbstractTest {
     @Test(testName = "Add Product to Cart - Task3 TC-002",
             description = "choose the first product from a category and add it to cart, then verifies info in shopping cart",
             dataProvider = "Category MenuItem Provider")
-    public void AddProductToCartTest(HomePage.MenuItem category) {
+    public void verifyAddFirstProductOfCategoryToCart(HomePage.MenuItem category) {
         WebDriver driver = initializeDriver();
 
         HomePage homePage = new HomePage(driver);
@@ -164,7 +159,7 @@ public class DemoblazeTest extends AbstractTest {
     @Test(testName = "Delete Product from Cart - Task3 TC-003",
             description = "choose the first product from a category and add it to cart, then delete it, verifies info in shopping cart",
             dataProvider = "Category MenuItem Provider")
-    public void DeleteProductFromCartTest(HomePage.MenuItem category) {
+    public void verifyDeleteProductOfCategoryFromCart(HomePage.MenuItem category) {
         WebDriver driver = initializeDriver();
 
         HomePage homePage = new HomePage(driver);
@@ -214,7 +209,7 @@ public class DemoblazeTest extends AbstractTest {
 
     @Test(testName = "Empty Shopping Cart - Task3 TC-004",
             description = "add random products to the shopping cart, then empties the cart")
-    public void EmptyShoppingCartTest() {
+    public void verifyAllDeleteButtonsToEmptyShoppingCart() {
         WebDriver driver = initializeDriver();
 
         HomePage homePage = new HomePage(driver);
@@ -255,7 +250,7 @@ public class DemoblazeTest extends AbstractTest {
 
     @Test(testName = "Fill Contact Form - Task3 TC-005",
             description = "click on contact, then fills the form and sends it")
-    public void FillContactFormTest() {
+    public void verifyFillInfoInContactFormAndSend() {
         WebDriver driver = initializeDriver();
 
         HomePage homePage = new HomePage(driver);
@@ -285,7 +280,7 @@ public class DemoblazeTest extends AbstractTest {
 
     @Test(testName = "Log In with wrong credentials - Task3 TC-006",
             description = "click on log in, then fills the form and click log in button")
-    public void LogInWrongCredentialsTest() {
+    public void verifyLogInAttemptWithWrongCredentials() {
         WebDriver driver = initializeDriver();
 
         HomePage homePage = new HomePage(driver);

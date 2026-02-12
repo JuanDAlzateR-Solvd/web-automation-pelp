@@ -5,6 +5,8 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
+import java.util.OptionalInt;
+import java.util.stream.IntStream;
 
 public class CartPage extends AbstractPage {
 
@@ -46,5 +48,42 @@ public class CartPage extends AbstractPage {
         return getElementsList().isEmpty();
     }
 
+    public List<WebElement> getCartProducts() {
+        List<WebElement> cartProducts = getElementsList();
+        logger.info("products in cart:{}", cartProducts.size());
+        cartProducts.forEach(p -> {
+            logger.info(p.getText());
+        });
+        return cartProducts;
+    }
 
+    public int findProductIndexInCart(List<WebElement> cartProducts, String productName) {
+        int productIndex = -1;
+
+        OptionalInt index = IntStream.range(0, cartProducts.size())
+                .filter(i -> cartProducts.get(i).getText().contains(productName))
+                .findFirst();
+        if (index.isPresent()) {
+            logger.info("Product is in the cart in position {}", index.getAsInt());
+            productIndex = index.getAsInt();
+        } else {
+            logger.info("Product is not in the cart");
+        }
+        return productIndex;
+    }
+
+    public void deleteProduct(int productIndex) {
+        List<WebElement> products = getElementsList();
+        List<WebElement> deleteButtons = getDeleteButtonsList();
+        WebElement productToDelete = products.get(productIndex);
+        String productName = getTextOf(productToDelete);
+        logger.info("Deleting product {}", productName);
+        click(deleteButtons.get(productIndex), "deleteButton" + productIndex);
+        pause(1000);
+        waitUntilPageIsReady();
+        if (deleteButtons.size() > 1) {
+            waitVisible(getGrid());
+        }
+
+    }
 }

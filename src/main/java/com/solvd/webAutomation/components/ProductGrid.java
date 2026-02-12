@@ -74,4 +74,12 @@ public class ProductGrid extends AbstractPage {
         return grid;
     }
 
+    public WebElement getProductNumber(int productNumber) {
+        List<WebElement> products = getElementsList();
+        WebElement product = products.get(productNumber);
+        logger.info(getTextOf(product));
+        //  productGrid.waitVisible(firstProduct);
+        return product;
+    }
+
 }

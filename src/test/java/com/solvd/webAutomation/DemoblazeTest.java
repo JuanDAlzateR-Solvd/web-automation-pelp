@@ -9,6 +9,7 @@ import com.solvd.webAutomation.components.TopMenu;
 import com.solvd.webAutomation.driver.DriverFactory;
 import com.solvd.webAutomation.driver.DriverRunMode;
 import com.solvd.webAutomation.driver.DriverType;
+import com.solvd.webAutomation.flows.ShoppingFlow;
 import com.solvd.webAutomation.pages.desktop.CartPage;
 import com.solvd.webAutomation.pages.desktop.HomePage;
 
@@ -126,7 +127,7 @@ public class DemoblazeTest extends AbstractTest {
 
         clickCategory(homePage, category, productGrid);
 
-        WebElement firstProduct = getProductNumber(productGrid, 0);
+        WebElement firstProduct = productGrid.getProductNumber(0);
 
         String firstProductName = productGrid.getProductName(firstProduct);
 
@@ -141,7 +142,7 @@ public class DemoblazeTest extends AbstractTest {
 
         clickCart(topMenu, cartPage);
 
-        List<WebElement> cartProducts = getCartProducts(cartPage);
+        List<WebElement> cartProducts = cartPage.getCartProducts();
 
         boolean productInCart = cartProducts.stream()
                 .map(WebElement::getText)
@@ -172,7 +173,7 @@ public class DemoblazeTest extends AbstractTest {
 
         clickCategory(homePage, category, productGrid);
 
-        WebElement firstProduct = getProductNumber(productGrid, 0);
+        WebElement firstProduct = productGrid.getProductNumber(0);
         String firstProductName = productGrid.getProductName(firstProduct);
         productGrid.clickProduct(firstProduct);
 
@@ -184,16 +185,16 @@ public class DemoblazeTest extends AbstractTest {
 
         clickCart(topMenu, cartPage);
 
-        List<WebElement> cartProducts = getCartProducts(cartPage);
+        List<WebElement> cartProducts = cartPage.getCartProducts();
 //        List<WebElement> deleteButtons = cartPage.getDeleteButtonsList();
         sa.assertFalse(cartProducts.isEmpty(), "the shopping cart is empty");
 
-        int productIndex = findProductIndexInCart(cartProducts, firstProductName);
+        int productIndex = cartPage.findProductIndexInCart(cartProducts, firstProductName);
 
         sa.assertTrue(productIndex != -1, "Product not found in the cart");
 
         if (productIndex != -1) {
-            deleteProduct(cartPage, productIndex);
+            cartPage.deleteProduct(productIndex);
         }
 
         cartPage.pause(1000);
@@ -218,22 +219,24 @@ public class DemoblazeTest extends AbstractTest {
         TopMenu topMenu = new TopMenu(driver);
         CartPage cartPage = new CartPage(driver);
 
+        ShoppingFlow shoppingFlow=new ShoppingFlow(productGrid,productPage,topMenu);
+
         homePage.waitUntilPageIsReady();
 
         String productName = "";
         for (int i = 0; i < 5; i++) {
-            productName = addRandomProductToCart(productGrid, productPage, topMenu);
+            productName = shoppingFlow.addRandomProductToCart();
         }
 
         SoftAssert sa = new SoftAssert();
         clickCart(topMenu, cartPage);
 
-        List<WebElement> cartProducts = getCartProducts(cartPage);
+        List<WebElement> cartProducts = cartPage.getCartProducts();
 //        List<WebElement> deleteButtons = cartPage.getDeleteButtonsList();
         sa.assertFalse(cartProducts.isEmpty(), "the shopping cart is empty");
 //
         while (!cartPage.isCartEmpty()) {
-            deleteProduct(cartPage, 0);
+            cartPage.deleteProduct(0);
         }
 
 

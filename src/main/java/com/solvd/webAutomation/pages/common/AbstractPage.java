@@ -122,7 +122,7 @@ public abstract class AbstractPage {
                                 "  box.right <= (window.innerWidth || document.documentElement.clientWidth)       " +
                                 ");",
                         element);
-        String aux = isInViewport ? "" : "not";
+        String aux = Boolean.TRUE.equals(isInViewport) ? "" : "not";
         logger.info("Element [{}] is " + aux + " in Viewport", elementName);
         return isInViewport;
     }

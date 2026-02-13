@@ -9,20 +9,13 @@ import com.solvd.webAutomation.driver.DriverRunMode;
 import com.solvd.webAutomation.driver.DriverType;
 import com.solvd.webAutomation.pages.desktop.CartPage;
 import com.solvd.webAutomation.pages.desktop.HomePage;
-import com.solvd.webAutomation.pages.desktop.ProductPage;
+
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
 
-
-import java.util.List;
-import java.util.OptionalInt;
-import java.util.Random;
-import java.util.stream.IntStream;
 
 public class AbstractTest {
     protected Logger logger = LoggerFactory.getLogger(this.getClass());

@@ -10,21 +10,42 @@ import com.solvd.webAutomation.driver.DriverType;
 import com.solvd.webAutomation.pages.desktop.CartPage;
 import com.solvd.webAutomation.pages.desktop.HomePage;
 
+import com.solvd.webAutomation.utils.ScreenshotUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Parameters;
 
 
 public class AbstractTest {
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
-    //    protected WebDriver driver;
+        protected WebDriver driver;
     protected WebDriverWait wait;
 
+    @Parameters("browser")
+    @BeforeMethod
+    public void setUp(String browser) {
+        DriverType driverType = DriverType.valueOf(browser);
+        driver = DriverFactory.createDriver(DriverRunMode.REMOTE, driverType);
+        driver.manage().window().maximize();
+        driver.get("https://demoblaze.com/");
+    }
+
     @AfterMethod(alwaysRun = true)
-    public void tearDown() {
-        try {
+    public void tearDown(ITestResult result) {
+        if (ITestResult.FAILURE == result.getStatus()) {
+
+            ScreenshotUtils.takeScreenshot(
+                    DriverFactory.getDriver(),
+                    result.getName()
+            );
+        }
+
+            try {
             DriverFactory.quitDriver();
         } catch (Exception e) {
             logger.warn("Driver already closed: " + e.getMessage());

@@ -2,7 +2,6 @@ package com.solvd.webAutomation.pages.common;
 
 import org.jspecify.annotations.NonNull;
 import org.openqa.selenium.*;
-import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.PageFactory;
 
 import org.openqa.selenium.support.pagefactory.AjaxElementLocatorFactory;
@@ -12,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
-import java.util.Objects;
 
 
 public abstract class AbstractPage {
@@ -53,6 +51,26 @@ public abstract class AbstractPage {
         wait.until(ExpectedConditions.elementToBeClickable(element));
         scrollTo(element);
         element.click();
+    }
+
+    public void type(By locator, String elementName, String text) {
+        logger.info("Typing into element [{}] value [{}]", elementName, text);
+        WebElement element = driver.findElement(locator);
+
+        wait.until(driver -> {
+            try {
+                wait.until(ExpectedConditions.visibilityOf(element));
+                scrollTo(element);
+                element.clear();
+                element.sendKeys(text);
+                return true;
+            } catch (StaleElementReferenceException e) {
+                logger.warn("Stale element while typing [{}], retrying...", elementName);
+                return false;
+            }
+        });
+
+
     }
 
 
@@ -151,6 +169,15 @@ public abstract class AbstractPage {
             Thread.sleep(milliseconds);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public boolean isAlertPresent() {
+        try {
+            wait.until(ExpectedConditions.alertIsPresent());
+            return true;
+        } catch (TimeoutException e) {
+            return false;
         }
     }
 

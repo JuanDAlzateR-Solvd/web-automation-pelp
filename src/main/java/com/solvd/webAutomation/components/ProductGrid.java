@@ -1,6 +1,7 @@
 package com.solvd.webAutomation.components;
 
 import com.solvd.webAutomation.pages.common.AbstractPage;
+import com.solvd.webAutomation.pages.desktop.HomePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -46,6 +47,13 @@ public class ProductGrid extends AbstractPage {
     public void clickNextButton() {
 //        click(nextButton, "Next Button");
         click(By.cssSelector("button[id*='next']"), "Next Button");
+    }
+
+    public void clickNextButtonIfPossible(HomePage.MenuItem category) {
+        if (nextButtonIsClickable() && category != HomePage.MenuItem.MONITORS) {
+            //demoblaze.com has a bug, when click on category monitors it shows the next button, even thought it shouldn't.
+            clickNextButton();
+        }
     }
 
     public String getTextOf(WebElement product) {

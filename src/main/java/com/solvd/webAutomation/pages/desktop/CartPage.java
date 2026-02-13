@@ -3,7 +3,6 @@ package com.solvd.webAutomation.pages.desktop;
 import com.solvd.webAutomation.pages.common.AbstractPage;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.util.List;
 
@@ -45,6 +44,10 @@ public class CartPage extends AbstractPage {
 
     public String getTotalPrice() {
         return getText(totalPrice, "totalPrice");
+    }
+
+    public boolean isCartEmpty() {
+        return getElementsList().isEmpty();
     }
 
 

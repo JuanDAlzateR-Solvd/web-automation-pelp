@@ -32,7 +32,7 @@ public class AbstractTest {
     }
 
     public WebDriver initializeDriver() {
-        WebDriver driver = DriverFactory.createDriver(DriverRunMode.LOCAL, DriverType.CHROME);
+        WebDriver driver = DriverFactory.createDriver(DriverRunMode.REMOTE, DriverType.CHROME);
         driver.manage().window().maximize();
         driver.get("https://demoblaze.com/");
 

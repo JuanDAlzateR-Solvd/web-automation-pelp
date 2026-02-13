@@ -1,17 +1,12 @@
 package com.solvd.webAutomation;
 
-
 import com.solvd.webAutomation.components.*;
 
-import com.solvd.webAutomation.driver.DriverFactory;
-import com.solvd.webAutomation.driver.DriverRunMode;
-import com.solvd.webAutomation.driver.DriverType;
 import com.solvd.webAutomation.flows.ShoppingFlow;
 import com.solvd.webAutomation.pages.desktop.CartPage;
 import com.solvd.webAutomation.pages.desktop.HomePage;
 
 import com.solvd.webAutomation.pages.desktop.ProductPage;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

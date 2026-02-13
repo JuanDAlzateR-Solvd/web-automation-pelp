@@ -1,6 +1,5 @@
 package com.solvd.webAutomation.utils;
 
-import com.solvd.webAutomation.driver.DriverFactory;
 import org.openqa.selenium.*;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
@@ -18,17 +17,18 @@ public class ScreenshotUtils {
         String timestamp = LocalDateTime.now()
                 .format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
 
-        String browser= ((RemoteWebDriver) driver).getCapabilities().getBrowserName();
+        String browser = ((RemoteWebDriver) driver).getCapabilities().getBrowserName();
 
-        String threadID = ((RemoteWebDriver) driver).getSessionId().toString();
+        long threadID = Thread.currentThread().getId();
+//                ((RemoteWebDriver) driver).getSessionId().toString();
 
-        String screenshotName = testName + "_" + timestamp + "_" + browser + "_" + threadID;
+        String screenshotName = testName + "_" + timestamp + "_T" + threadID + "_" + browser + "_";
 
         File src = ((TakesScreenshot) driver)
                 .getScreenshotAs(OutputType.FILE);
 
         File dest = new File(
-                "screenshots/" + screenshotName+ ".png"
+                "screenshots/" + screenshotName + ".png"
         );
 
         dest.getParentFile().mkdirs();

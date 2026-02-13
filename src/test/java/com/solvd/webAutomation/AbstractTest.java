@@ -23,7 +23,7 @@ import org.testng.annotations.Parameters;
 
 public class AbstractTest {
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
-        protected WebDriver driver;
+    protected WebDriver driver;
     protected WebDriverWait wait;
 
     @Parameters("browser")
@@ -45,7 +45,7 @@ public class AbstractTest {
             );
         }
 
-            try {
+        try {
             DriverFactory.quitDriver();
         } catch (Exception e) {
             logger.warn("Driver already closed: " + e.getMessage());

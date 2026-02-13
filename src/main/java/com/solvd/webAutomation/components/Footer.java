@@ -27,32 +27,42 @@ public class Footer extends AbstractPage {
         return By.cssSelector("div[id='fotcont'] img");
     }
 
-    public String[] getGetInTouchText(){
+    public String[] getGetInTouchText() {
 //        logger.info(getInTouch.getText());
-        String[] lines= getInTouch.getText().split("\n");
+        String[] lines = getInTouch.getText().split("\n");
         return lines;
     }
 
-    public String getAddress(){
+    public String getAddress() {
         String string = getGetInTouchText()[1]
                 .split(":")[1]
                 .substring(1);
-        logger.info("Address: "+string);
+        logger.info("Address: " + string);
         return string;
     }
-    public String getPhone(){
+
+    public String getPhone() {
         String string = getGetInTouchText()[2]
                 .split(":")[1]
                 .substring(1);
-        logger.info("Phone: "+string);
+        logger.info("Phone: " + string);
         return string;
     }
-    public String getEmail(){
+
+    public String getEmail() {
         String string = getGetInTouchText()[3]
                 .split(":")[1]
                 .substring(1);
-        logger.info("Email: "+string);
+        logger.info("Email: " + string);
         return string;
+    }
+
+    public boolean isVisibleInScreen() {
+        return isInViewport(getInTouch, "Get In Touch Thumbnail");
+    }
+
+    public void scrollToBottom() {
+        scrollTo(getInTouch);
     }
 
 

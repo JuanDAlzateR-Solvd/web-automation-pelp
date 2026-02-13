@@ -211,7 +211,7 @@ public class DemoblazeTest extends AbstractTest {
         TopMenu topMenu = new TopMenu(driver);
         CartPage cartPage = new CartPage(driver);
 
-        ShoppingFlow shoppingFlow=new ShoppingFlow(productGrid,productPage,topMenu);
+        ShoppingFlow shoppingFlow = new ShoppingFlow(productGrid, productPage, topMenu);
 
         homePage.waitUntilPageIsReady();
 
@@ -303,13 +303,16 @@ public class DemoblazeTest extends AbstractTest {
 
         homePage.waitUntilPageIsReady();
 
-        footer.getGetInTouchText();
-
         SoftAssert sa = new SoftAssert();
 
-        sa.assertTrue(footer.getAddress().length()>5);
-        sa.assertTrue(footer.getPhone().length()>5);
-        sa.assertTrue(footer.getEmail().length()>5);
+        sa.assertFalse(footer.isVisibleInScreen(), "Footer is visible in screen after load home page");
+
+        footer.scrollToBottom();
+        sa.assertTrue(footer.isVisibleInScreen(), "Footer is not visible in screen at bottom of page");
+
+        sa.assertTrue(footer.getAddress().length() > 5);
+        sa.assertTrue(footer.getPhone().length() > 5);
+        sa.assertTrue(footer.getEmail().length() > 5);
 
         sa.assertAll();
 

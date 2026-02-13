@@ -109,6 +109,24 @@ public abstract class AbstractPage {
         }
     }
 
+    protected Boolean isInViewport(WebElement element, String elementName) {
+        logger.info("Checking if element is in Viewport [{}]", elementName);
+        Boolean isInViewport = (Boolean) ((JavascriptExecutor) driver)
+                .executeScript(
+                        "var elem = arguments[0],                 " +
+                                "  box = elem.getBoundingClientRect();    " +
+                                "return (                                 " +
+                                "  box.top >= 0 &&                        " +
+                                "  box.left >= 0 &&                       " +
+                                "  box.bottom <= (window.innerHeight || document.documentElement.clientHeight) && " +
+                                "  box.right <= (window.innerWidth || document.documentElement.clientWidth)       " +
+                                ");",
+                        element);
+        String aux = isInViewport ? "" : "not";
+        logger.info("Element [{}] is " + aux + " in Viewport", elementName);
+        return isInViewport;
+    }
+
     protected Boolean isClickable(WebElement element) {
         return isClickable(element, element.getTagName());
     }

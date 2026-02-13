@@ -97,9 +97,9 @@ public class CartPage extends AbstractPage {
 
     public void waitUntilCartDeletesProduct() {
         logger.info("Waiting for the shopping cart to reload");
-        int cartSize=getCartProducts().size();
+        int cartSize = getCartProducts().size();
         By by = By.cssSelector("tbody[id='tbodyid'] tr[class='success']");
-        wait.until(ExpectedConditions.numberOfElementsToBe(by, cartSize-1));
+        wait.until(ExpectedConditions.numberOfElementsToBe(by, cartSize - 1));
 
     }
 }

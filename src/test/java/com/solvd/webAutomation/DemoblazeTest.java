@@ -130,7 +130,6 @@ public class DemoblazeTest extends AbstractTest {
 
         String firstProductName = productGrid.getProductName(firstProduct);
 
-//        productGrid.waitVisible(firstProduct);
         productGrid.clickProduct(firstProduct);
 
         SoftAssert sa = new SoftAssert();
@@ -149,8 +148,6 @@ public class DemoblazeTest extends AbstractTest {
 
         sa.assertTrue(productInCart, "The product is not in the cart");
         sa.assertFalse(cartPage.getTotalPrice().isEmpty(), "Total price is empty");
-
-//        productPage.pause(2000);
 
         sa.assertAll();
 
@@ -185,7 +182,7 @@ public class DemoblazeTest extends AbstractTest {
         clickCart(topMenu, cartPage);
 
         List<WebElement> cartProducts = cartPage.getCartProducts();
-//        List<WebElement> deleteButtons = cartPage.getDeleteButtonsList();
+
         sa.assertFalse(cartProducts.isEmpty(), "the shopping cart is empty");
 
         int productIndex = cartPage.findProductIndexInCart(cartProducts, firstProductName);
@@ -230,9 +227,9 @@ public class DemoblazeTest extends AbstractTest {
         clickCart(topMenu, cartPage);
 
         List<WebElement> cartProducts = cartPage.getCartProducts();
-//        List<WebElement> deleteButtons = cartPage.getDeleteButtonsList();
+
         sa.assertFalse(cartProducts.isEmpty(), "the shopping cart is empty");
-//
+
         while (!cartPage.isCartEmpty()) {
             cartPage.deleteProduct(0);
         }
@@ -254,7 +251,6 @@ public class DemoblazeTest extends AbstractTest {
         TopMenu topMenu = new TopMenu(driver);
         ContactModal contactModal = new ContactModal(driver);
 
-
         homePage.waitUntilPageIsReady();
 
         clickContact(topMenu, contactModal);
@@ -269,8 +265,6 @@ public class DemoblazeTest extends AbstractTest {
         sa.assertTrue(contactModal.isAlertPresent());
         contactModal.acceptMessageAlert();
 
-//        contactModal.pause(5000);
-
         sa.assertAll();
 
     }
@@ -284,7 +278,6 @@ public class DemoblazeTest extends AbstractTest {
         TopMenu topMenu = new TopMenu(driver);
         LogInModal logInModal = new LogInModal(driver);
 
-
         homePage.waitUntilPageIsReady();
 
         clickLogIn(topMenu, logInModal);
@@ -294,12 +287,9 @@ public class DemoblazeTest extends AbstractTest {
         logInModal.type(LogInModal.MenuItem.USERNAME, "example@email.com");
         logInModal.type(LogInModal.MenuItem.PASSWORD, "Example Password");
 
-
         logInModal.clickLogInButton();
         sa.assertTrue(logInModal.isAlertPresent());
         logInModal.acceptWrongPasswordAlert();
-
-//        logInModal.pause(5000);
 
         sa.assertAll();
 
@@ -319,8 +309,6 @@ public class DemoblazeTest extends AbstractTest {
                 {TopMenu.MenuItem.HOME},
                 {TopMenu.MenuItem.CONTACT},
                 {TopMenu.MenuItem.CART}
-
-
         };
     }
 

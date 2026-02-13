@@ -1,10 +1,7 @@
 package com.solvd.webAutomation;
 
 
-import com.solvd.webAutomation.components.ContactModal;
-import com.solvd.webAutomation.components.LogInModal;
-import com.solvd.webAutomation.components.ProductGrid;
-import com.solvd.webAutomation.components.TopMenu;
+import com.solvd.webAutomation.components.*;
 
 import com.solvd.webAutomation.driver.DriverFactory;
 import com.solvd.webAutomation.driver.DriverRunMode;
@@ -294,6 +291,30 @@ public class DemoblazeTest extends AbstractTest {
         sa.assertAll();
 
     }
+
+    @Test(testName = "VerifyFooterInfo- Task3 TC-007",
+            description = "click on log in, then fills the form and click log in button")
+    public void verifyFooterVisibilityAndInfo() {
+        WebDriver driver = initializeDriver();
+
+        HomePage homePage = new HomePage(driver);
+
+        Footer footer = new Footer(driver);
+
+        homePage.waitUntilPageIsReady();
+
+        footer.getGetInTouchText();
+
+        SoftAssert sa = new SoftAssert();
+
+        sa.assertTrue(footer.getAddress().length()>5);
+        sa.assertTrue(footer.getPhone().length()>5);
+        sa.assertTrue(footer.getEmail().length()>5);
+
+        sa.assertAll();
+
+    }
+
 
     //Data Providers
     @DataProvider(name = "Category MenuItem Provider")

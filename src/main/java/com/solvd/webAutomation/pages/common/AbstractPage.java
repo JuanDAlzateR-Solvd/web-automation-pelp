@@ -171,15 +171,17 @@ public abstract class AbstractPage {
         wait.until(ExpectedConditions.elementToBeClickable(element));
     }
 
-    public void pause(int milliseconds) {
-//        WebDriverWait waitTime=new WebDriverWait(driver, Duration.ofSeconds(milliseconds/1000));
-//        waitTime.until(d -> true);
+    /**
+     * Pauses using Thread sleep. Use only for debug code, not for test implementation.
+     *
+     * @param milliseconds int number of milliseconds to pause     *
+     */
+    public void debugPause(int milliseconds) {
         try {
             Thread.sleep(milliseconds);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        //Remove pause
     }
 
     public boolean isAlertPresent() {

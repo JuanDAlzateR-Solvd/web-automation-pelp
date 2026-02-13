@@ -196,8 +196,7 @@ public class DemoblazeTest extends AbstractTest {
             cartPage.deleteProduct(productIndex);
         }
 
-        cartPage.pause(1000);
-        //add wait to reload, and delete pause
+        cartPage.waitUntilPageIsLoaded();
 
         List<WebElement> newCartProducts = cartPage.getElementsList();
 
@@ -237,10 +236,6 @@ public class DemoblazeTest extends AbstractTest {
         while (!cartPage.isCartEmpty()) {
             cartPage.deleteProduct(0);
         }
-
-
-//        cartPage.pause(5000); //to debug
-
 
         List<WebElement> newCartProducts = cartPage.getElementsList();
 

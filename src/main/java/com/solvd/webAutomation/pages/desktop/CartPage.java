@@ -3,6 +3,7 @@ package com.solvd.webAutomation.pages.desktop;
 import com.solvd.webAutomation.pages.common.AbstractPage;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.util.List;
 import java.util.OptionalInt;
@@ -84,11 +85,21 @@ public class CartPage extends AbstractPage {
         String productName = getTextOf(productToDelete);
         logger.info("Deleting product {}", productName);
         click(deleteButtons.get(productIndex), "deleteButton" + productIndex);
-        pause(1000);
-        waitUntilPageIsReady();
+
+//        waitUntilPageIsLoaded();
+        waitUntilCartDeletesProduct();
+
         if (deleteButtons.size() > 1) {
             waitVisible(getGrid());
         }
+
+    }
+
+    public void waitUntilCartDeletesProduct() {
+        logger.info("Waiting for the shopping cart to reload");
+        int cartSize=getCartProducts().size();
+        By by = By.cssSelector("tbody[id='tbodyid'] tr[class='success']");
+        wait.until(ExpectedConditions.numberOfElementsToBe(by, cartSize-1));
 
     }
 }

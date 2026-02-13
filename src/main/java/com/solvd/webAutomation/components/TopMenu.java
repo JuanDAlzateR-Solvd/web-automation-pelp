@@ -1,28 +1,32 @@
 package com.solvd.webAutomation.components;
 
-import com.solvd.webAutomation.actions.NavActions;
 import com.solvd.webAutomation.pages.common.AbstractPage;
+import com.solvd.webAutomation.pages.desktop.HomePage;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
-import org.slf4j.LoggerFactory;
-
-import java.util.HashMap;
 
 public class TopMenu extends AbstractPage {
 
-    @FindBy(css = "a[class='nav-link'][href='index.html']")
+    private static final String homeButtonCssSelector = "a[class='nav-link'][href='index.html']";
+    private static final String contactButtonCssSelector = "a[class='nav-link'][data-target='#exampleModal']";
+    private static final String aboutUsButtonCssSelector = "a[class='nav-link'][data-target='#videoModal']";
+    private static final String cartButtonCssSelector = "a[class='nav-link'][id='cartur']";
+    private static final String logInButtonCssSelector = "a[class='nav-link'][id='login2']";
+    private static final String signUpButtonCssSelector = "a[class='nav-link'][id='signin2']";
+
+    @FindBy(css = homeButtonCssSelector)
     private WebElement homeButton;
-    @FindBy(css = "a[class='nav-link'][data-target='#exampleModal']")
+    @FindBy(css = contactButtonCssSelector)
     private WebElement contactButton;
-    @FindBy(css = "a[class='nav-link'][data-target='#videoModal']")
+    @FindBy(css = aboutUsButtonCssSelector)
     private WebElement aboutUsButton;
-    @FindBy(css = "a[class='nav-link'][id='cartur']")
+    @FindBy(css = cartButtonCssSelector)
     private WebElement cartButton;
-    @FindBy(css = "a[class='nav-link'][id='login2']")
+    @FindBy(css = logInButtonCssSelector)
     private WebElement logInButton;
-    @FindBy(css = "a[class='nav-link'][id='signin2']")
+    @FindBy(css = signUpButtonCssSelector)
     private WebElement signUpButton;
 
     public TopMenu(WebDriver driver) {
@@ -44,18 +48,33 @@ public class TopMenu extends AbstractPage {
         }
     }
 
+    public void clickBy(MenuItem item) {
+        By by = By.cssSelector(item.cssSelector);
+        click(by, item.name);
+    }
+
     public enum MenuItem {
-        HOME("Top Menu Home"),
-        CONTACT("Top Menu Contact"),
-        ABOUT_US("Top Menu About Us"),
-        CART("Top Menu Cart"),
-        LOG_IN("Top Menu Log In"),
-        SIGN_UP("Top Menu Sign Up");
+        HOME("Top Menu Home", homeButtonCssSelector),
+        CONTACT("Top Menu Contact", contactButtonCssSelector),
+        ABOUT_US("Top Menu About Us", aboutUsButtonCssSelector),
+        CART("Top Menu Cart", cartButtonCssSelector),
+        LOG_IN("Top Menu Log In", logInButtonCssSelector),
+        SIGN_UP("Top Menu Sign Up", signUpButtonCssSelector);
 
         private final String name;
+        private final String cssSelector;
 
-        MenuItem(String name) {
+        MenuItem(String name, String cssSelector) {
             this.name = name;
+            this.cssSelector = cssSelector;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public String getCssSelector() {
+            return cssSelector;
         }
     }
 

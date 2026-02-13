@@ -1,15 +1,12 @@
 package com.solvd.webAutomation.components;
 
-import com.solvd.webAutomation.actions.NavActions;
 import com.solvd.webAutomation.pages.common.AbstractPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class ProductGrid extends AbstractPage {
@@ -47,7 +44,8 @@ public class ProductGrid extends AbstractPage {
     }
 
     public void clickNextButton() {
-        click(nextButton, "Next Button");
+//        click(nextButton, "Next Button");
+        click(By.cssSelector("button[id*='next']"), "Next Button");
     }
 
     public String getTextOf(WebElement product) {
@@ -56,8 +54,12 @@ public class ProductGrid extends AbstractPage {
     }
 
     public void clickProduct(WebElement product) {
-        String productName = getText(product).split("\n")[0];
+        String productName = getProductName(product);
         click(product, productName);
+    }
+
+    public String getProductName(WebElement product) {
+        return getText(product).split("\n")[0];
     }
 
     public WebElement getGrid() {

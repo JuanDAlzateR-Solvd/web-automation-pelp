@@ -1,40 +1,66 @@
 package com.solvd.webAutomation.pages.desktop;
 
-import com.solvd.webAutomation.actions.NavActions;
+import com.solvd.webAutomation.pages.common.AbstractPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
-public class HomePage {
-    private WebDriver driver;
-    private NavActions navActions;
+public class HomePage extends AbstractPage {
 
-    @FindBy(css = "a[onclick*='phone']")
+    private static final String phonesCssSelector = "a[onclick*='phone']";
+    private static final String laptopsCssSelector = "a[onclick*='notebook']";
+    private static final String monitorsCssSelector = "a[onclick*='monitor']";
+
+    @FindBy(css = phonesCssSelector)
     private WebElement phonesButton;
-    @FindBy(css = "a[onclick*='notebook']")
+    @FindBy(css = laptopsCssSelector)
     private WebElement laptopsButton;
-    @FindBy(css = "a[onclick*='monitor']")
+    @FindBy(css = monitorsCssSelector)
     private WebElement monitorsButton;
 
     public HomePage(WebDriver driver) {
-        this.driver = driver;
-        PageFactory.initElements(driver, this);
-        this.navActions = new NavActions(driver);
-
+        super(driver);
     }
 
-
-    public void clickPhonesButton() {
-        navActions.click(phonesButton);
+    @Override
+    protected By getPageLoadedIndicator() {
+        return By.cssSelector("div[id='tbodyid'] [class='card-img-top img-fluid']");
     }
 
-    public void clickLaptopsButton() {
-        navActions.click(laptopsButton);
+    public void clickButton(MenuItem item) {
+        switch (item) {
+            case PHONES -> click(phonesButton, item.name);
+            case LAPTOPS -> click(laptopsButton, item.name);
+            case MONITORS -> click(monitorsButton, item.name);
+
+        }
     }
 
-    public void clickMonitorsButton() {
-        navActions.click(monitorsButton);
+    public void clickBy(MenuItem item) {
+        By by = By.cssSelector(item.cssSelector);
+        click(by, item.name);
+    }
+
+    public enum MenuItem {
+        PHONES("Category Phones", phonesCssSelector),
+        LAPTOPS("Category Laptops", laptopsCssSelector),
+        MONITORS("Category Monitors", monitorsCssSelector);
+
+        private final String name;
+        private final String cssSelector;
+
+        MenuItem(String name, String cssSelector) {
+            this.name = name;
+            this.cssSelector = cssSelector;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public String getCssSelector() {
+            return cssSelector;
+        }
     }
 }

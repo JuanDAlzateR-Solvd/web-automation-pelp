@@ -10,11 +10,11 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class ContactModal extends AbstractPage {
 
-    private static final String inputEmailCssSelector = "input[id='recipient-email']";
-    private static final String inputNameCssSelector = "input[id='recipient-name']";
-    private static final String inputMessageCssSelector = "textarea[id='message-text']";
+    private static final String inputEmailCssSelector = "#recipient-email";
+    private static final String inputNameCssSelector = "#recipient-name";
+    private static final String inputMessageCssSelector = "#message-text";
 
-    @FindBy(css = "h5[id='exampleModalLabel']")
+    @FindBy(css = "#exampleModalLabel")
     private WebElement title;
     @FindBy(css = "button[onclick='send()']")
     private WebElement sendButton;

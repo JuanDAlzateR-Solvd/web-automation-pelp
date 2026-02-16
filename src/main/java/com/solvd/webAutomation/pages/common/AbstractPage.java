@@ -3,7 +3,6 @@ package com.solvd.webAutomation.pages.common;
 import org.jspecify.annotations.NonNull;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.PageFactory;
-
 import org.openqa.selenium.support.pagefactory.AjaxElementLocatorFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -19,7 +18,6 @@ public abstract class AbstractPage {
     protected WebDriverWait wait;
 
     private static final By LOADER = By.cssSelector(".loader, .spinner, .loading");
-
 
     public AbstractPage(WebDriver driver) {
         this.driver = driver;
@@ -79,7 +77,7 @@ public abstract class AbstractPage {
     protected void type(WebElement element, String text) {
         logger.info("Typing on element [{}]", element.getTagName());
         wait.until(ExpectedConditions.visibilityOf(element));
-        //element.clear();
+        element.clear();
         element.sendKeys(text);
     }
 
@@ -154,14 +152,8 @@ public abstract class AbstractPage {
         );
 
         pageWait.until(ExpectedConditions.invisibilityOfElementLocated(LOADER));
+        pageWait.until(ExpectedConditions.visibilityOfElementLocated(getPageLoadedIndicator()));
         logger.info("The page is ready");
-    }
-
-    public void waitUntilPageIsLoaded() {
-        logger.info("Waiting for the page to load");
-        waitUntilPageIsReady();
-        wait.until(ExpectedConditions.visibilityOfElementLocated(getPageLoadedIndicator()));
-        logger.info("The page is loaded");
     }
 
     protected void scrollTo(@NonNull WebElement element) {

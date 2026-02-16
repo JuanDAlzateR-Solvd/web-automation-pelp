@@ -9,18 +9,28 @@ import com.solvd.webAutomation.driver.DriverRunMode;
 import com.solvd.webAutomation.driver.DriverType;
 import com.solvd.webAutomation.pages.desktop.CartPage;
 import com.solvd.webAutomation.pages.desktop.HomePage;
-
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Parameters;
 
 
 public class AbstractTest {
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
-    //    protected WebDriver driver;
+    protected WebDriver driver;
     protected WebDriverWait wait;
+
+    @BeforeMethod
+    public void setUp() {
+        driver = DriverFactory.createDriver(DriverRunMode.LOCAL, DriverType.CHROME);
+        //DriverRunMode LOCAL or REMOTE. REMOTE Requires Selenium server standalone.
+        driver.manage().window().maximize();
+        driver.get("https://demoblaze.com/");
+    }
 
     @AfterMethod(alwaysRun = true)
     public void tearDown() {
@@ -33,6 +43,7 @@ public class AbstractTest {
 
     public WebDriver initializeDriver() {
         WebDriver driver = DriverFactory.createDriver(DriverRunMode.LOCAL, DriverType.CHROME);
+        WebDriver driver = DriverFactory.createDriver(DriverRunMode.REMOTE, DriverType.CHROME);
         driver.manage().window().maximize();
         driver.get("https://demoblaze.com/");
 

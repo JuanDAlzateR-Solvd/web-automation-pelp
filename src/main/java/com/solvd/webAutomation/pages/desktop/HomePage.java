@@ -64,3 +64,9 @@ public class HomePage extends AbstractPage {
         }
     }
 }
+
+        public String getCssSelector() {
+            return cssSelector;
+        }
+    }
+}

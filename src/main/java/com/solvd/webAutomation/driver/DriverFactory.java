@@ -1,6 +1,8 @@
 package com.solvd.webAutomation.driver;
 
+import com.solvd.webAutomation.config.ConfigReader;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -43,15 +45,20 @@ public class DriverFactory {
 
     private static WebDriver createRemoteDriver(DriverType driverType) {
         try {
+            String gridURL = ConfigReader.get("selenium_url");
+            URL url = new URL(gridURL);
             switch (driverType) {
                 case CHROME:
                     ChromeOptions options = new ChromeOptions();
-                    RemoteWebDriver driver = new RemoteWebDriver(
-                            new URL("http://localhost:4444"),
-                            options
-                    );
+                    RemoteWebDriver driver = new RemoteWebDriver(url, options);
                     threadDriver.set(driver);
                     return driver;
+
+                case FIREFOX:
+                    FirefoxOptions options2 = new FirefoxOptions();
+                    RemoteWebDriver driver2 = new RemoteWebDriver(url, options2);
+                    threadDriver.set(driver2);
+                    return driver2;
 
                 default:
                     throw new IllegalArgumentException("Unsupported driver type: " + driverType);

@@ -192,7 +192,7 @@ public class DemoblazeTest extends AbstractTest {
             cartPage.deleteProduct(productIndex);
         }
 
-        cartPage.waitUntilPageIsLoaded();
+        cartPage.waitUntilPageIsReady();
 
         List<WebElement> newCartProducts = cartPage.getElementsList();
 

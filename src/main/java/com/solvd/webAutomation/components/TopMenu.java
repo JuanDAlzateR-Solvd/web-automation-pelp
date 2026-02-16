@@ -71,29 +71,11 @@ public class TopMenu extends AbstractPage {
     @Override
     protected By getPageLoadedIndicator() {
         return By.cssSelector("a[id='nava'] img");
-        super(driver);
     }
 
-    @Override
-    protected By getPageLoadedIndicator() {
-        return By.cssSelector("a[id='nava'] img");
-    }
 
     public void clickButton(MenuItem item) {
-        switch (item) {
-            case HOME -> click(homeButton, item.name);
-            case CONTACT -> click(contactButton, item.name);
-            case ABOUT_US -> click(aboutUsButton, item.name);
-            case CART -> click(cartButton, item.name);
-            case LOG_IN -> click(logInButton, item.name);
-            case SIGN_UP -> click(signUpButton, item.name);
-        }
         click(menuButtons.get(item), item.name);
-    }
-
-    public void clickMenuItem(MenuItem item) {
-        By by = By.cssSelector(item.cssSelector);
-        click(by, item.name);
     }
 
     public void clickMenuItem(MenuItem item) {

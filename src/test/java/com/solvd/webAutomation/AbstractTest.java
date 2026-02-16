@@ -42,7 +42,6 @@ public class AbstractTest {
     }
 
     public WebDriver initializeDriver() {
-        WebDriver driver = DriverFactory.createDriver(DriverRunMode.LOCAL, DriverType.CHROME);
         WebDriver driver = DriverFactory.createDriver(DriverRunMode.REMOTE, DriverType.CHROME);
         driver.manage().window().maximize();
         driver.get("https://demoblaze.com/");
@@ -51,25 +50,25 @@ public class AbstractTest {
     }
 
     public void clickCategory(HomePage homePage, HomePage.MenuItem category, ProductGrid productGrid) {
-        homePage.clickBy(category);
+        homePage.clickButton(category);
         homePage.waitUntilPageIsReady();
         homePage.waitVisible(productGrid.getGrid());
     }
 
     public void clickCart(TopMenu topMenu, CartPage cartPage) {
-        topMenu.clickMenuItem(TopMenu.MenuItem.CART);
+        topMenu.clickButton(TopMenu.MenuItem.CART);
         cartPage.waitUntilPageIsReady();
         cartPage.waitVisible(cartPage.getGrid());
     }
 
     public void clickContact(TopMenu topMenu, ContactModal contactModal) {
-        topMenu.clickMenuItem(TopMenu.MenuItem.CONTACT);
+        topMenu.clickButton(TopMenu.MenuItem.CONTACT);
         contactModal.waitUntilPageIsReady();
         contactModal.waitVisible(contactModal.getTitle());
     }
 
     public void clickLogIn(TopMenu topMenu, LogInModal logInModal) {
-        topMenu.clickMenuItem(TopMenu.MenuItem.LOG_IN);
+        topMenu.clickButton(TopMenu.MenuItem.LOG_IN);
         logInModal.waitUntilPageIsReady();
         logInModal.waitVisible(logInModal.getTitle());
     }

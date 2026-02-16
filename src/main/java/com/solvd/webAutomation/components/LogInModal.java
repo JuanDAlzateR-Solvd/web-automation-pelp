@@ -10,21 +10,19 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class LogInModal extends AbstractPage {
 
-    private static final String inputUsernameCssSelector = "input[id='loginusername']";
-    private static final String inputPasswordCssSelector = "input[id='loginpassword']";
+    private static final String inputUsernameCssSelector = "#loginusername";
+    private static final String inputPasswordCssSelector = "#loginpassword";
 
-
-    @FindBy(css = "h5[id='logInModalLabel']")
+    @FindBy(id = "logInModalLabel")
     private WebElement title;
     @FindBy(css = "button[onclick='logIn()']")
     private WebElement logInButton;
     @FindBy(css = "button[class='btn btn-secondary']")
     private WebElement closeButton;
-    @FindBy(css = inputUsernameCssSelector)
+    @FindBy(id="loginusername")
     private WebElement inputEmail;
-    @FindBy(css = inputPasswordCssSelector)
+    @FindBy(id="loginpassword")
     private WebElement inputName;
-
 
     public LogInModal(WebDriver driver) {
         super(driver);
@@ -70,7 +68,6 @@ public class LogInModal extends AbstractPage {
     public enum MenuItem {
         USERNAME("Input Username", inputUsernameCssSelector),
         PASSWORD("Input Password", inputPasswordCssSelector);
-
 
         private final String name;
         private final String cssSelector;

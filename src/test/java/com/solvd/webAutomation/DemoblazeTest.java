@@ -1,6 +1,5 @@
 package com.solvd.webAutomation;
 
-import com.solvd.webAutomation.actions.NavActions;
 import com.solvd.webAutomation.components.ProductGrid;
 import com.solvd.webAutomation.components.TopMenu;
 import com.solvd.webAutomation.pages.desktop.HomePage;
@@ -13,13 +12,12 @@ import org.testng.asserts.SoftAssert;
 import java.util.Arrays;
 import java.util.List;
 
-public class DemoblazeTest {
+public class DemoblazeTest extends AbstractTest {
     private static final Logger logger =
             LoggerFactory.getLogger(DemoblazeTest.class);
 
     @Test(testName = "Functionality of top menu", description = "verifies that home page loads,top Menu works correctly")
     public void verifyTopMenuNavigation() {
-//        WebDriver driver = initializeDriver();
 
         HomePage homePage = new HomePage(driver);
         TopMenu topMenu = new TopMenu(driver);
@@ -51,7 +49,7 @@ public class DemoblazeTest {
 
         homePage.clickBy(HomePage.MenuItem.LAPTOPS);
 
-        homePage.waitUntilPageIsLoaded();
+        homePage.waitUntilPageIsReady();
 
         List<String> productsList = productGrid.getProductTitles();
         productsList.forEach(logger::info);
@@ -60,4 +58,3 @@ public class DemoblazeTest {
 
     }
 }
-

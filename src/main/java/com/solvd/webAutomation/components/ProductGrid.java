@@ -22,8 +22,6 @@ public class ProductGrid extends AbstractPage {
         super(driver);
     }
 
-    private List<WebElement> products;
-
     public WebDriver getDriver() {
         return driver;
     }
@@ -34,7 +32,7 @@ public class ProductGrid extends AbstractPage {
     }
 
     public List<WebElement> getElementsList() {
-        return grid.findElements(By.cssSelector(":scope >* a[class='hrefch']"));
+        return grid.findElements(By.cssSelector(":scope .card-title")); //other possibility ":scope >* a[class='hrefch']"
     }
 
     public List<String> getProductTitles() {

@@ -1,18 +1,12 @@
 package com.solvd.webAutomation.components;
 
 import com.solvd.webAutomation.pages.common.AbstractPage;
-import com.solvd.webAutomation.pages.desktop.HomePage;
 import org.openqa.selenium.By;
-import org.openqa.selenium.TimeoutException;
+
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.time.Duration;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class TopMenu extends AbstractPage {
@@ -88,15 +82,17 @@ public class TopMenu extends AbstractPage {
     }
 
     public boolean isVisible(MenuItem item) {
-        Boolean result = false;
-        switch (item) {
-            case HOME -> result = driver.getCurrentUrl().contains("index.html");
-            case CONTACT -> result = isVisible(contactCloseButton);
-            case ABOUT_US -> result = isVisible(aboutUsCloseButton);
-            case CART -> result = driver.getCurrentUrl().contains("cart.html");
-            case LOG_IN -> result = isVisible(logInCloseButton);
-            case SIGN_UP -> result = isVisible(signUpCloseButton);
+        boolean result = false;
+
+        if (closeButtons.containsKey(item)) {
+            result = isVisible(closeButtons.get(item));
+        }else{
+            switch (item) {
+                case HOME -> result = driver.getCurrentUrl().contains("index.html");
+                case CART -> result = driver.getCurrentUrl().contains("cart.html");
+            }
         }
+
         return result;
     }
 
@@ -123,7 +119,6 @@ public class TopMenu extends AbstractPage {
         public String getCssSelector() {
             return cssSelector;
         }
-
 
     }
 

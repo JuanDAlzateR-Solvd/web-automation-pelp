@@ -12,6 +12,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class TopMenu extends AbstractPage {
 
@@ -48,20 +50,29 @@ public class TopMenu extends AbstractPage {
         super(driver);
     }
 
+    private final Map<MenuItem, WebElement> menuButtons = Map.of(
+            MenuItem.HOME, homeButton,
+            MenuItem.CONTACT, contactButton,
+            MenuItem.ABOUT_US, aboutUsButton,
+            MenuItem.CART, cartButton,
+            MenuItem.LOG_IN, logInButton,
+            MenuItem.SIGN_UP, signUpButton
+    );
+
+    private final Map<MenuItem, WebElement> closeButtons = Map.of(
+            MenuItem.CONTACT, contactCloseButton,
+            MenuItem.ABOUT_US, aboutUsCloseButton,
+            MenuItem.LOG_IN, logInCloseButton,
+            MenuItem.SIGN_UP, signUpCloseButton
+    );
+
     @Override
     protected By getPageLoadedIndicator() {
         return By.cssSelector("a[id='nava'] img");
     }
 
     public void clickButton(MenuItem item) {
-        switch (item) {
-            case HOME -> click(homeButton, item.name);
-            case CONTACT -> click(contactButton, item.name);
-            case ABOUT_US -> click(aboutUsButton, item.name);
-            case CART -> click(cartButton, item.name);
-            case LOG_IN -> click(logInButton, item.name);
-            case SIGN_UP -> click(signUpButton, item.name);
-        }
+        click(menuButtons.get(item), item.name);
     }
 
     public void clickMenuItem(MenuItem item) {
@@ -70,12 +81,9 @@ public class TopMenu extends AbstractPage {
     }
 
     public void clickCloseButton(MenuItem item) {
-
-        switch (item) {
-            case CONTACT -> click(contactCloseButton);
-            case ABOUT_US -> click(aboutUsCloseButton);
-            case LOG_IN -> click(logInCloseButton);
-            case SIGN_UP -> click(signUpCloseButton);
+        if (closeButtons.containsKey(item)) {
+            click(closeButtons.get(item),
+                    item.name.substring(4) + " Close Button");
         }
     }
 
@@ -115,6 +123,8 @@ public class TopMenu extends AbstractPage {
         public String getCssSelector() {
             return cssSelector;
         }
+
+
     }
 
 }

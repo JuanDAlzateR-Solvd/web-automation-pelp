@@ -45,7 +45,7 @@ public class DriverFactory {
 
     private static WebDriver createRemoteDriver(DriverType driverType) {
         try {
-            String gridURL= ConfigReader.get("selenium_url");
+            String gridURL = ConfigReader.get("selenium_url");
             URL url = new URL(gridURL);
             switch (driverType) {
                 case CHROME:

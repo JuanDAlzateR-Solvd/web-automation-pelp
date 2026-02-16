@@ -38,10 +38,6 @@ public class ContactModal extends AbstractPage {
         return title;
     }
 
-    public WebDriver getDriver() {
-        return driver;
-    }
-
     public void clickSendButton() {
         click(sendButton, "Send Button");
     }

@@ -32,7 +32,7 @@ public class DemoblazeTest extends AbstractTest {
 
     @Test(testName = "Functionality of top menu", description = "verifies that home page loads,top Menu works correctly")
     public void verifyTopMenuNavigation() {
-
+        WebDriver driver = getDriver();
         HomePage homePage = new HomePage(driver);
         TopMenu topMenu = new TopMenu(driver);
 
@@ -52,8 +52,7 @@ public class DemoblazeTest extends AbstractTest {
 
     @Test(testName = "List of Products - Task1", description = "filters the products by category, then prints in console all the products")
     public void verifyProductsDisplayedForSelectedCategory() {
-        driver.manage().window().maximize();
-        driver.get("https://demoblaze.com/");
+        WebDriver driver = getDriver();
 
         HomePage homePage = new HomePage(driver);
         ProductGrid productGrid = new ProductGrid(driver);
@@ -75,7 +74,7 @@ public class DemoblazeTest extends AbstractTest {
             description = "filters the products by a category, then verifies info from the last product of last page",
             dataProvider = "Category MenuItem Provider")
     public void verifyInfoOfLastProductOfACategory(HomePage.MenuItem category) {
-        WebDriver driver = initializeDriver();
+        WebDriver driver = getDriver();
 
         HomePage homePage = new HomePage(driver);
         ProductGrid productGrid = new ProductGrid(driver);
@@ -113,7 +112,7 @@ public class DemoblazeTest extends AbstractTest {
             description = "choose the first product from a category and add it to cart, then verifies info in shopping cart",
             dataProvider = "Category MenuItem Provider")
     public void verifyAddFirstProductOfCategoryToCart(HomePage.MenuItem category) {
-        WebDriver driver = initializeDriver();
+        WebDriver driver = getDriver();
 
         HomePage homePage = new HomePage(driver);
         ProductGrid productGrid = new ProductGrid(driver);
@@ -156,7 +155,7 @@ public class DemoblazeTest extends AbstractTest {
             description = "choose the first product from a category and add it to cart, then delete it, verifies info in shopping cart",
             dataProvider = "Category MenuItem Provider")
     public void verifyDeleteProductOfCategoryFromCart(HomePage.MenuItem category) {
-        WebDriver driver = initializeDriver();
+        WebDriver driver = getDriver();
 
         HomePage homePage = new HomePage(driver);
         ProductGrid productGrid = new ProductGrid(driver);
@@ -205,7 +204,7 @@ public class DemoblazeTest extends AbstractTest {
     @Test(testName = "Empty Shopping Cart - Task3 TC-004",
             description = "add random products to the shopping cart, then empties the cart")
     public void verifyAllDeleteButtonsToEmptyShoppingCart() {
-        WebDriver driver = initializeDriver();
+        WebDriver driver = getDriver();
 
         HomePage homePage = new HomePage(driver);
         ProductGrid productGrid = new ProductGrid(driver);
@@ -244,7 +243,7 @@ public class DemoblazeTest extends AbstractTest {
     @Test(testName = "Fill Contact Form - Task3 TC-005",
             description = "click on contact, then fills the form and sends it")
     public void verifyFillInfoInContactFormAndSend() {
-        WebDriver driver = initializeDriver();
+        WebDriver driver = getDriver();
 
         HomePage homePage = new HomePage(driver);
         TopMenu topMenu = new TopMenu(driver);
@@ -271,7 +270,7 @@ public class DemoblazeTest extends AbstractTest {
     @Test(testName = "Log In with wrong credentials - Task3 TC-006",
             description = "click on log in, then fills the form and click log in button")
     public void verifyLogInAttemptWithWrongCredentials() {
-        WebDriver driver = initializeDriver();
+        WebDriver driver = getDriver();
 
         HomePage homePage = new HomePage(driver);
         TopMenu topMenu = new TopMenu(driver);
@@ -297,7 +296,7 @@ public class DemoblazeTest extends AbstractTest {
     @Test(testName = "VerifyFooterInfo- Task3 TC-007",
             description = "click on log in, then fills the form and click log in button")
     public void verifyFooterVisibilityAndInfo() {
-        WebDriver driver = initializeDriver();
+        WebDriver driver = getDriver();
 
         HomePage homePage = new HomePage(driver);
 

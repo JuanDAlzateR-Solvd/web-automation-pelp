@@ -39,10 +39,6 @@ public class LogInModal extends AbstractPage {
         return title;
     }
 
-    public WebDriver getDriver() {
-        return driver;
-    }
-
     public void clickLogInButton() {
         click(logInButton, "Log In Button");
     }

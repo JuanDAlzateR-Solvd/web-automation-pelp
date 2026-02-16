@@ -18,18 +18,22 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Parameters;
 
+import java.lang.reflect.Method;
+
 
 public class AbstractTest {
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
-    protected WebDriver driver;
+//    protected WebDriver driver;
     protected WebDriverWait wait;
 
     @BeforeMethod
-    public void setUp() {
-        driver = DriverFactory.createDriver(DriverRunMode.LOCAL, DriverType.CHROME);
-        //DriverRunMode LOCAL or REMOTE. REMOTE Requires Selenium server standalone.
-        driver.manage().window().maximize();
-        driver.get("https://demoblaze.com/");
+    public void setUp(Method method) {
+        DriverFactory.createDriver(DriverRunMode.LOCAL, DriverType.CHROME);
+        //DriverRunMode LOCAL or REMOTE. REMOTE Requires Selenium server.
+        getDriver().manage().window().maximize();
+        getDriver().get("https://demoblaze.com/");
+
+        logger.info("Staring Test: " + method.getName()+"| Thread: "+Thread.currentThread().getName());
     }
 
     @AfterMethod(alwaysRun = true)
@@ -41,14 +45,17 @@ public class AbstractTest {
         }
     }
 
-    public WebDriver initializeDriver() {
-        WebDriver driver = DriverFactory.createDriver(DriverRunMode.REMOTE, DriverType.CHROME);
-        driver.manage().window().maximize();
-        driver.get("https://demoblaze.com/");
+//    public WebDriver initializeDriver() {
+//        WebDriver driver = DriverFactory.createDriver(DriverRunMode.LOCAL, DriverType.CHROME);
+//        driver.manage().window().maximize();
+//        driver.get("https://demoblaze.com/");
+//
+//        return driver;
+//    }
 
-        return driver;
+    protected  WebDriver getDriver() {
+        return DriverFactory.getDriver();
     }
-
     public void clickCategory(HomePage homePage, HomePage.MenuItem category, ProductGrid productGrid) {
         homePage.clickButton(category);
         homePage.waitUntilPageIsReady();

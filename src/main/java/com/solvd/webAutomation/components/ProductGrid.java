@@ -22,10 +22,6 @@ public class ProductGrid extends AbstractPage {
         super(driver);
     }
 
-    public WebDriver getDriver() {
-        return driver;
-    }
-
     @Override
     protected By getPageLoadedIndicator() {
         return By.cssSelector("div[id='tbodyid'] [class='card-img-top img-fluid']");

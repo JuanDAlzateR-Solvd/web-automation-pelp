@@ -26,12 +26,13 @@ public class ShoppingFlow {
         WebElement product = productGrid.getProductNumber(productIndex);
         String productName = productGrid.getProductName(product);
         productGrid.clickProduct(product);
+        productPage.waitUntilPageIsReady();
 
         productPage.clickAddToCartButton();
         productPage.acceptProductAddedAlert();
 
         topMenu.clickMenuItem(TopMenu.MenuItem.HOME);
-        topMenu.waitUntilPageIsReady();
+        productGrid.waitUntilPageIsReady();
 
         return productName;
     }

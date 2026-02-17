@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 
-
 public abstract class AbstractPage {
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
     protected WebDriver driver;
@@ -69,10 +68,7 @@ public abstract class AbstractPage {
                 return false;
             }
         });
-
-
     }
-
 
     protected void type(WebElement element, String text) {
         logger.info("Typing on element [{}]", element.getTagName());
@@ -91,11 +87,11 @@ public abstract class AbstractPage {
         return element.getText();
     }
 
-    protected Boolean isVisible(WebElement element) {
+    protected boolean isVisible(WebElement element) {
         return isVisible(element, element.getTagName());
     }
 
-    protected Boolean isVisible(WebElement element, String elementName) {
+    protected boolean isVisible(WebElement element, String elementName) {
         logger.info("Checking if visibility of element [{}]", elementName);
         try {
             waitVisible(element);
@@ -107,7 +103,7 @@ public abstract class AbstractPage {
         }
     }
 
-    protected Boolean isInViewport(WebElement element, String elementName) {
+    protected boolean isInViewport(WebElement element, String elementName) {
         logger.info("Checking if element is in Viewport [{}]", elementName);
         Boolean isInViewport = (Boolean) ((JavascriptExecutor) driver)
                 .executeScript(
@@ -122,14 +118,14 @@ public abstract class AbstractPage {
                         element);
         String aux = Boolean.TRUE.equals(isInViewport) ? "" : "not";
         logger.info("Element [{}] is " + aux + " in Viewport", elementName);
-        return isInViewport;
+        return Boolean.TRUE.equals(isInViewport);
     }
 
-    protected Boolean isClickable(WebElement element) {
+    protected boolean isClickable(WebElement element) {
         return isClickable(element, element.getTagName());
     }
 
-    protected Boolean isClickable(WebElement element, String elementName) {
+    protected boolean isClickable(WebElement element, String elementName) {
 
         logger.info("Checking if clickable on element [{}]", elementName);
         try {

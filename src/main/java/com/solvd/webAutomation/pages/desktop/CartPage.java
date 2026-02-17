@@ -91,11 +91,10 @@ public class CartPage extends AbstractPage {
 //        waitUntilPageIsLoaded();
 //        waitUntilCartDeletesProduct();
 
-        if (!isCartEmpty2()) {
+        if (!isCartEmpty3()) {
             waitUntilCartDeletesProduct();
-            waitVisible(getProductGridContainer());
-        }else  {
-            waitUntilPageIsReady();
+            WebElement indicator = driver.findElement(getPageLoadedIndicator());
+            waitVisible(indicator);
         }
 
     }
@@ -111,15 +110,31 @@ public class CartPage extends AbstractPage {
     public boolean isCartEmpty2() {
         logger.info("Checking if shopping cart is empty");
        try{
-           By by = By.cssSelector("#tbodyid .success");
-           productGridContainer.findElements(by);
            wait.until(ExpectedConditions.visibilityOf(getProductGridContainer()));
+           By by = By.cssSelector("#tbodyid tr");
+           List<WebElement> rows =driver.findElements(by);
            logger.info("Shopping cart is not empty");
-           return false;
+           return rows.size()==0;
        }catch (InvalidSelectorException e){
            logger.info("Shopping cart is empty");
            return true;
        }
 
     }
+    public boolean isCartEmpty3() {
+        logger.info("Checking if shopping cart is empty");
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.id("tbodyid")));
+
+        List<WebElement> rows =
+                driver.findElements(By.cssSelector("#tbodyid tr"));
+
+        if (rows.size()==0) {
+            logger.info("Shopping cart is empty");
+        }else
+        {
+            logger.info("Shopping cart is not empty");
+        }
+        return rows.size() == 0;
+    }
+
 }

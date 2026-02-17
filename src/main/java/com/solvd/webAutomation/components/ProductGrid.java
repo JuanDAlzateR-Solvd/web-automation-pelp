@@ -9,7 +9,6 @@ import org.openqa.selenium.support.FindBy;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class ProductGrid extends AbstractPage {
 
@@ -32,7 +31,7 @@ public class ProductGrid extends AbstractPage {
     }
 
     public List<WebElement> getProductElements() {
-        return productElements; //other possibility ":scope >* a[class='hrefch']"
+        return productElements;
     }
 
     public List<String> getProductTitles() {

@@ -9,7 +9,7 @@ public class ProductPage extends AbstractPage {
 
     @FindBy(css = ".item.active")
     private WebElement image;
-    @FindBy(css = "#tbodyid .name]")
+    @FindBy(css = "#tbodyid .name")
     private WebElement title;
     @FindBy(css = "#tbodyid .price-container")
     private WebElement price;

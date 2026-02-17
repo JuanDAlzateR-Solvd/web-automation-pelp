@@ -9,6 +9,7 @@ import org.openqa.selenium.support.FindBy;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class ProductGrid extends AbstractPage {
 
@@ -42,7 +43,7 @@ public class ProductGrid extends AbstractPage {
         return productsList;
     }
 
-    public Boolean nextButtonIsClickable() {
+    public boolean nextButtonIsClickable() {
         return isClickable(nextButton);
     }
 
@@ -75,11 +76,10 @@ public class ProductGrid extends AbstractPage {
         return productGridContainer;
     }
 
-    public WebElement getProductNumber(int productNumber) {
+    public WebElement getProductByIndex(int productIndex) {
         List<WebElement> products = getProductElements();
-        WebElement product = products.get(productNumber);
+        WebElement product = products.get(productIndex);
         logger.info(getTextOf(product));
-        //  productGrid.waitVisible(firstProduct);
         return product;
     }
 

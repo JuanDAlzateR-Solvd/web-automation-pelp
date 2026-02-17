@@ -55,7 +55,7 @@ public class DemoblazeTest extends AbstractTest {
 
         homePage.waitUntilPageIsReady();
 
-        homePage.clickBy(HomePage.MenuItem.LAPTOPS);
+        homePage.clickButton(HomePage.MenuItem.LAPTOPS);
 
         homePage.waitUntilPageIsReady();
 
@@ -78,7 +78,7 @@ public class DemoblazeTest extends AbstractTest {
 
         homePage.waitUntilPageIsReady();
 
-        homePage.clickBy(category);
+        homePage.clickButton(category);
 
         homePage.waitUntilPageIsReady();
 
@@ -120,7 +120,7 @@ public class DemoblazeTest extends AbstractTest {
 
         clickCategory(homePage, category, productGrid);
 
-        WebElement firstProduct = productGrid.getProductNumber(0);
+        WebElement firstProduct = productGrid.getProductByIndex(0);
 
         String firstProductName = productGrid.getProductName(firstProduct);
 
@@ -163,7 +163,7 @@ public class DemoblazeTest extends AbstractTest {
 
         clickCategory(homePage, category, productGrid);
 
-        WebElement firstProduct = productGrid.getProductNumber(0);
+        WebElement firstProduct = productGrid.getProductByIndex(0);
         String firstProductName = productGrid.getProductName(firstProduct);
         productGrid.clickProduct(firstProduct);
 

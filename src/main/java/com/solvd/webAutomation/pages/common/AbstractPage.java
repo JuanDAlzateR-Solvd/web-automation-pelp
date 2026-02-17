@@ -112,7 +112,16 @@ public abstract class AbstractPage {
 
     protected String getText(WebElement element, String elementName) {
         logger.info("Getting text from element [{}]", elementName);
-        wait.until(ExpectedConditions.visibilityOf(element));
+        wait.until(driver -> {
+            try {
+                wait.until(ExpectedConditions.visibilityOf(element));
+                scrollTo(element);
+                return true;
+            } catch (StaleElementReferenceException e) {
+                logger.warn("Stale element while getting text from [{}], retrying...", elementName);
+                return false;
+            }
+        });
         return element.getText();
     }
 

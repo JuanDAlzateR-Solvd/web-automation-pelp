@@ -23,7 +23,7 @@ public class ShoppingFlow {
     }
 
     public String addProductToCart(int productIndex) {
-        WebElement product = productGrid.getProductNumber(productIndex);
+        WebElement product = productGrid.getProductByIndex(productIndex);
         String productName = productGrid.getProductName(product);
         productGrid.clickProduct(product);
         productPage.waitUntilPageIsReady();

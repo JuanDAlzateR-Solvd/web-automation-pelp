@@ -11,12 +11,14 @@ import java.util.stream.IntStream;
 
 public class CartPage extends AbstractPage {
 
-    private static final String addToCartButtonCssSelector = "a[onclick*='addToCart']";
-
-    @FindBy(css = "tbody[id='tbodyid']")
-    private WebElement grid;
-    @FindBy(css = "h3[id='totalp']")
+    @FindBy(css = "#tbodyid]")
+    private WebElement productGridContainer;
+    @FindBy(css = "#totalp")
     private WebElement totalPrice;
+    @FindBy(css = "#tbodyid .success")
+    private List<WebElement> productElements;
+    @FindBy(css = "#tbodyid a[onclick*='deleteItem']")
+    private List<WebElement> deleteButtonsList;
 
     private List<WebElement> products;
 
@@ -24,21 +26,21 @@ public class CartPage extends AbstractPage {
         super(driver);
     }
 
-    public WebElement getGrid() {
-        return grid;
+    public WebElement getProductGridContainer() {
+        return productGridContainer;
     }
 
     @Override
     protected By getPageLoadedIndicator() {
-        return By.cssSelector("div[class='table-responsive']");
+        return By.cssSelector(".table-responsive");
     }
 
-    public List<WebElement> getElementsList() {
-        return grid.findElements(By.cssSelector(":scope tr[class='success']"));
+    public List<WebElement> getProductElements() {
+        return productElements;
     }
 
     public List<WebElement> getDeleteButtonsList() {
-        return grid.findElements(By.cssSelector(":scope a[onclick*='deleteItem']"));
+        return deleteButtonsList;
     }
 
     public String getTextOf(WebElement product) {
@@ -51,11 +53,11 @@ public class CartPage extends AbstractPage {
     }
 
     public boolean isCartEmpty() {
-        return getElementsList().isEmpty();
+        return getProductElements().isEmpty();
     }
 
     public List<WebElement> getCartProducts() {
-        List<WebElement> cartProducts = getElementsList();
+        List<WebElement> cartProducts = getProductElements();
         logger.info("products in cart:{}", cartProducts.size());
         cartProducts.forEach(p -> {
             logger.info(p.getText());
@@ -79,7 +81,7 @@ public class CartPage extends AbstractPage {
     }
 
     public void deleteProduct(int productIndex) {
-        List<WebElement> products = getElementsList();
+        List<WebElement> products = getProductElements();
         List<WebElement> deleteButtons = getDeleteButtonsList();
         WebElement productToDelete = products.get(productIndex);
         String productName = getTextOf(productToDelete);
@@ -90,7 +92,7 @@ public class CartPage extends AbstractPage {
         waitUntilCartDeletesProduct();
 
         if (deleteButtons.size() > 1) {
-            waitVisible(getGrid());
+            waitVisible(getProductGridContainer());
         }
 
     }
@@ -98,7 +100,7 @@ public class CartPage extends AbstractPage {
     public void waitUntilCartDeletesProduct() {
         logger.info("Waiting for the shopping cart to reload");
         int cartSize = getCartProducts().size();
-        By by = By.cssSelector("tbody[id='tbodyid'] tr[class='success']");
+        By by = By.cssSelector("#tbodyid .success");
         wait.until(ExpectedConditions.numberOfElementsToBe(by, cartSize - 1));
 
     }

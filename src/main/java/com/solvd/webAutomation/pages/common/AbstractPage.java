@@ -50,8 +50,6 @@ public abstract class AbstractPage {
                 return false;
             }
         });
-
-
     }
 
     public void click(By locator, String elementName) {
@@ -204,7 +202,6 @@ public abstract class AbstractPage {
         } catch (TimeoutException e) {
             logger.info("Modal is not visible, continuing");
         }
-
     }
 
     public void waitVisible(WebElement element) {

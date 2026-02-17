@@ -31,7 +31,7 @@ public class ShoppingFlow {
         productPage.clickAddToCartButton();
         productPage.acceptProductAddedAlert();
 
-        topMenu.clickMenuItem(TopMenu.MenuItem.HOME);
+        topMenu.clickButton(TopMenu.MenuItem.HOME);
         productGrid.waitUntilPageIsReady();
 
         return productName;

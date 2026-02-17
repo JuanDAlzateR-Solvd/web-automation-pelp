@@ -18,9 +18,9 @@ public class LogInModal extends AbstractPage {
     private WebElement logInButton;
     @FindBy(css = "#logInModal button.btn.btn-secondary")
     private WebElement closeButton;
-    @FindBy(id="loginusername")
+    @FindBy(id = "loginusername")
     private WebElement usernameInput;
-    @FindBy(id="loginpassword")
+    @FindBy(id = "loginpassword")
     private WebElement passwordInput;
 
     public LogInModal(WebDriver driver) {

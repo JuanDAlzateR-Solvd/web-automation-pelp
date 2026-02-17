@@ -47,12 +47,12 @@ public class ContactModal extends AbstractPage {
     }
 
     public void click(MenuItem item) {
-        WebElement element=menuInputs.get(item);
+        WebElement element = menuInputs.get(item);
         click(element, item.getName());
     }
 
     public void type(MenuItem item, String text) {
-        WebElement element=menuInputs.get(item);
+        WebElement element = menuInputs.get(item);
         type(element, item.getName(), text);
     }
 

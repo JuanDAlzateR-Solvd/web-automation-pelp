@@ -95,7 +95,7 @@ public class TopMenu extends AbstractPage {
 
         if (closeButtons.containsKey(item)) {
             result = isVisible(closeButtons.get(item));
-        }else{
+        } else {
             switch (item) {
                 case HOME -> result = driver.getCurrentUrl().contains("index.html");
                 case CART -> result = driver.getCurrentUrl().contains("cart.html");

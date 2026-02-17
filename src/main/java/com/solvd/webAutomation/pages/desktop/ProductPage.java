@@ -30,12 +30,12 @@ public class ProductPage extends AbstractPage {
     }
 
     public boolean isVisible(InfoItem item) {
-      return   switch (item) {
-          case IMAGE -> isVisible(image, item.getName());
-          case TITLE -> isVisible(title, item.getName());
-          case PRICE -> isVisible(price, item.getName());
-          case DESCRIPTION -> isVisible(description, item.getName());
-      };
+        return switch (item) {
+            case IMAGE -> isVisible(image, item.getName());
+            case TITLE -> isVisible(title, item.getName());
+            case PRICE -> isVisible(price, item.getName());
+            case DESCRIPTION -> isVisible(description, item.getName());
+        };
     }
 
     public void clickAddToCartButton2() {//It doesn't work
@@ -74,6 +74,7 @@ public class ProductPage extends AbstractPage {
         InfoItem(String name) {
             this.name = name;
         }
+
         public String getName() {
             return name;
         }

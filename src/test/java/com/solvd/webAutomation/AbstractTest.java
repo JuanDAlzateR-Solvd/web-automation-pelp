@@ -21,7 +21,7 @@ import java.lang.reflect.Method;
 
 public class AbstractTest {
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
-//    protected WebDriver driver;
+    //    protected WebDriver driver;
     protected WebDriverWait wait;
 
     @BeforeMethod
@@ -31,7 +31,7 @@ public class AbstractTest {
         getDriver().manage().window().maximize();
         getDriver().get("https://demoblaze.com/");
 
-        logger.info("Staring Test: " + method.getName()+"| Thread: "+Thread.currentThread().getName());
+        logger.info("Staring Test: " + method.getName() + "| Thread: " + Thread.currentThread().getName());
     }
 
     @AfterMethod(alwaysRun = true)
@@ -51,9 +51,10 @@ public class AbstractTest {
 //        return driver;
 //    }
 
-    protected  WebDriver getDriver() {
+    protected WebDriver getDriver() {
         return DriverFactory.getDriver();
     }
+
     public void clickCategory(HomePage homePage, HomePage.MenuItem category, ProductGrid productGrid) {
         homePage.clickButton(category);
         homePage.waitUntilPageIsReady();

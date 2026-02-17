@@ -38,8 +38,8 @@ public class ShoppingFlow {
     }
 
     public String addRandomProductToCart() {
-        productGrid.waitVisible(productGrid.getGrid());
-        List<WebElement> products = productGrid.getElementsList();
+        productGrid.waitVisible(productGrid.getProductGridContainer());
+        List<WebElement> products = productGrid.getProductElements();
         int size = products.size();
 
         Random rand = new Random();

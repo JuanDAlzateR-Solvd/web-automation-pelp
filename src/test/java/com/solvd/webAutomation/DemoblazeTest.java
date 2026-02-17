@@ -5,9 +5,6 @@ import com.solvd.webAutomation.components.TopMenu;
 
 import com.solvd.webAutomation.components.*;
 
-import com.solvd.webAutomation.driver.DriverFactory;
-import com.solvd.webAutomation.driver.DriverRunMode;
-import com.solvd.webAutomation.driver.DriverType;
 import com.solvd.webAutomation.flows.ShoppingFlow;
 import com.solvd.webAutomation.pages.desktop.CartPage;
 import com.solvd.webAutomation.pages.desktop.HomePage;
@@ -24,7 +21,6 @@ import org.testng.asserts.SoftAssert;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.*;
 
 public class DemoblazeTest extends AbstractTest {
     private static final Logger logger =
@@ -88,9 +84,9 @@ public class DemoblazeTest extends AbstractTest {
 
         productGrid.clickNextButtonIfPossible(category);
 
-        homePage.waitVisible(productGrid.getGrid());
+        homePage.waitVisible(productGrid.getProductGridContainer());
 
-        List<WebElement> products = productGrid.getElementsList();
+        List<WebElement> products = productGrid.getProductElements();
         WebElement lastProduct = products.get(products.size() - 1);
 
         logger.info(productGrid.getTextOf(lastProduct));

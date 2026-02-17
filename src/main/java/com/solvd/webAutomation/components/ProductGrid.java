@@ -12,11 +12,14 @@ import java.util.List;
 
 public class ProductGrid extends AbstractPage {
 
-    @FindBy(css = "div[id='tbodyid']")
-    private WebElement grid;
+    @FindBy(css = "#tbodyid")
+    private WebElement productGridContainer;
 
-    @FindBy(css = "button[id*='next']")
+    @FindBy(css = ".pagination #next2")
     private WebElement nextButton;
+
+    @FindBy(css = "#tbodyid .card-title")
+    private List<WebElement> productElements;
 
     public ProductGrid(WebDriver driver) {
         super(driver);
@@ -24,16 +27,16 @@ public class ProductGrid extends AbstractPage {
 
     @Override
     protected By getPageLoadedIndicator() {
-        return By.cssSelector("div[id='tbodyid'] [class='card-img-top img-fluid']");
+        return By.cssSelector("#tbodyid .card-img-top.img-fluid");
     }
 
-    public List<WebElement> getElementsList() {
-        return grid.findElements(By.cssSelector(":scope .card-title")); //other possibility ":scope >* a[class='hrefch']"
+    public List<WebElement> getProductElements() {
+        return productElements; //other possibility ":scope >* a[class='hrefch']"
     }
 
     public List<String> getProductTitles() {
         List<String> productsList = new ArrayList<>();
-        for (WebElement product : getElementsList()) {
+        for (WebElement product : getProductElements()) {
             productsList.add(getText(product));
         }
         return productsList;
@@ -44,8 +47,7 @@ public class ProductGrid extends AbstractPage {
     }
 
     public void clickNextButton() {
-//        click(nextButton, "Next Button");
-        click(By.cssSelector("button[id*='next']"), "Next Button");
+        click(nextButton, "Next Button");
     }
 
     public void clickNextButtonIfPossible(HomePage.MenuItem category) {
@@ -69,12 +71,12 @@ public class ProductGrid extends AbstractPage {
         return getText(product).split("\n")[0];
     }
 
-    public WebElement getGrid() {
-        return grid;
+    public WebElement getProductGridContainer() {
+        return productGridContainer;
     }
 
     public WebElement getProductNumber(int productNumber) {
-        List<WebElement> products = getElementsList();
+        List<WebElement> products = getProductElements();
         WebElement product = products.get(productNumber);
         logger.info(getTextOf(product));
         //  productGrid.waitVisible(firstProduct);

@@ -38,18 +38,38 @@ public abstract class AbstractPage {
 
     public void click(WebElement element, String elementName) {
         logger.info("Clicking on element [{}]", elementName);
-        wait.until(ExpectedConditions.elementToBeClickable(element));
-        scrollTo(element);
-        element.click();
+
+        wait.until(driver -> {
+            try {
+                wait.until(ExpectedConditions.elementToBeClickable(element));
+                scrollTo(element);
+                element.click();
+                return true;
+            } catch (StaleElementReferenceException e) {
+                logger.warn("Stale element while clicking [{}], retrying...", elementName);
+                return false;
+            }
+        });
+
+
     }
 
     public void click(By locator, String elementName) {
         logger.info("Clicking on element [{}]", elementName);
 //        waitUntilModalIsGone();
         WebElement element = driver.findElement(locator);
-        wait.until(ExpectedConditions.elementToBeClickable(element));
-        scrollTo(element);
-        element.click();
+
+        wait.until(driver -> {
+            try {
+                wait.until(ExpectedConditions.elementToBeClickable(element));
+                scrollTo(element);
+                element.click();
+                return true;
+            } catch (StaleElementReferenceException e) {
+                logger.warn("Stale element while clicking [{}], retrying...", elementName);
+                return false;
+            }
+        });
     }
 
     public void type(By locator, String elementName, String text) {
@@ -70,11 +90,20 @@ public abstract class AbstractPage {
         });
     }
 
-    protected void type(WebElement element, String text) {
-        logger.info("Typing on element [{}]", element.getTagName());
-        wait.until(ExpectedConditions.visibilityOf(element));
-        element.clear();
-        element.sendKeys(text);
+    protected void type(WebElement element, String elementName, String text) {
+        logger.info("Typing on element [{}]", elementName);
+        wait.until(driver -> {
+            try {
+                wait.until(ExpectedConditions.visibilityOf(element));
+                scrollTo(element);
+                element.clear();
+                element.sendKeys(text);
+                return true;
+            } catch (StaleElementReferenceException e) {
+                logger.warn("Stale element while typing [{}], retrying...", elementName);
+                return false;
+            }
+        });
     }
 
     protected String getText(WebElement element) {

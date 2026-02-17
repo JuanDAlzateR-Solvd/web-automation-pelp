@@ -285,7 +285,7 @@ public class DemoblazeTest extends AbstractTest {
         logInModal.type(LogInModal.MenuItem.USERNAME, "example@email.com");
         logInModal.type(LogInModal.MenuItem.PASSWORD, "Example Password");
 
-        logInModal.clickLogInButton();
+        logInModal.click(LogInModal.MenuItem.LOG_IN);
         sa.assertTrue(logInModal.isAlertPresent());
         logInModal.acceptWrongPasswordAlert();
 
@@ -318,7 +318,6 @@ public class DemoblazeTest extends AbstractTest {
         sa.assertAll();
 
     }
-
 
     //Data Providers
     @DataProvider(name = "Category MenuItem Provider")

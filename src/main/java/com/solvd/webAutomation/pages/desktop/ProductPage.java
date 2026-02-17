@@ -7,7 +7,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class ProductPage extends AbstractPage {
 
-    private static final String addToCartButtonCssSelector = "a[onclick*='addToCart']";
+    private static final String addToCartButtonCssSelector = "a.btn.btn-success.btn-lg";
 
     @FindBy(css = "div[class='item active']")
     private WebElement image;
@@ -17,9 +17,8 @@ public class ProductPage extends AbstractPage {
     private WebElement price;
     @FindBy(css = "div[id='tbodyid'] div[id='more-information']")
     private WebElement description;
-    @FindBy(css = addToCartButtonCssSelector)
+    @FindBy(css = "a.btn.btn-success.btn-lg")
     private WebElement addToCartButton;
-
 
     public ProductPage(WebDriver driver) {
         super(driver);
@@ -30,23 +29,13 @@ public class ProductPage extends AbstractPage {
         return By.cssSelector("div[id='myCarousel-2'] img");
     }
 
-    public Boolean isVisible(InfoItem item) {
-        switch (item) {
-            case IMAGE -> {
-                return isVisible(image, item.name);
-            }
-            case TITLE -> {
-                return isVisible(title, item.name);
-            }
-            case PRICE -> {
-                return isVisible(price, item.name);
-            }
-            case DESCRIPTION -> {
-                return isVisible(description, item.name);
-            }
-        }
-        logger.info("error: infoItem not found");
-        return false;
+    public boolean isVisible(InfoItem item) {
+      return   switch (item) {
+          case IMAGE -> isVisible(image, item.getName());
+          case TITLE -> isVisible(title, item.getName());
+          case PRICE -> isVisible(price, item.getName());
+          case DESCRIPTION -> isVisible(description, item.getName());
+      };
     }
 
     public void clickAddToCartButton2() {//It doesn't work
@@ -85,7 +74,9 @@ public class ProductPage extends AbstractPage {
         InfoItem(String name) {
             this.name = name;
         }
+        public String getName() {
+            return name;
+        }
     }
-
 
 }

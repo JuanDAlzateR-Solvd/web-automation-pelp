@@ -8,26 +8,30 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
-public class ContactModal extends AbstractPage {
+import java.util.Map;
 
-    private static final String inputEmailCssSelector = "#recipient-email";
-    private static final String inputNameCssSelector = "#recipient-name";
-    private static final String inputMessageCssSelector = "#message-text";
+public class ContactModal extends AbstractPage {
 
     @FindBy(css = "#exampleModalLabel")
     private WebElement title;
-    @FindBy(css = "button[onclick='send()']")
+    @FindBy(css = "#exampleModal button.btn.btn-primary")
     private WebElement sendButton;
-    @FindBy(css = inputEmailCssSelector)
+    @FindBy(css = "#recipient-email")
     private WebElement inputEmail;
-    @FindBy(css = inputNameCssSelector)
+    @FindBy(css = "#recipient-name")
     private WebElement inputName;
-    @FindBy(css = inputMessageCssSelector)
+    @FindBy(css = "#message-text")
     private WebElement inputMessage;
 
     public ContactModal(WebDriver driver) {
         super(driver);
     }
+
+    private final Map<MenuItem, WebElement> menuInputs = Map.of(
+            MenuItem.EMAIL, inputEmail,
+            MenuItem.NAME, inputName,
+            MenuItem.MESSAGE, inputMessage
+    );
 
     @Override
     protected By getPageLoadedIndicator() {
@@ -43,13 +47,13 @@ public class ContactModal extends AbstractPage {
     }
 
     public void click(MenuItem item) {
-        By by = By.cssSelector(item.cssSelector);
-        click(by, item.name);
+        WebElement element=menuInputs.get(item);
+        click(element, item.getName());
     }
 
     public void type(MenuItem item, String text) {
-        By by = By.cssSelector(item.cssSelector);
-        type(by, item.name, text);
+        WebElement element=menuInputs.get(item);
+        type(element, item.getName(), text);
     }
 
     public boolean isContactModalVisible() {
@@ -62,26 +66,20 @@ public class ContactModal extends AbstractPage {
         alert.accept();
     }
 
-
     public enum MenuItem {
-        EMAIL("Input Email", inputEmailCssSelector),
-        NAME("Input Name", inputNameCssSelector),
-        MESSAGE("Input Message", inputMessageCssSelector);
+        EMAIL("Input Email"),
+        NAME("Input Name"),
+        MESSAGE("Input Message");
 
         private final String name;
-        private final String cssSelector;
 
-        MenuItem(String name, String cssSelector) {
+        MenuItem(String name) {
             this.name = name;
-            this.cssSelector = cssSelector;
         }
 
         public String getName() {
             return name;
         }
 
-        public String getCssSelector() {
-            return cssSelector;
-        }
     }
 }

@@ -255,7 +255,7 @@ public class DemoblazeTest extends AbstractTest {
         contactModal.type(ContactModal.MenuItem.NAME, "Example Name");
         contactModal.type(ContactModal.MenuItem.MESSAGE, "This is a test message");
 
-        contactModal.clickSendButton();
+        contactModal.click(ContactModal.MenuItem.SEND);
         sa.assertTrue(contactModal.isAlertPresent());
         contactModal.acceptMessageAlert();
 

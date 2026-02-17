@@ -14,23 +14,30 @@ public class ContactModal extends AbstractPage {
 
     @FindBy(css = "#exampleModalLabel")
     private WebElement title;
+    @FindBy(css = "#recipient-email")
+    private WebElement emailInput;
+    @FindBy(css = "#recipient-name")
+    private WebElement nameInput;
+    @FindBy(css = "#message-text")
+    private WebElement messageInput;
     @FindBy(css = "#exampleModal button.btn.btn-primary")
     private WebElement sendButton;
-    @FindBy(css = "#recipient-email")
-    private WebElement inputEmail;
-    @FindBy(css = "#recipient-name")
-    private WebElement inputName;
-    @FindBy(css = "#message-text")
-    private WebElement inputMessage;
+    @FindBy(css = "#exampleModal button.btn.btn-secondary")
+    private WebElement closeButton;
 
     public ContactModal(WebDriver driver) {
         super(driver);
     }
 
     private final Map<MenuItem, WebElement> menuInputs = Map.of(
-            MenuItem.EMAIL, inputEmail,
-            MenuItem.NAME, inputName,
-            MenuItem.MESSAGE, inputMessage
+            MenuItem.EMAIL, emailInput,
+            MenuItem.NAME, nameInput,
+            MenuItem.MESSAGE, messageInput
+    );
+
+    private final Map<MenuItem, WebElement> menuButtons = Map.of(
+            MenuItem.CLOSE, closeButton,
+            MenuItem.SEND, sendButton
     );
 
     @Override
@@ -42,12 +49,8 @@ public class ContactModal extends AbstractPage {
         return title;
     }
 
-    public void clickSendButton() {
-        click(sendButton, "Send Button");
-    }
-
     public void click(MenuItem item) {
-        WebElement element = menuInputs.get(item);
+        WebElement element = menuButtons.get(item);
         click(element, item.getName());
     }
 
@@ -69,7 +72,9 @@ public class ContactModal extends AbstractPage {
     public enum MenuItem {
         EMAIL("Input Email"),
         NAME("Input Name"),
-        MESSAGE("Input Message");
+        MESSAGE("Input Message"),
+        CLOSE("Close Button"),
+        SEND("Send Button");
 
         private final String name;
 

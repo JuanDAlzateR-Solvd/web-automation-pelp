@@ -30,7 +30,7 @@ public class HomePage extends AbstractPage {
 
     @Override
     protected By getPageLoadedIndicator() {
-        return By.cssSelector("div[id='tbodyid'] [class='card-img-top img-fluid']");
+        return By.cssSelector("#tbodyid .card-img-top.img-fluid");
     }
 
     public void clickButton(MenuItem item) {

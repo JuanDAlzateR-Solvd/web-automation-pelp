@@ -9,13 +9,13 @@ public class ProductPage extends AbstractPage {
 
     private static final String addToCartButtonCssSelector = "a.btn.btn-success.btn-lg";
 
-    @FindBy(css = "div[class='item active']")
+    @FindBy(css = ".item.active")
     private WebElement image;
-    @FindBy(css = "div[id='tbodyid']>h2[class='name']")
+    @FindBy(css = "#tbodyid .name]")
     private WebElement title;
-    @FindBy(css = "div[id='tbodyid']>h3[class='price-container']")
+    @FindBy(css = "#tbodyid .price-container")
     private WebElement price;
-    @FindBy(css = "div[id='tbodyid'] div[id='more-information']")
+    @FindBy(css = "#tbodyid #more-information")
     private WebElement description;
     @FindBy(css = "a.btn.btn-success.btn-lg")
     private WebElement addToCartButton;
@@ -26,7 +26,7 @@ public class ProductPage extends AbstractPage {
 
     @Override
     protected By getPageLoadedIndicator() {
-        return By.cssSelector("div[id='myCarousel-2'] img");
+        return By.cssSelector("#myCarousel-2 img");
     }
 
     public boolean isVisible(InfoItem item) {

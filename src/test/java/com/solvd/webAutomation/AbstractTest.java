@@ -64,7 +64,7 @@ public class AbstractTest {
     public void clickCart(TopMenu topMenu, CartPage cartPage) {
         topMenu.clickButton(TopMenu.MenuItem.CART);
         cartPage.waitUntilPageIsReady();
-        cartPage.waitVisible(cartPage.getProductGridContainer());
+//        cartPage.waitVisible(cartPage.getProductGridContainer());
     }
 
     public void clickContact(TopMenu topMenu, ContactModal contactModal) {

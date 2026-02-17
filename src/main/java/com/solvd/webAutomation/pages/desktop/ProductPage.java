@@ -7,8 +7,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class ProductPage extends AbstractPage {
 
-    private static final String addToCartButtonCssSelector = "a.btn.btn-success.btn-lg";
-
     @FindBy(css = ".item.active")
     private WebElement image;
     @FindBy(css = "#tbodyid .name]")
@@ -26,8 +24,8 @@ public class ProductPage extends AbstractPage {
 
     @Override
     protected By getPageLoadedIndicator() {
-        return By.cssSelector("#myCarousel-2 img");
-    }
+        return By.cssSelector("#myCarousel-2");
+    }//"#myCarousel-2 img"
 
     public boolean isVisible(InfoItem item) {
         return switch (item) {
@@ -39,7 +37,7 @@ public class ProductPage extends AbstractPage {
     }
 
     public void clickAddToCartButton2() {//It doesn't work
-        By by = By.cssSelector(addToCartButtonCssSelector);
+        By by = By.cssSelector("a.btn.btn-success.btn-lg");
         click(by, "Add To Cart Button");
     }
 

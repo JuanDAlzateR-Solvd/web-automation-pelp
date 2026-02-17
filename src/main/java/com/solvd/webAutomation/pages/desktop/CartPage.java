@@ -89,10 +89,13 @@ public class CartPage extends AbstractPage {
         click(deleteButtons.get(productIndex), "deleteButton" + productIndex);
 
 //        waitUntilPageIsLoaded();
-        waitUntilCartDeletesProduct();
+//        waitUntilCartDeletesProduct();
 
-        if (deleteButtons.size() > 1) {
+        if (!isCartEmpty2()) {
+            waitUntilCartDeletesProduct();
             waitVisible(getProductGridContainer());
+        }else  {
+            waitUntilPageIsReady();
         }
 
     }
@@ -102,6 +105,21 @@ public class CartPage extends AbstractPage {
         int cartSize = getCartProducts().size();
         By by = By.cssSelector("#tbodyid .success");
         wait.until(ExpectedConditions.numberOfElementsToBe(by, cartSize - 1));
+
+    }
+
+    public boolean isCartEmpty2() {
+        logger.info("Checking if shopping cart is empty");
+       try{
+           By by = By.cssSelector("#tbodyid .success");
+           productGridContainer.findElements(by);
+           wait.until(ExpectedConditions.visibilityOf(getProductGridContainer()));
+           logger.info("Shopping cart is not empty");
+           return false;
+       }catch (InvalidSelectorException e){
+           logger.info("Shopping cart is empty");
+           return true;
+       }
 
     }
 }

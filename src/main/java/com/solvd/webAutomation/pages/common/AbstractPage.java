@@ -204,8 +204,21 @@ public abstract class AbstractPage {
         }
     }
 
+//    public void waitVisible(WebElement element) {
+//        wait.until(ExpectedConditions.visibilityOf(element));
+//    }
+
     public void waitVisible(WebElement element) {
-        wait.until(ExpectedConditions.visibilityOf(element));
+        wait.until(driver -> {
+            try {
+                wait.until(ExpectedConditions.visibilityOf(element));
+                scrollTo(element);
+                return true;
+            } catch (StaleElementReferenceException e) {
+                logger.warn("Stale element while waiting visibility of [{}], retrying...", element.getTagName());
+                return false;
+            }
+        });
     }
 
     protected void waitClickable(WebElement element) {

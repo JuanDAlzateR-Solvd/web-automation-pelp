@@ -189,7 +189,7 @@ public class DemoblazeTest extends AbstractTest {
 
         cartPage.waitUntilPageIsReady();
 
-        List<WebElement> newCartProducts = cartPage.getElementsList();
+        List<WebElement> newCartProducts = cartPage.getCartProducts();
 
         sa.assertTrue(newCartProducts.size() == cartProducts.size() - 1, "The product was not deleted");
 
@@ -228,7 +228,7 @@ public class DemoblazeTest extends AbstractTest {
             cartPage.deleteProduct(0);
         }
 
-        List<WebElement> newCartProducts = cartPage.getElementsList();
+        List<WebElement> newCartProducts = cartPage.getCartProducts();
 
         sa.assertTrue(newCartProducts.isEmpty(), "The shooping cart is not empty");
 

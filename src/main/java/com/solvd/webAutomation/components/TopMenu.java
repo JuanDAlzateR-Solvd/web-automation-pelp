@@ -16,7 +16,7 @@ public class TopMenu extends AbstractPage {
     private WebElement contactButton;
     @FindBy(css = "a.nav-link[data-target='#videoModal']")
     private WebElement aboutUsButton;
-    @FindBy(css = "a.nav-link#cartur")
+    @FindBy(css = "a.nav-link[href='cart.html']")
     private WebElement cartButton;
     @FindBy(css = "a.nav-link#login2")
     private WebElement logInButton;

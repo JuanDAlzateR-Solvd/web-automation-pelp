@@ -176,6 +176,7 @@ public class DemoblazeTest extends AbstractTest {
         clickCart(topMenu, cartPage);
 
         List<WebElement> cartProducts = cartPage.getCartProducts();
+        int initialCartSize = cartProducts.size();
 
         sa.assertFalse(cartProducts.isEmpty(), "the shopping cart is empty");
 
@@ -189,9 +190,13 @@ public class DemoblazeTest extends AbstractTest {
 
         cartPage.waitUntilPageIsReady();
 
-        List<WebElement> newCartProducts = cartPage.getCartProducts();
+        int finalCartSize=0;
+        if (!cartPage.isCartEmpty()) {
+            List<WebElement> newCartProducts = cartPage.getCartProducts();
+            finalCartSize = newCartProducts.size();
+        }
 
-        sa.assertTrue(newCartProducts.size() == cartProducts.size() - 1, "The product was not deleted");
+        sa.assertTrue(finalCartSize == initialCartSize - 1, "The product was not deleted");
 
         sa.assertAll();
 

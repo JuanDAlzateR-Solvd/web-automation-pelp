@@ -85,6 +85,6 @@ public class ContactModal extends AbstractPage {
         public String getName() {
             return name;
         }
-
     }
+
 }

@@ -26,8 +26,8 @@ public class ShoppingFlow {
         WebElement product = productGrid.getProductByIndex(productIndex);
         String productName = productGrid.getProductName(product);
 
-        if (productName.equals("Nexus 6")){//Identified a bug specific for the Nexus 6 product, for now just change product.
-            product = productGrid.getProductByIndex(productIndex+1);
+        if (productName.equals("Nexus 6")) {//Identified a bug specific for the Nexus 6 product, for now just change product.
+            product = productGrid.getProductByIndex(productIndex + 1);
             productName = productGrid.getProductName(product);
         }
 

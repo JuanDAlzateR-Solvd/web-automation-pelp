@@ -5,7 +5,6 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.OptionalInt;
 import java.util.stream.IntStream;
@@ -39,6 +38,7 @@ public class CartPage extends AbstractPage {
     public List<WebElement> getProductElements() {
         return productElements;
     }
+
     public List<WebElement> getProductElementsBy() {
         return productGridContainer.findElements(By.cssSelector(":scope tr[class='success']"));
     }
@@ -58,15 +58,13 @@ public class CartPage extends AbstractPage {
 
     public List<WebElement> getCartProducts() {
 
-            List<WebElement> cartProducts = getProductElements();
+        List<WebElement> cartProducts = getProductElements();
 //        List<WebElement> cartProducts = getProductElementsBy();
-            logger.info("products in cart:{}", cartProducts.size());
-            cartProducts.forEach(p -> {
-                logger.info(p.getText());
-            });
-            return cartProducts;
-
-
+        logger.info("products in cart:{}", cartProducts.size());
+        cartProducts.forEach(p -> {
+            logger.info(p.getText());
+        });
+        return cartProducts;
     }
 
     public int findProductIndexInCart(List<WebElement> cartProducts, String productName) {
@@ -117,10 +115,9 @@ public class CartPage extends AbstractPage {
         List<WebElement> rows =
                 driver.findElements(By.cssSelector("#tbodyid tr"));
 
-        if (rows.size()==0) {
+        if (rows.size() == 0) {
             logger.info("Shopping cart is empty");
-        }else
-        {
+        } else {
             logger.info("Shopping cart is not empty");
         }
         return rows.size() == 0;

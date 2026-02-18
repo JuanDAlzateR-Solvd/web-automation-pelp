@@ -204,10 +204,6 @@ public abstract class AbstractPage {
         }
     }
 
-//    public void waitVisible(WebElement element) {
-//        wait.until(ExpectedConditions.visibilityOf(element));
-//    }
-
     public void waitVisible(WebElement element) {
         wait.until(driver -> {
             try {

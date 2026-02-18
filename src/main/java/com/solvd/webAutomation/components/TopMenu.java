@@ -61,11 +61,6 @@ public class TopMenu extends AbstractPage {
         click(menuButtons.get(item), item.name);
     }
 
-//    public void clickMenuItem(MenuItem item) {
-//        By by = By.cssSelector(item.cssSelector);
-//        click(by, item.name);
-//    }
-
     public void clickCloseButton(MenuItem item) {
         if (closeButtons.containsKey(item)) {
             click(closeButtons.get(item),

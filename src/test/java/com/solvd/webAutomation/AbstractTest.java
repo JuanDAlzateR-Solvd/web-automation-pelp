@@ -21,8 +21,8 @@ import java.lang.reflect.Method;
 
 public class AbstractTest {
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
-    //    protected WebDriver driver;
-    protected WebDriverWait wait;
+//    protected WebDriver driver;
+//    protected WebDriverWait wait;
 
     @BeforeMethod
     public void setUp(Method method) {
@@ -42,14 +42,6 @@ public class AbstractTest {
             logger.warn("Driver already closed: " + e.getMessage());
         }
     }
-
-//    public WebDriver initializeDriver() {
-//        WebDriver driver = DriverFactory.createDriver(DriverRunMode.LOCAL, DriverType.CHROME);
-//        driver.manage().window().maximize();
-//        driver.get("https://demoblaze.com/");
-//
-//        return driver;
-//    }
 
     protected WebDriver getDriver() {
         return DriverFactory.getDriver();
@@ -78,6 +70,5 @@ public class AbstractTest {
         logInModal.waitUntilPageIsReady();
         logInModal.waitVisible(logInModal.getTitle());
     }
-
 
 }

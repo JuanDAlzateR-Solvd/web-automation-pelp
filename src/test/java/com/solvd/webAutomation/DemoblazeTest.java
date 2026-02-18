@@ -224,14 +224,14 @@ public class DemoblazeTest extends AbstractTest {
 
         sa.assertFalse(cartProducts.isEmpty(), "The shopping cart is empty");
 
-        while (!cartPage.isCartEmpty3()) {
+        while (!cartPage.isCartEmpty()) {
             cartPage.deleteProduct(0);
         }
 
         logger.debug("finished empty shopping cart");
 //        List<WebElement> newCartProducts = cartPage.getCartProducts();
 //        sa.assertTrue(newCartProducts.isEmpty(), "The shopping cart is not empty");
-        sa.assertTrue(cartPage.isCartEmpty3(), "The shopping cart is not empty");
+        sa.assertTrue(cartPage.isCartEmpty(), "The shopping cart is not empty");
         logger.debug("finished checking shopping cart");
 
         sa.assertAll();

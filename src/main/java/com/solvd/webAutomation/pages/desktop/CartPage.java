@@ -55,10 +55,6 @@ public class CartPage extends AbstractPage {
         return getText(totalPrice, "totalPrice");
     }
 
-    public boolean isCartEmpty() {
-        return getProductElements().isEmpty();
-    }
-
     public List<WebElement> getCartProducts() {
         List<WebElement> cartProducts = getProductElements();
 //        List<WebElement> cartProducts = getProductElementsBy();
@@ -95,12 +91,11 @@ public class CartPage extends AbstractPage {
 //        waitUntilPageIsLoaded();
 //        waitUntilCartDeletesProduct();
 
-        if (!isCartEmpty3()) {
+        if (!isCartEmpty()) {
             waitUntilCartDeletesProduct();
             WebElement indicator = driver.findElement(getPageLoadedIndicator());
             waitVisible(indicator);
         }
-
     }
 
     public void waitUntilCartDeletesProduct() {
@@ -108,24 +103,9 @@ public class CartPage extends AbstractPage {
         int cartSize = getCartProducts().size();
         By by = By.cssSelector("#tbodyid .success");
         wait.until(ExpectedConditions.numberOfElementsToBe(by, cartSize - 1));
-
     }
 
-    public boolean isCartEmpty2() {
-        logger.info("Checking if shopping cart is empty");
-       try{
-           wait.until(ExpectedConditions.visibilityOf(getProductGridContainer()));
-           By by = By.cssSelector("#tbodyid tr");
-           List<WebElement> rows =driver.findElements(by);
-           logger.info("Shopping cart is not empty");
-           return rows.size()==0;
-       }catch (InvalidSelectorException e){
-           logger.info("Shopping cart is empty");
-           return true;
-       }
-
-    }
-    public boolean isCartEmpty3() {
+    public boolean isCartEmpty() {
         logger.info("Checking if shopping cart is empty");
         wait.until(ExpectedConditions.presenceOfElementLocated(By.id("tbodyid")));
 

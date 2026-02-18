@@ -8,26 +8,37 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
+import java.util.Map;
+
 public class ContactModal extends AbstractPage {
 
-    private static final String inputEmailCssSelector = "input[id='recipient-email']";
-    private static final String inputNameCssSelector = "input[id='recipient-name']";
-    private static final String inputMessageCssSelector = "textarea[id='message-text']";
-
-    @FindBy(css = "h5[id='exampleModalLabel']")
+    @FindBy(css = "#exampleModalLabel")
     private WebElement title;
-    @FindBy(css = "button[onclick='send()']")
+    @FindBy(css = "#recipient-email")
+    private WebElement emailInput;
+    @FindBy(css = "#recipient-name")
+    private WebElement nameInput;
+    @FindBy(css = "#message-text")
+    private WebElement messageInput;
+    @FindBy(css = "#exampleModal button.btn.btn-primary")
     private WebElement sendButton;
-    @FindBy(css = inputEmailCssSelector)
-    private WebElement inputEmail;
-    @FindBy(css = inputNameCssSelector)
-    private WebElement inputName;
-    @FindBy(css = inputMessageCssSelector)
-    private WebElement inputMessage;
+    @FindBy(css = "#exampleModal button.btn.btn-secondary")
+    private WebElement closeButton;
 
     public ContactModal(WebDriver driver) {
         super(driver);
     }
+
+    private final Map<MenuItem, WebElement> menuInputs = Map.of(
+            MenuItem.EMAIL, emailInput,
+            MenuItem.NAME, nameInput,
+            MenuItem.MESSAGE, messageInput
+    );
+
+    private final Map<MenuItem, WebElement> menuButtons = Map.of(
+            MenuItem.CLOSE, closeButton,
+            MenuItem.SEND, sendButton
+    );
 
     @Override
     protected By getPageLoadedIndicator() {
@@ -38,22 +49,14 @@ public class ContactModal extends AbstractPage {
         return title;
     }
 
-    public WebDriver getDriver() {
-        return driver;
-    }
-
-    public void clickSendButton() {
-        click(sendButton, "Send Button");
-    }
-
     public void click(MenuItem item) {
-        By by = By.cssSelector(item.cssSelector);
-        click(by, item.name);
+        WebElement element = menuButtons.get(item);
+        click(element, item.getName());
     }
 
     public void type(MenuItem item, String text) {
-        By by = By.cssSelector(item.cssSelector);
-        type(by, item.name, text);
+        WebElement element = menuInputs.get(item);
+        type(element, item.getName(), text);
     }
 
     public boolean isContactModalVisible() {
@@ -66,26 +69,22 @@ public class ContactModal extends AbstractPage {
         alert.accept();
     }
 
-
     public enum MenuItem {
-        EMAIL("Input Email", inputEmailCssSelector),
-        NAME("Input Name", inputNameCssSelector),
-        MESSAGE("Input Message", inputMessageCssSelector);
+        EMAIL("Input Email"),
+        NAME("Input Name"),
+        MESSAGE("Input Message"),
+        CLOSE("Close Button"),
+        SEND("Send Button");
 
         private final String name;
-        private final String cssSelector;
 
-        MenuItem(String name, String cssSelector) {
+        MenuItem(String name) {
             this.name = name;
-            this.cssSelector = cssSelector;
         }
 
         public String getName() {
             return name;
         }
-
-        public String getCssSelector() {
-            return cssSelector;
-        }
     }
+
 }

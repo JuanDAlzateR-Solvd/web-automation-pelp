@@ -19,6 +19,9 @@ import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Parameters;
+import org.testng.annotations.BeforeMethod;
+
+import java.lang.reflect.Method;
 
 
 public class AbstractTest {
@@ -59,27 +62,30 @@ public class AbstractTest {
 
         return driver;
     }
+    protected WebDriver getDriver() {
+        return DriverFactory.getDriver();
+    }
 
     public void clickCategory(HomePage homePage, HomePage.MenuItem category, ProductGrid productGrid) {
-        homePage.clickBy(category);
+        homePage.clickButton(category);
         homePage.waitUntilPageIsReady();
-        homePage.waitVisible(productGrid.getGrid());
+        homePage.waitVisible(productGrid.getProductGridContainer());
     }
 
     public void clickCart(TopMenu topMenu, CartPage cartPage) {
-        topMenu.clickMenuItem(TopMenu.MenuItem.CART);
+        topMenu.clickButton(TopMenu.MenuItem.CART);
         cartPage.waitUntilPageIsReady();
-        cartPage.waitVisible(cartPage.getGrid());
+//        cartPage.waitVisible(cartPage.getProductGridContainer());
     }
 
     public void clickContact(TopMenu topMenu, ContactModal contactModal) {
-        topMenu.clickMenuItem(TopMenu.MenuItem.CONTACT);
+        topMenu.clickButton(TopMenu.MenuItem.CONTACT);
         contactModal.waitUntilPageIsReady();
         contactModal.waitVisible(contactModal.getTitle());
     }
 
     public void clickLogIn(TopMenu topMenu, LogInModal logInModal) {
-        topMenu.clickMenuItem(TopMenu.MenuItem.LOG_IN);
+        topMenu.clickButton(TopMenu.MenuItem.LOG_IN);
         logInModal.waitUntilPageIsReady();
         logInModal.waitVisible(logInModal.getTitle());
     }

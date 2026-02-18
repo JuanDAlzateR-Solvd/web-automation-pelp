@@ -8,57 +8,52 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
+import java.util.Map;
+
 public class LogInModal extends AbstractPage {
 
-    private static final String inputUsernameCssSelector = "input[id='loginusername']";
-    private static final String inputPasswordCssSelector = "input[id='loginpassword']";
-
-
-    @FindBy(css = "h5[id='logInModalLabel']")
+    @FindBy(id = "logInModalLabel")
     private WebElement title;
-    @FindBy(css = "button[onclick='logIn()']")
+    @FindBy(css = "#logInModal button.btn.btn-primary")
     private WebElement logInButton;
-    @FindBy(css = "button[class='btn btn-secondary']")
+    @FindBy(css = "#logInModal button.btn.btn-secondary")
     private WebElement closeButton;
-    @FindBy(css = inputUsernameCssSelector)
-    private WebElement inputEmail;
-    @FindBy(css = inputPasswordCssSelector)
-    private WebElement inputName;
-
+    @FindBy(id = "loginusername")
+    private WebElement usernameInput;
+    @FindBy(id = "loginpassword")
+    private WebElement passwordInput;
 
     public LogInModal(WebDriver driver) {
         super(driver);
     }
 
+    private final Map<MenuItem, WebElement> menuInputs = Map.of(
+            MenuItem.USERNAME, usernameInput,
+            MenuItem.PASSWORD, passwordInput
+    );
+
+    private final Map<MenuItem, WebElement> menuButtons = Map.of(
+            MenuItem.CLOSE, closeButton,
+            MenuItem.LOG_IN, logInButton
+    );
+
     @Override
     protected By getPageLoadedIndicator() {
-        return By.cssSelector("h5[id='logInModalLabel']");
+        return By.id("logInModalLabel");
     }
 
     public WebElement getTitle() {
         return title;
     }
 
-    public WebDriver getDriver() {
-        return driver;
-    }
-
-    public void clickLogInButton() {
-        click(logInButton, "Log In Button");
-    }
-
-    public void clickCloseButton() {
-        click(closeButton, "Close Button");
-    }
-
     public void click(MenuItem item) {
-        By by = By.cssSelector(item.cssSelector);
-        click(by, item.name);
+        WebElement button = menuButtons.get(item);
+        click(button, item.name);
     }
 
     public void type(MenuItem item, String text) {
-        By by = By.cssSelector(item.cssSelector);
-        type(by, item.name, text);
+        WebElement element = menuInputs.get(item);
+        type(element, item.name, text);
     }
 
     public boolean isLogInModalVisible() {
@@ -72,24 +67,20 @@ public class LogInModal extends AbstractPage {
     }
 
     public enum MenuItem {
-        USERNAME("Input Username", inputUsernameCssSelector),
-        PASSWORD("Input Password", inputPasswordCssSelector);
-
+        USERNAME("Input Username"),
+        PASSWORD("Input Password"),
+        CLOSE("Close Button"),
+        LOG_IN("Log In Button");
 
         private final String name;
-        private final String cssSelector;
 
-        MenuItem(String name, String cssSelector) {
+        MenuItem(String name) {
             this.name = name;
-            this.cssSelector = cssSelector;
         }
 
         public String getName() {
             return name;
         }
-
-        public String getCssSelector() {
-            return cssSelector;
-        }
     }
+
 }

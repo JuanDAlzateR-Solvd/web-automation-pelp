@@ -1,5 +1,6 @@
 package com.solvd.webAutomation.driver;
 
+import com.solvd.webAutomation.config.ConfigReader;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -44,7 +45,8 @@ public class DriverFactory {
 
     private static WebDriver createRemoteDriver(DriverType driverType) {
         try {
-            URL url = new URL("http://localhost:4444");
+            String gridURL = ConfigReader.get("selenium_url");
+            URL url = new URL(gridURL);
             switch (driverType) {
                 case CHROME:
                     ChromeOptions options = new ChromeOptions();

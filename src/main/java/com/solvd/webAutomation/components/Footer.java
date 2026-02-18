@@ -6,9 +6,11 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import java.util.Arrays;
+
 public class Footer extends AbstractPage {
 
-    private static final String getInTouchCssSelector = "div[id='fotcont'] div[class*='col-sm-3'] .caption";
+    private static final String getInTouchCssSelector = "#fotcont div[class*='col-sm-3'] .caption";
 
     @FindBy(css = getInTouchCssSelector)
     private WebElement getInTouch;
@@ -19,37 +21,33 @@ public class Footer extends AbstractPage {
 
     @Override
     protected By getPageLoadedIndicator() {
-        return By.cssSelector("div[id='fotcont'] img");
+        return By.cssSelector("#fotcont img");
     }
 
     public String[] getGetInTouchText() {
 //        logger.info(getInTouch.getText());
-        String[] lines = getInTouch.getText().split("\n");
-        return lines;
+        return Arrays.stream(getInTouch.getText().split("\n"))
+                .map(String::trim)
+                .toArray(String[]::new);
+    }
+
+    private String extractValueFromLine(int lineIndex) {
+        String[] lines = getGetInTouchText();
+        if (lines.length <= lineIndex) return "";
+        String[] parts = lines[lineIndex].split(":", 2);
+        return parts.length > 1 ? parts[1].trim() : "";
     }
 
     public String getAddress() {
-        String string = getGetInTouchText()[1]
-                .split(":")[1]
-                .substring(1);
-        logger.info("Address: " + string);
-        return string;
+        return extractValueFromLine(1);
     }
 
     public String getPhone() {
-        String string = getGetInTouchText()[2]
-                .split(":")[1]
-                .substring(1);
-        logger.info("Phone: " + string);
-        return string;
+        return extractValueFromLine(2);
     }
 
     public String getEmail() {
-        String string = getGetInTouchText()[3]
-                .split(":")[1]
-                .substring(1);
-        logger.info("Email: " + string);
-        return string;
+        return extractValueFromLine(3);
     }
 
     public boolean isVisibleInScreen() {
@@ -59,6 +57,5 @@ public class Footer extends AbstractPage {
     public void scrollToBottom() {
         scrollTo(getInTouch);
     }
-
 
 }

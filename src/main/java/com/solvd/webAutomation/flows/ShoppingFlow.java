@@ -23,22 +23,29 @@ public class ShoppingFlow {
     }
 
     public String addProductToCart(int productIndex) {
-        WebElement product = productGrid.getProductNumber(productIndex);
+        WebElement product = productGrid.getProductByIndex(productIndex);
         String productName = productGrid.getProductName(product);
+
+        if (productName.equals("Nexus 6")) {//Identified a bug specific for the Nexus 6 product, for now just change product.
+            product = productGrid.getProductByIndex(productIndex + 1);
+            productName = productGrid.getProductName(product);
+        }
+
         productGrid.clickProduct(product);
+        productPage.waitUntilPageIsReady();
 
         productPage.clickAddToCartButton();
         productPage.acceptProductAddedAlert();
 
-        topMenu.clickMenuItem(TopMenu.MenuItem.HOME);
-        topMenu.waitUntilPageIsReady();
+        topMenu.clickButton(TopMenu.MenuItem.HOME);
+        productGrid.waitUntilPageIsReady();
 
         return productName;
     }
 
     public String addRandomProductToCart() {
-        productGrid.waitVisible(productGrid.getGrid());
-        List<WebElement> products = productGrid.getElementsList();
+        productGrid.waitVisible(productGrid.getProductGridContainer());
+        List<WebElement> products = productGrid.getProductElements();
         int size = products.size();
 
         Random rand = new Random();

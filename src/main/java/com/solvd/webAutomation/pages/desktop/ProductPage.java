@@ -7,19 +7,16 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class ProductPage extends AbstractPage {
 
-    private static final String addToCartButtonCssSelector = "a[onclick*='addToCart']";
-
-    @FindBy(css = "div[class='item active']")
+    @FindBy(css = ".item.active")
     private WebElement image;
-    @FindBy(css = "div[id='tbodyid']>h2[class='name']")
+    @FindBy(css = "#tbodyid .name")
     private WebElement title;
-    @FindBy(css = "div[id='tbodyid']>h3[class='price-container']")
+    @FindBy(css = "#tbodyid .price-container")
     private WebElement price;
-    @FindBy(css = "div[id='tbodyid'] div[id='more-information']")
+    @FindBy(css = "#tbodyid #more-information")
     private WebElement description;
-    @FindBy(css = addToCartButtonCssSelector)
+    @FindBy(css = "a.btn.btn-success.btn-lg")
     private WebElement addToCartButton;
-
 
     public ProductPage(WebDriver driver) {
         super(driver);
@@ -27,30 +24,20 @@ public class ProductPage extends AbstractPage {
 
     @Override
     protected By getPageLoadedIndicator() {
-        return By.cssSelector("div[id='myCarousel-2'] img");
-    }
+        return By.cssSelector("#myCarousel-2");
+    }//"#myCarousel-2 img"
 
-    public Boolean isVisible(InfoItem item) {
-        switch (item) {
-            case IMAGE -> {
-                return isVisible(image, item.name);
-            }
-            case TITLE -> {
-                return isVisible(title, item.name);
-            }
-            case PRICE -> {
-                return isVisible(price, item.name);
-            }
-            case DESCRIPTION -> {
-                return isVisible(description, item.name);
-            }
-        }
-        logger.info("error: infoItem not found");
-        return false;
+    public boolean isVisible(InfoItem item) {
+        return switch (item) {
+            case IMAGE -> isVisible(image, item.getName());
+            case TITLE -> isVisible(title, item.getName());
+            case PRICE -> isVisible(price, item.getName());
+            case DESCRIPTION -> isVisible(description, item.getName());
+        };
     }
 
     public void clickAddToCartButton2() {//It doesn't work
-        By by = By.cssSelector(addToCartButtonCssSelector);
+        By by = By.cssSelector("a.btn.btn-success.btn-lg");
         click(by, "Add To Cart Button");
     }
 
@@ -85,7 +72,10 @@ public class ProductPage extends AbstractPage {
         InfoItem(String name) {
             this.name = name;
         }
-    }
 
+        public String getName() {
+            return name;
+        }
+    }
 
 }

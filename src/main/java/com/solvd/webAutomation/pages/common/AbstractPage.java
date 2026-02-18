@@ -3,7 +3,6 @@ package com.solvd.webAutomation.pages.common;
 import org.jspecify.annotations.NonNull;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.PageFactory;
-
 import org.openqa.selenium.support.pagefactory.AjaxElementLocatorFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -12,14 +11,12 @@ import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 
-
 public abstract class AbstractPage {
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
     protected WebDriver driver;
     protected WebDriverWait wait;
 
     private static final By LOADER = By.cssSelector(".loader, .spinner, .loading");
-
 
     public AbstractPage(WebDriver driver) {
         this.driver = driver;
@@ -41,18 +38,36 @@ public abstract class AbstractPage {
 
     public void click(WebElement element, String elementName) {
         logger.info("Clicking on element [{}]", elementName);
-        wait.until(ExpectedConditions.elementToBeClickable(element));
-        scrollTo(element);
-        element.click();
+
+        wait.until(driver -> {
+            try {
+                wait.until(ExpectedConditions.elementToBeClickable(element));
+                scrollTo(element);
+                element.click();
+                return true;
+            } catch (StaleElementReferenceException e) {
+                logger.warn("Stale element while clicking [{}], retrying...", elementName);
+                return false;
+            }
+        });
     }
 
     public void click(By locator, String elementName) {
         logger.info("Clicking on element [{}]", elementName);
 //        waitUntilModalIsGone();
         WebElement element = driver.findElement(locator);
-        wait.until(ExpectedConditions.elementToBeClickable(element));
-        scrollTo(element);
-        element.click();
+
+        wait.until(driver -> {
+            try {
+                wait.until(ExpectedConditions.elementToBeClickable(element));
+                scrollTo(element);
+                element.click();
+                return true;
+            } catch (StaleElementReferenceException e) {
+                logger.warn("Stale element while clicking [{}], retrying...", elementName);
+                return false;
+            }
+        });
     }
 
     public void type(By locator, String elementName, String text) {
@@ -71,16 +86,22 @@ public abstract class AbstractPage {
                 return false;
             }
         });
-
-
     }
 
-
-    protected void type(WebElement element, String text) {
-        logger.info("Typing on element [{}]", element.getTagName());
-        wait.until(ExpectedConditions.visibilityOf(element));
-        //element.clear();
-        element.sendKeys(text);
+    protected void type(WebElement element, String elementName, String text) {
+        logger.info("Typing on element [{}]", elementName);
+        wait.until(driver -> {
+            try {
+                wait.until(ExpectedConditions.visibilityOf(element));
+                scrollTo(element);
+                element.clear();
+                element.sendKeys(text);
+                return true;
+            } catch (StaleElementReferenceException e) {
+                logger.warn("Stale element while typing [{}], retrying...", elementName);
+                return false;
+            }
+        });
     }
 
     protected String getText(WebElement element) {
@@ -89,15 +110,24 @@ public abstract class AbstractPage {
 
     protected String getText(WebElement element, String elementName) {
         logger.info("Getting text from element [{}]", elementName);
-        wait.until(ExpectedConditions.visibilityOf(element));
+        wait.until(driver -> {
+            try {
+                wait.until(ExpectedConditions.visibilityOf(element));
+                scrollTo(element);
+                return true;
+            } catch (StaleElementReferenceException e) {
+                logger.warn("Stale element while getting text from [{}], retrying...", elementName);
+                return false;
+            }
+        });
         return element.getText();
     }
 
-    protected Boolean isVisible(WebElement element) {
+    protected boolean isVisible(WebElement element) {
         return isVisible(element, element.getTagName());
     }
 
-    protected Boolean isVisible(WebElement element, String elementName) {
+    protected boolean isVisible(WebElement element, String elementName) {
         logger.info("Checking if visibility of element [{}]", elementName);
         try {
             waitVisible(element);
@@ -109,7 +139,7 @@ public abstract class AbstractPage {
         }
     }
 
-    protected Boolean isInViewport(WebElement element, String elementName) {
+    protected boolean isInViewport(WebElement element, String elementName) {
         logger.info("Checking if element is in Viewport [{}]", elementName);
         Boolean isInViewport = (Boolean) ((JavascriptExecutor) driver)
                 .executeScript(
@@ -124,14 +154,14 @@ public abstract class AbstractPage {
                         element);
         String aux = Boolean.TRUE.equals(isInViewport) ? "" : "not";
         logger.info("Element [{}] is " + aux + " in Viewport", elementName);
-        return isInViewport;
+        return Boolean.TRUE.equals(isInViewport);
     }
 
-    protected Boolean isClickable(WebElement element) {
+    protected boolean isClickable(WebElement element) {
         return isClickable(element, element.getTagName());
     }
 
-    protected Boolean isClickable(WebElement element, String elementName) {
+    protected boolean isClickable(WebElement element, String elementName) {
 
         logger.info("Checking if clickable on element [{}]", elementName);
         try {
@@ -154,14 +184,8 @@ public abstract class AbstractPage {
         );
 
         pageWait.until(ExpectedConditions.invisibilityOfElementLocated(LOADER));
+        pageWait.until(ExpectedConditions.visibilityOfElementLocated(getPageLoadedIndicator()));
         logger.info("The page is ready");
-    }
-
-    public void waitUntilPageIsLoaded() {
-        logger.info("Waiting for the page to load");
-        waitUntilPageIsReady();
-        wait.until(ExpectedConditions.visibilityOfElementLocated(getPageLoadedIndicator()));
-        logger.info("The page is loaded");
     }
 
     protected void scrollTo(@NonNull WebElement element) {
@@ -178,11 +202,19 @@ public abstract class AbstractPage {
         } catch (TimeoutException e) {
             logger.info("Modal is not visible, continuing");
         }
-
     }
 
     public void waitVisible(WebElement element) {
-        wait.until(ExpectedConditions.visibilityOf(element));
+        wait.until(driver -> {
+            try {
+                wait.until(ExpectedConditions.visibilityOf(element));
+                scrollTo(element);
+                return true;
+            } catch (StaleElementReferenceException e) {
+                logger.warn("Stale element while waiting visibility of [{}], retrying...", element.getTagName());
+                return false;
+            }
+        });
     }
 
     protected void waitClickable(WebElement element) {

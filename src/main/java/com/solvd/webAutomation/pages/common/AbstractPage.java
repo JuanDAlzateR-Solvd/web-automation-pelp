@@ -69,10 +69,7 @@ public abstract class AbstractPage {
                 return false;
             }
         });
-
-
     }
-
 
     protected void type(WebElement element, String text) {
         logger.info("Typing on element [{}]", element.getTagName());

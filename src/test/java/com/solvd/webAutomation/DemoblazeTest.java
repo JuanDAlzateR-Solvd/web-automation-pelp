@@ -28,9 +28,9 @@ public class DemoblazeTest extends AbstractTest {
 
         Arrays.stream(TopMenu.MenuItem.values())
                 .forEach(menuItem -> {
-                    topMenu.clickButton(menuItem);
+                    topMenu.click(menuItem);
                     sa.assertTrue(topMenu.isVisible(menuItem));
-                    topMenu.clickCloseButton(menuItem);
+                    topMenu.clickClose(menuItem);
                 });
 
         sa.assertAll();

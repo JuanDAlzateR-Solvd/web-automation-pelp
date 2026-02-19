@@ -73,7 +73,7 @@ public class TopMenu extends AbstractPage {
     public void clickClose(MenuItem item) {
         WebElement closeButton = closeButtons.get(item);
         if (closeButton != null) {
-            click(closeButton, item.getName().substring(4)+" Close");
+            click(closeButton, item.getName().substring(4) + " Close");
         }
     }
 
@@ -81,11 +81,11 @@ public class TopMenu extends AbstractPage {
         boolean result = false;
         try {
             result = isModalVisible(item);
-        }catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             try {
-                result=isPageOpened(item);
-            }catch (IllegalArgumentException e2) {
-                logger.error("Menu item has no modal and does not represent a page: "+ item.getName());
+                result = isPageOpened(item);
+            } catch (IllegalArgumentException e2) {
+                logger.error("Menu item has no modal and does not represent a page: " + item.getName());
             }
         }
         return result;

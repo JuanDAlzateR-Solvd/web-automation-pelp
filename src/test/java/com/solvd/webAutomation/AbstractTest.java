@@ -21,7 +21,7 @@ public class AbstractTest {
     @BeforeMethod
     public void setUp() {
         DriverFactory.createDriver(DriverRunMode.LOCAL, DriverType.CHROME);
-        WebDriver driver=DriverFactory.getDriver();
+        WebDriver driver = DriverFactory.getDriver();
         //DriverRunMode LOCAL or REMOTE. REMOTE Requires Selenium server standalone.
         driver.manage().window().maximize();
         driver.get("https://demoblaze.com/");

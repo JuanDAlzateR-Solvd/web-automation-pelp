@@ -103,6 +103,11 @@ public abstract class AbstractPage {
         }
     }
 
+    public boolean isPageVisible() {
+        WebElement element = getPageLoadedIndicator();
+        return isVisible(element, this.getClass().getSimpleName() + " Indicator");
+    }
+
     protected boolean isInViewport(WebElement element, String elementName) {
         logger.info("Checking if element is in Viewport [{}]", elementName);
         Boolean isInViewport = (Boolean) ((JavascriptExecutor) driver)

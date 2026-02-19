@@ -24,7 +24,7 @@ public class HomePage extends AbstractPage {
     }
 
     @Override
-    protected WebElement getPageLoadedIndicator() {
+    public WebElement getPageLoadedIndicator() {
         return imageIndicator;
     }
 

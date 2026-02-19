@@ -2,6 +2,8 @@ package com.solvd.webAutomation.components;
 
 import com.solvd.webAutomation.pages.common.AbstractPage;
 
+import com.solvd.webAutomation.pages.desktop.CartPage;
+import com.solvd.webAutomation.pages.desktop.HomePage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -102,11 +104,9 @@ public class TopMenu extends AbstractPage {
     }
 
     public boolean isPageOpened(MenuItem item) {
-        String url = driver.getCurrentUrl();
-
         return switch (item) {
-            case HOME -> url.contains("index.html");
-            case CART -> url.contains("cart.html");
+            case HOME -> new HomePage(driver).isPageVisible();
+            case CART -> new CartPage(driver).isPageVisible();
             default -> throw new IllegalArgumentException(
                     "Menu item does not represent a page: " + item);
         };

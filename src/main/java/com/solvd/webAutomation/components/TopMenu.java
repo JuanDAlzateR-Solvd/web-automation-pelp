@@ -41,6 +41,9 @@ public class TopMenu extends AbstractPage {
     @FindBy(css = "div[id='signInModal'] button[class='close']")
     private WebElement signUpCloseButton;
 
+    @FindBy(css = "a[id='nava'] img")
+    private WebElement imageIndicator;
+
     public TopMenu(WebDriver driver) {
         super(driver);
     }
@@ -62,8 +65,8 @@ public class TopMenu extends AbstractPage {
     );
 
     @Override
-    protected By getPageLoadedIndicator() {
-        return By.cssSelector("a[id='nava'] img");
+    protected WebElement getPageLoadedIndicator() {
+        return imageIndicator;
     }
 
     public void click(MenuItem item) {

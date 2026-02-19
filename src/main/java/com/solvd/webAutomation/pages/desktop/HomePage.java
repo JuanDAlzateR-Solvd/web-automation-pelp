@@ -8,27 +8,28 @@ import org.openqa.selenium.support.FindBy;
 
 public class HomePage extends AbstractPage {
 
-    private static final String phonesCssSelector = "a[onclick*='phone']";
-    private static final String laptopsCssSelector = "a[onclick*='notebook']";
-    private static final String monitorsCssSelector = "a[onclick*='monitor']";
-
-    @FindBy(css = phonesCssSelector)
+    @FindBy(css = "a[onclick*='phone']")
     private WebElement phonesButton;
-    @FindBy(css = laptopsCssSelector)
+
+    @FindBy(css = "a[onclick*='notebook']")
     private WebElement laptopsButton;
-    @FindBy(css = monitorsCssSelector)
+
+    @FindBy(css = "a[onclick*='monitor']")
     private WebElement monitorsButton;
+
+    @FindBy(css = "#tbodyid .card-img-top.img-fluid")
+    private WebElement imageIndicator;
 
     public HomePage(WebDriver driver) {
         super(driver);
     }
 
     @Override
-    protected By getPageLoadedIndicator() {
-        return By.cssSelector("div[id='tbodyid'] [class='card-img-top img-fluid']");
+    protected WebElement getPageLoadedIndicator() {
+        return imageIndicator;
     }
 
-    public void clickButton(MenuItem item) {
+    public void click(MenuItem item) {
         switch (item) {
             case PHONES -> click(phonesButton, item.name);
             case LAPTOPS -> click(laptopsButton, item.name);
@@ -36,30 +37,20 @@ public class HomePage extends AbstractPage {
         }
     }
 
-    public void clickBy(MenuItem item) {
-        By by = By.cssSelector(item.cssSelector);
-        click(by, item.name);
-    }
-
     public enum MenuItem {
-        PHONES("Category Phones", phonesCssSelector),
-        LAPTOPS("Category Laptops", laptopsCssSelector),
-        MONITORS("Category Monitors", monitorsCssSelector);
+        PHONES("Category Phones"),
+        LAPTOPS("Category Laptops"),
+        MONITORS("Category Monitors");
 
         private final String name;
-        private final String cssSelector;
 
-        MenuItem(String name, String cssSelector) {
+        MenuItem(String name) {
             this.name = name;
-            this.cssSelector = cssSelector;
         }
 
         public String getName() {
             return name;
         }
 
-        public String getCssSelector() {
-            return cssSelector;
-        }
     }
 }

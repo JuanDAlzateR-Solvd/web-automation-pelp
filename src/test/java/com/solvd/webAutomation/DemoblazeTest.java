@@ -44,7 +44,7 @@ public class DemoblazeTest extends AbstractTest {
 
         homePage.waitUntilPageIsReady();
 
-        homePage.clickBy(HomePage.MenuItem.LAPTOPS);
+        homePage.click(HomePage.MenuItem.LAPTOPS);
 
         homePage.waitUntilPageIsReady();
 

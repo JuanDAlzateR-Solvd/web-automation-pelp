@@ -21,13 +21,16 @@ public class ProductGrid extends AbstractPage {
     @FindBy(css = "#tbodyid .card-title")
     private List<WebElement> productElements;
 
+    @FindBy(css = "#tbodyid .card-img-top.img-fluid")
+    private WebElement imageIndicator;
+
     public ProductGrid(WebDriver driver) {
         super(driver);
     }
 
     @Override
-    protected By getPageLoadedIndicator() {
-        return By.cssSelector("#tbodyid .card-img-top.img-fluid");
+    protected WebElement getPageLoadedIndicator() {
+        return imageIndicator;
     }
 
     public List<WebElement> getProductElements() {

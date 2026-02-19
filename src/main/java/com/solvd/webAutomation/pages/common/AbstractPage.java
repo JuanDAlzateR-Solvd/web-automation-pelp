@@ -30,7 +30,7 @@ public abstract class AbstractPage {
         );
     }
 
-    protected abstract By getPageLoadedIndicator();
+    protected abstract WebElement getPageLoadedIndicator();
 
     public void click(WebElement element) {
         click(element, element.getTagName());
@@ -148,7 +148,7 @@ public abstract class AbstractPage {
         );
 
         pageWait.until(ExpectedConditions.invisibilityOfElementLocated(LOADER));
-        pageWait.until(ExpectedConditions.visibilityOfElementLocated(getPageLoadedIndicator()));
+        pageWait.until(ExpectedConditions.visibilityOf(getPageLoadedIndicator()));
         logger.info("The page is ready");
     }
 

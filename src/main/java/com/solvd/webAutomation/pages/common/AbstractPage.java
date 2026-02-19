@@ -87,11 +87,11 @@ public abstract class AbstractPage {
         return element.getText();
     }
 
-    protected Boolean isVisible(WebElement element) {
+    protected boolean isVisible(WebElement element) {
         return isVisible(element, element.getTagName());
     }
 
-    protected Boolean isVisible(WebElement element, String elementName) {
+    protected boolean isVisible(WebElement element, String elementName) {
         logger.info("Checking if visibility of element [{}]", elementName);
         try {
             waitVisible(element);
@@ -103,7 +103,7 @@ public abstract class AbstractPage {
         }
     }
 
-    protected Boolean isInViewport(WebElement element, String elementName) {
+    protected boolean isInViewport(WebElement element, String elementName) {
         logger.info("Checking if element is in Viewport [{}]", elementName);
         Boolean isInViewport = (Boolean) ((JavascriptExecutor) driver)
                 .executeScript(
@@ -121,13 +121,13 @@ public abstract class AbstractPage {
         return isInViewport;
     }
 
-    protected Boolean isClickable(WebElement element) {
+    protected boolean isClickable(WebElement element) {
         return isClickable(element, element.getTagName());
     }
 
-    protected Boolean isClickable(WebElement element, String elementName) {
-
+    protected boolean isClickable(WebElement element, String elementName) {
         logger.info("Checking if clickable on element [{}]", elementName);
+
         try {
             waitClickable(element);
             logger.info("Element [{}] is clickable", elementName);
@@ -158,15 +158,13 @@ public abstract class AbstractPage {
         );
     }
 
-    protected void waitUntilModalIsGone() {
-        By modal = By.cssSelector("div[id='exampleModal']");
+    protected void waitUntilModalIsGone(WebElement element) {
         try {
             logger.info("Waiting for modal to be invisible");
-            wait.until(ExpectedConditions.invisibilityOfElementLocated(modal));
+            wait.until(ExpectedConditions.invisibilityOf(element));
         } catch (TimeoutException e) {
             logger.info("Modal is not visible, continuing");
         }
-
     }
 
     public void waitVisible(WebElement element) {

@@ -1,7 +1,6 @@
 package com.solvd.webAutomation.pages.desktop;
 
 import com.solvd.webAutomation.pages.common.AbstractPage;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -51,6 +50,6 @@ public class HomePage extends AbstractPage {
         public String getName() {
             return name;
         }
-
     }
+
 }

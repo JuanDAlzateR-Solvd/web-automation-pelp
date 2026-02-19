@@ -38,9 +38,6 @@ public class DemoblazeTest extends AbstractTest {
 
     @Test(testName = "List of Products - Task1", description = "filters the products by category, then prints in console all the products")
     public void verifyProductsDisplayedForSelectedCategory() {
-//        WebDriver driver = DriverFactory.createDriver(DriverRunMode.LOCAL, DriverType.CHROME);
-        driver.manage().window().maximize();
-        driver.get("https://demoblaze.com/");
 
         HomePage homePage = new HomePage(driver);
         ProductGrid productGrid = new ProductGrid(driver);
@@ -55,6 +52,6 @@ public class DemoblazeTest extends AbstractTest {
         productsList.forEach(logger::info);
 
         Assert.assertFalse(productsList.isEmpty(), "There are no products in the grid");
-
     }
+
 }

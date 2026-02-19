@@ -109,21 +109,25 @@ public abstract class AbstractPage {
     }
 
     protected boolean isInViewport(WebElement element, String elementName) {
-        logger.info("Checking if element is in Viewport [{}]", elementName);
-        Boolean isInViewport = (Boolean) ((JavascriptExecutor) driver)
-                .executeScript(
-                        "var elem = arguments[0],                 " +
-                                "  box = elem.getBoundingClientRect();    " +
-                                "return (                                 " +
-                                "  box.top >= 0 &&                        " +
-                                "  box.left >= 0 &&                       " +
-                                "  box.bottom <= (window.innerHeight || document.documentElement.clientHeight) && " +
-                                "  box.right <= (window.innerWidth || document.documentElement.clientWidth)       " +
-                                ");",
-                        element);
-        String aux = Boolean.TRUE.equals(isInViewport) ? "" : "not";
-        logger.info("Element [{}] is " + aux + " in Viewport", elementName);
-        return isInViewport;
+        logger.info("Checking if element [{}] is in viewport", elementName);
+
+        String script = """
+                    var elem = arguments[0],
+                        box = elem.getBoundingClientRect();
+                    return (
+                        box.top >= 0 &&
+                        box.left >= 0 &&
+                        box.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+                        box.right <= (window.innerWidth || document.documentElement.clientWidth)
+                    );
+                """;
+
+        boolean isVisible = Boolean.TRUE.equals(
+                (Boolean) ((JavascriptExecutor) driver).executeScript(script, element)
+        );
+
+        logger.info("Element [{}] is {}in viewport", elementName, isVisible ? "" : "not ");
+        return isVisible;
     }
 
     protected boolean isClickable(WebElement element) {

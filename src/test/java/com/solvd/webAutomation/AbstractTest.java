@@ -12,8 +12,6 @@ import org.slf4j.LoggerFactory;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Parameters;
-
 
 public class AbstractTest {
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -22,7 +20,8 @@ public class AbstractTest {
 
     @BeforeMethod
     public void setUp() {
-        driver = DriverFactory.createDriver(DriverRunMode.LOCAL, DriverType.CHROME);
+        DriverFactory.createDriver(DriverRunMode.LOCAL, DriverType.CHROME);
+        WebDriver driver=DriverFactory.getDriver();
         //DriverRunMode LOCAL or REMOTE. REMOTE Requires Selenium server standalone.
         driver.manage().window().maximize();
         driver.get("https://demoblaze.com/");
@@ -35,14 +34,6 @@ public class AbstractTest {
         } catch (Exception e) {
             logger.warn("Driver already closed: " + e.getMessage());
         }
-    }
-
-    public WebDriver initializeDriver() {
-        WebDriver driver = DriverFactory.createDriver(DriverRunMode.REMOTE, DriverType.CHROME);
-        driver.manage().window().maximize();
-        driver.get("https://demoblaze.com/");
-
-        return driver;
     }
 
     public void clickCategory(HomePage homePage, HomePage.MenuItem category, ProductGrid productGrid) {

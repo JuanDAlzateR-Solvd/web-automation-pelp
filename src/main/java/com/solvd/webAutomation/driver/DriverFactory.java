@@ -17,26 +17,22 @@ public class DriverFactory {
         // prevent instantiation
     }
 
-    public static WebDriver createDriver(DriverRunMode runMode, DriverType driverType) {
+    public static void createDriver(DriverRunMode runMode, DriverType driverType) {
+        WebDriver driver;
 
         switch (runMode) {
-            case LOCAL:
-                return createLocalDriver(driverType);
-
-            case REMOTE:
-                return createRemoteDriver(driverType);
-
-            default:
-                throw new IllegalArgumentException("Unsupported run mode: " + runMode);
+            case LOCAL -> driver = createLocalDriver(driverType);
+            case REMOTE -> driver = createRemoteDriver(driverType);
+            default -> throw new IllegalArgumentException("Unsupported run mode");
         }
+
+        threadDriver.set(driver);
     }
 
     private static WebDriver createLocalDriver(DriverType driverType) {
         switch (driverType) {
             case CHROME:
-                WebDriver driver = new ChromeDriver();
-                threadDriver.set(driver);
-                return driver;
+                return new ChromeDriver();
 
             default:
                 throw new IllegalArgumentException("Unsupported driver type: " + driverType);
@@ -50,15 +46,11 @@ public class DriverFactory {
             switch (driverType) {
                 case CHROME:
                     ChromeOptions options = new ChromeOptions();
-                    RemoteWebDriver driver = new RemoteWebDriver(url, options);
-                    threadDriver.set(driver);
-                    return driver;
+                    return new RemoteWebDriver(url, options);
 
                 case FIREFOX:
                     FirefoxOptions options2 = new FirefoxOptions();
-                    RemoteWebDriver driver2 = new RemoteWebDriver(url, options2);
-                    threadDriver.set(driver2);
-                    return driver2;
+                    return new RemoteWebDriver(url, options2);
 
                 default:
                     throw new IllegalArgumentException("Unsupported driver type: " + driverType);

@@ -103,9 +103,6 @@ public class CartPage extends AbstractPage {
         logger.info("Deleting product {}", productName);
         click(deleteButtons.get(productIndex), "deleteButton" + productIndex);
 
-//        waitUntilPageIsLoaded();
-//        waitUntilCartDeletesProduct();
-
         if (!isCartEmpty()) {
             waitUntilCartDeletesProduct();
             waitVisible(tableIndicator);

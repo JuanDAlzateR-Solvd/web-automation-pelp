@@ -48,7 +48,7 @@ public class AbstractTest {
     public void clickCategory(HomePage homePage, HomePage.MenuItem category, ProductGrid productGrid) {
         homePage.clickBy(category);
         homePage.waitUntilPageIsReady();
-        homePage.waitVisible(productGrid.getGrid());
+        homePage.waitVisible(productGrid.getProductGridContainer());
     }
 
 }

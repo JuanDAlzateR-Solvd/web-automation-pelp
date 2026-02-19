@@ -12,56 +12,62 @@ import java.util.List;
 
 public class ProductGrid extends AbstractPage {
 
-    @FindBy(css = "div[id='tbodyid']")
-    private WebElement grid;
+    @FindBy(css = "#tbodyid")
+    private WebElement productGridContainer;
 
-    @FindBy(css = "button[id*='next']")
+    @FindBy(css = ".pagination #next2")
     private WebElement nextButton;
+
+    @FindBy(css = "#tbodyid .card-title")
+    private List<WebElement> productElements;
 
     public ProductGrid(WebDriver driver) {
         super(driver);
     }
 
-    public WebDriver getDriver() {
-        return driver;
-    }
-
     @Override
     protected By getPageLoadedIndicator() {
-        return By.cssSelector("div[id='tbodyid'] [class='card-img-top img-fluid']");
+        return By.cssSelector("#tbodyid .card-img-top.img-fluid");
     }
 
-    public List<WebElement> getElementsList() {
-        return grid.findElements(By.cssSelector(":scope .card-title")); //other possibility ":scope >* a[class='hrefch']"
+    public List<WebElement> getProductElements() {
+        return productElements;
     }
 
     public List<String> getProductTitles() {
         List<String> productsList = new ArrayList<>();
-        for (WebElement product : getElementsList()) {
+        for (WebElement product : getProductElements()) {
             productsList.add(getText(product));
         }
         return productsList;
     }
 
-    public Boolean nextButtonIsClickable() {
+    public boolean isNextButtonClickable() {
         return isClickable(nextButton);
     }
 
     public void clickNextButton() {
-//        click(nextButton, "Next Button");
-        click(By.cssSelector("button[id*='next']"), "Next Button");
+        click(nextButton, "Next Button");
     }
 
     public void clickNextButtonIfPossible(HomePage.MenuItem category) {
-        if (nextButtonIsClickable() && category != HomePage.MenuItem.MONITORS) {
+        if (isNextButtonClickable() && category != HomePage.MenuItem.MONITORS) {
             //demoblaze.com has a bug, when click on category monitors it shows the next button, even thought it shouldn't.
             clickNextButton();
         }
     }
 
     public String getTextOf(WebElement product) {
-        String productName = getText(product).split("\n")[0];
+        String productName = extractProductName(product);
         return getText(product, productName);
+    }
+
+    public String getProductName(WebElement product) {
+        return extractProductName(product);
+    }
+
+    private String extractProductName(WebElement product) {
+        return getText(product).split("\n")[0];
     }
 
     public void clickProduct(WebElement product) {
@@ -69,19 +75,14 @@ public class ProductGrid extends AbstractPage {
         click(product, productName);
     }
 
-    public String getProductName(WebElement product) {
-        return getText(product).split("\n")[0];
+    public WebElement getProductGridContainer() {
+        return productGridContainer;
     }
 
-    public WebElement getGrid() {
-        return grid;
-    }
-
-    public WebElement getProductNumber(int productNumber) {
-        List<WebElement> products = getElementsList();
-        WebElement product = products.get(productNumber);
+    public WebElement getProductByIndex(int productIndex) {
+        List<WebElement> products = getProductElements();
+        WebElement product = products.get(productIndex);
         logger.info(getTextOf(product));
-        //  productGrid.waitVisible(firstProduct);
         return product;
     }
 

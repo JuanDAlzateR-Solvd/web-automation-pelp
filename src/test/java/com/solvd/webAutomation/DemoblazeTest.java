@@ -177,6 +177,8 @@ public class DemoblazeTest extends AbstractTest {
 
         clickCart(topMenu, cartPage);
 
+       // cartPage.waitUntilCartShowsProducts();
+
         List<WebElement> cartProducts = cartPage.getCartProducts();
         int initialCartSize = cartProducts.size();
 

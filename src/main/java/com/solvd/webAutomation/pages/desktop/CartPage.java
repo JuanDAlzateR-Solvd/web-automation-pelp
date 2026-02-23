@@ -80,7 +80,7 @@ public class CartPage extends AbstractPage {
      */
     public int findProductIndexInCart(List<WebElement> cartProducts, String productName) {
         int index = IntStream.range(0, cartProducts.size())
-                .filter(i -> cartProducts.get(i).getText().equalsIgnoreCase(productName))
+                .filter(i -> cartProducts.get(i).getText().contains(productName))
                 .findFirst()
                 .orElse(-1);
 
@@ -90,6 +90,12 @@ public class CartPage extends AbstractPage {
             logger.info("Product '{}' not found in cart", productName);
         }
         return index;
+    }
+
+    public void printProductsInCart() {
+        logger.info("Printing products in cart:");
+        getCartProducts().forEach(p -> {logger.info(p.getText());});
+        logger.info("Finished printing products in cart.");
     }
 
     public void deleteProduct(int productIndex) {
@@ -104,6 +110,12 @@ public class CartPage extends AbstractPage {
             waitUntilCartDeletesProduct();
             waitUntilVisible(tableIndicator);
         }
+    }
+
+    public void waitUntilCartShowsProducts() {
+        logger.info("Waiting for the shopping cart to show products");
+        By by = By.cssSelector("#tbodyid .success");
+        wait.until(ExpectedConditions.numberOfElementsToBeMoreThan(by, 0));
     }
 
     public void waitUntilCartDeletesProduct() {

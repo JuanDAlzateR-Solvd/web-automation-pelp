@@ -34,7 +34,7 @@ public class AbstractTest {
         driver.manage().window().maximize();
         driver.get("https://demoblaze.com/");
 
-        logger.info("Staring Test: " + method.getName() + "| Thread: " + Thread.currentThread().getName());
+        logger.info("Starting Test: " + method.getName() + "| Thread: " + Thread.currentThread().getName());
     }
 
     @AfterMethod(alwaysRun = true)

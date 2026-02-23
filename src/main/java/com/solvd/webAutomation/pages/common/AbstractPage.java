@@ -1,5 +1,6 @@
 package com.solvd.webAutomation.pages.common;
 
+import com.solvd.webAutomation.config.ConfigReader;
 import org.jspecify.annotations.NonNull;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.PageFactory;
@@ -16,14 +17,16 @@ public abstract class AbstractPage {
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
     protected WebDriver driver;
     protected WebDriverWait wait;
+    public int waitDuration;
 
     private static final By LOADER = By.cssSelector(".loader, .spinner, .loading");
 
     public AbstractPage(WebDriver driver) {
         this.driver = driver;
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        waitDuration = Integer.parseInt(ConfigReader.get("wait_duration"));
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(waitDuration));
         PageFactory.initElements(
-                new AjaxElementLocatorFactory(driver, 10), this);
+                new AjaxElementLocatorFactory(driver, waitDuration), this);
 
         logger.info("Page Created | Thread: {} | Driver: {}",
                 Thread.currentThread().getId(),
@@ -187,7 +190,8 @@ public abstract class AbstractPage {
 
     public void waitUntilPageIsReady() {
         logger.info("Waiting for the page to load");
-        WebDriverWait pageWait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+        WebDriverWait pageWait = new WebDriverWait(driver, Duration.ofSeconds(waitDuration));
         pageWait.until(driver ->
                 ((JavascriptExecutor) driver)
                         .executeScript("return document.readyState")

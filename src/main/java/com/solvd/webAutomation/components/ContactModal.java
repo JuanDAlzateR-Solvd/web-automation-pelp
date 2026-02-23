@@ -14,14 +14,19 @@ public class ContactModal extends AbstractPage {
 
     @FindBy(css = "#exampleModalLabel")
     private WebElement title;
+
     @FindBy(css = "#recipient-email")
     private WebElement emailInput;
+
     @FindBy(css = "#recipient-name")
     private WebElement nameInput;
+
     @FindBy(css = "#message-text")
     private WebElement messageInput;
+
     @FindBy(css = "#exampleModal button.btn.btn-primary")
     private WebElement sendButton;
+
     @FindBy(css = "#exampleModal button.btn.btn-secondary")
     private WebElement closeButton;
 

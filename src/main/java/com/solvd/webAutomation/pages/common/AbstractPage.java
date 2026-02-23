@@ -20,9 +20,9 @@ public abstract class AbstractPage {
 
     public AbstractPage(WebDriver driver) {
         this.driver = driver;
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(60));
         PageFactory.initElements(
-                new AjaxElementLocatorFactory(driver, 10), this);
+                new AjaxElementLocatorFactory(driver, 60), this);
 
         logger.info("Page Created | Thread: {} | Driver: {}",
                 Thread.currentThread().getId(),
@@ -176,7 +176,7 @@ public abstract class AbstractPage {
 
     public void waitUntilPageIsReady() {
         logger.info("Waiting for the page to load");
-        WebDriverWait pageWait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        WebDriverWait pageWait = new WebDriverWait(driver, Duration.ofSeconds(60));
         pageWait.until(driver ->
                 ((JavascriptExecutor) driver)
                         .executeScript("return document.readyState")

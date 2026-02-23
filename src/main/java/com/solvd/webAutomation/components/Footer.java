@@ -10,9 +10,7 @@ import java.util.Arrays;
 
 public class Footer extends AbstractPage {
 
-    private static final String getInTouchCssSelector = "#fotcont div[class*='col-sm-3'] .caption";
-
-    @FindBy(css = getInTouchCssSelector)
+    @FindBy(css = "#fotcont div[class*='col-sm-3'] .caption")
     private WebElement getInTouch;
 
     @FindBy(css = "#fotcont img")

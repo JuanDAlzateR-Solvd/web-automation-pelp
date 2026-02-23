@@ -10,31 +10,30 @@ import com.solvd.webAutomation.driver.DriverType;
 import com.solvd.webAutomation.pages.desktop.CartPage;
 import com.solvd.webAutomation.pages.desktop.HomePage;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.remote.SessionId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Parameters;
 
 import java.lang.reflect.Method;
 
-
 public class AbstractTest {
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
-    protected WebDriver driver;
-    protected WebDriverWait wait;
 
     @BeforeMethod
     public void setUp(Method method) {
         DriverFactory.createDriver(DriverRunMode.LOCAL, DriverType.CHROME);
-        driver = DriverFactory.getDriver();
+        WebDriver driver = DriverFactory.getDriver();
         //DriverRunMode LOCAL or REMOTE. REMOTE Requires Selenium server standalone.
         driver.manage().window().maximize();
         driver.get("https://demoblaze.com/");
 
-        logger.info("Starting Test: " + method.getName() + "| Thread: " + Thread.currentThread().getName());
+        SessionId session =((RemoteWebDriver) driver).getSessionId();
+        logger.info("Starting Test: " + method.getName() + "| Thread: " + Thread.currentThread().getName()
+        +" | Driver hash: " + driver.hashCode() +" | Session ID: "+session.toString());
     }
 
     @AfterMethod(alwaysRun = true)
@@ -54,7 +53,6 @@ public class AbstractTest {
         homePage.click(category);
         homePage.waitUntilPageIsReady();
         homePage.waitUntilVisible(productGrid.getProductGridContainer());
-
     }
 
     public void clickCart(TopMenu topMenu, CartPage cartPage) {

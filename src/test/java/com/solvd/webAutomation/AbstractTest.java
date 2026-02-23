@@ -13,29 +13,32 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Parameters;
 
 import java.lang.reflect.Method;
 
 
 public class AbstractTest {
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
-//    protected WebDriver driver;
-//    protected WebDriverWait wait;
+    protected WebDriver driver;
+    protected WebDriverWait wait;
 
     @BeforeMethod
     public void setUp(Method method) {
         DriverFactory.createDriver(DriverRunMode.LOCAL, DriverType.CHROME);
-        //DriverRunMode LOCAL or REMOTE. REMOTE Requires Selenium server.
-        getDriver().manage().window().maximize();
-        getDriver().get("https://demoblaze.com/");
+        driver = DriverFactory.getDriver();
+        //DriverRunMode LOCAL or REMOTE. REMOTE Requires Selenium server standalone.
+        driver.manage().window().maximize();
+        driver.get("https://demoblaze.com/");
 
         logger.info("Staring Test: " + method.getName() + "| Thread: " + Thread.currentThread().getName());
     }
 
     @AfterMethod(alwaysRun = true)
-    public void tearDown() {
+    public void tearDown(ITestResult result) {
         try {
             DriverFactory.quitDriver();
         } catch (Exception e) {
@@ -48,27 +51,28 @@ public class AbstractTest {
     }
 
     public void clickCategory(HomePage homePage, HomePage.MenuItem category, ProductGrid productGrid) {
-        homePage.clickButton(category);
+        homePage.click(category);
         homePage.waitUntilPageIsReady();
-        homePage.waitVisible(productGrid.getProductGridContainer());
+        homePage.waitUntilVisible(productGrid.getProductGridContainer());
+
     }
 
     public void clickCart(TopMenu topMenu, CartPage cartPage) {
-        topMenu.clickButton(TopMenu.MenuItem.CART);
+        topMenu.click(TopMenu.MenuItem.CART);
         cartPage.waitUntilPageIsReady();
 //        cartPage.waitVisible(cartPage.getProductGridContainer());
     }
 
     public void clickContact(TopMenu topMenu, ContactModal contactModal) {
-        topMenu.clickButton(TopMenu.MenuItem.CONTACT);
+        topMenu.click(TopMenu.MenuItem.CONTACT);
         contactModal.waitUntilPageIsReady();
-        contactModal.waitVisible(contactModal.getTitle());
+        contactModal.click(contactModal.getTitle());
     }
 
     public void clickLogIn(TopMenu topMenu, LogInModal logInModal) {
-        topMenu.clickButton(TopMenu.MenuItem.LOG_IN);
+        topMenu.click(TopMenu.MenuItem.LOG_IN);
         logInModal.waitUntilPageIsReady();
-        logInModal.waitVisible(logInModal.getTitle());
+        logInModal.waitUntilVisible(logInModal.getTitle());
     }
 
 }

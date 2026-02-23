@@ -36,12 +36,15 @@ public class DemoblazeTest extends AbstractTest {
 
         SoftAssert sa = new SoftAssert();
 
-        Arrays.stream(TopMenu.MenuItem.values())
-                .forEach(menuItem -> {
-                    topMenu.clickButton(menuItem);
-                    sa.assertTrue(topMenu.isVisible(menuItem));
-                    topMenu.clickCloseButton(menuItem);
-                });
+        for (TopMenu.MenuItem menuItem : TopMenu.MenuItem.values()) {
+            logger.info("Testing Menu item: [{}]", menuItem);
+            try {
+                topMenu.click(menuItem);
+                sa.assertTrue(topMenu.isVisible(menuItem), "Menu item [" + menuItem + "] should be visible");
+            } finally {
+                topMenu.clickClose(menuItem);
+            }
+        }
 
         sa.assertAll();
     }
@@ -49,13 +52,12 @@ public class DemoblazeTest extends AbstractTest {
     @Test(testName = "List of Products - Task1", description = "filters the products by category, then prints in console all the products")
     public void verifyProductsDisplayedForSelectedCategory() {
         WebDriver driver = getDriver();
-
         HomePage homePage = new HomePage(driver);
         ProductGrid productGrid = new ProductGrid(driver);
 
         homePage.waitUntilPageIsReady();
 
-        homePage.clickButton(HomePage.MenuItem.LAPTOPS);
+        homePage.click(HomePage.MenuItem.LAPTOPS);
 
         homePage.waitUntilPageIsReady();
 

@@ -13,10 +13,15 @@ public class HomePage extends AbstractPage {
 
     @FindBy(css = ".list-group a[onclick*='phone']")
     private WebElement phonesButton;
+
     @FindBy(css = ".list-group a[onclick*='notebook']")
     private WebElement laptopsButton;
+
     @FindBy(css = ".list-group a[onclick*='monitor']")
     private WebElement monitorsButton;
+
+    @FindBy(css = "#tbodyid .card-img-top.img-fluid")
+    private WebElement imageIndicator;
 
     public HomePage(WebDriver driver) {
         super(driver);
@@ -29,11 +34,11 @@ public class HomePage extends AbstractPage {
     );
 
     @Override
-    protected By getPageLoadedIndicator() {
-        return By.cssSelector("#tbodyid .card-img-top.img-fluid");
+    public WebElement getPageLoadedIndicator() {
+        return imageIndicator;
     }
 
-    public void clickButton(MenuItem item) {
+    public void click(MenuItem item) {
         click(menuButtons.get(item), item.name);
     }
 

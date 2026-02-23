@@ -21,13 +21,16 @@ public class ProductGrid extends AbstractPage {
     @FindBy(css = "#tbodyid .card-title")
     private List<WebElement> productElements;
 
+    @FindBy(css = "#tbodyid .card-img-top.img-fluid")
+    private WebElement imageIndicator;
+
     public ProductGrid(WebDriver driver) {
         super(driver);
     }
 
     @Override
-    protected By getPageLoadedIndicator() {
-        return By.cssSelector("#tbodyid .card-img-top.img-fluid");
+    protected WebElement getPageLoadedIndicator() {
+        return imageIndicator;
     }
 
     public List<WebElement> getProductElements() {
@@ -42,7 +45,7 @@ public class ProductGrid extends AbstractPage {
         return productsList;
     }
 
-    public boolean nextButtonIsClickable() {
+    public boolean isNextButtonClickable() {
         return isClickable(nextButton);
     }
 
@@ -51,24 +54,28 @@ public class ProductGrid extends AbstractPage {
     }
 
     public void clickNextButtonIfPossible(HomePage.MenuItem category) {
-        if (nextButtonIsClickable() && category != HomePage.MenuItem.MONITORS) {
+        if (isNextButtonClickable() && category != HomePage.MenuItem.MONITORS) {
             //demoblaze.com has a bug, when click on category monitors it shows the next button, even thought it shouldn't.
             clickNextButton();
         }
     }
 
     public String getTextOf(WebElement product) {
-        String productName = getText(product).split("\n")[0];
+        String productName = extractProductName(product);
         return getText(product, productName);
+    }
+
+    public String getProductName(WebElement product) {
+        return extractProductName(product);
+    }
+
+    private String extractProductName(WebElement product) {
+        return getText(product).split("\n")[0];
     }
 
     public void clickProduct(WebElement product) {
         String productName = getProductName(product);
         click(product, productName);
-    }
-
-    public String getProductName(WebElement product) {
-        return getText(product).split("\n")[0];
     }
 
     public WebElement getProductGridContainer() {

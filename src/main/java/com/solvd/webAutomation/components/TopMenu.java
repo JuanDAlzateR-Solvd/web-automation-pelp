@@ -1,7 +1,9 @@
 package com.solvd.webAutomation.components;
 
 import com.solvd.webAutomation.pages.common.AbstractPage;
-import org.openqa.selenium.By;
+
+import com.solvd.webAutomation.pages.desktop.CartPage;
+import com.solvd.webAutomation.pages.desktop.HomePage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -12,25 +14,36 @@ public class TopMenu extends AbstractPage {
 
     @FindBy(css = "a.nav-link[href='index.html']")
     private WebElement homeButton;
+
     @FindBy(css = "a.nav-link[data-target='#exampleModal']")
     private WebElement contactButton;
+
     @FindBy(css = "a.nav-link[data-target='#videoModal']")
     private WebElement aboutUsButton;
+
     @FindBy(css = "a.nav-link[href='cart.html']")
     private WebElement cartButton;
+
     @FindBy(css = "a.nav-link#login2")
     private WebElement logInButton;
+
     @FindBy(css = "a.nav-link#signin2")
     private WebElement signUpButton;
 
     @FindBy(css = "#exampleModal .close")
     private WebElement contactCloseButton;
-    @FindBy(css = "#videoModal .close")
+
+      @FindBy(css = "#videoModal .close")
     private WebElement aboutUsCloseButton;
-    @FindBy(css = "#logInModal .close")
+
+       @FindBy(css = "#logInModal .close")
     private WebElement logInCloseButton;
+
     @FindBy(css = "#signInModal .close")
     private WebElement signUpCloseButton;
+
+    @FindBy(css = "a[id='nava'] img")
+    private WebElement imageIndicator;
 
     public TopMenu(WebDriver driver) {
         super(driver);
@@ -53,18 +66,18 @@ public class TopMenu extends AbstractPage {
     );
 
     @Override
-    protected By getPageLoadedIndicator() {
-        return By.cssSelector("a[id='nava'] img");
+    protected WebElement getPageLoadedIndicator() {
+        return imageIndicator;
     }
 
-    public void clickButton(MenuItem item) {
-        click(menuButtons.get(item), item.name);
+    public void click(MenuItem item) {
+        click(menuButtons.get(item), item.getName());
     }
 
-    public void clickCloseButton(MenuItem item) {
-        if (closeButtons.containsKey(item)) {
-            click(closeButtons.get(item),
-                    item.name.substring(4) + " Close Button");
+    public void clickClose(MenuItem item) {
+        WebElement closeButton = closeButtons.get(item);
+        if (closeButton != null) {
+            click(closeButton, item.getName().substring(4) + " Close");
         }
     }
 
@@ -73,14 +86,30 @@ public class TopMenu extends AbstractPage {
 
         if (closeButtons.containsKey(item)) {
             result = isVisible(closeButtons.get(item));
-        } else {
+        }else{
             switch (item) {
                 case HOME -> result = driver.getCurrentUrl().contains("index.html");
                 case CART -> result = driver.getCurrentUrl().contains("cart.html");
             }
         }
-
         return result;
+    }
+
+    public boolean isModalVisible(MenuItem item) {
+        WebElement closeButton = closeButtons.get(item);
+        if (closeButton == null) {
+            throw new IllegalArgumentException("Menu item has no modal: " + item);
+        }
+        return isVisible(closeButton);
+    }
+
+    public boolean isPageOpened(MenuItem item) {
+        return switch (item) {
+            case HOME -> new HomePage(driver).isPageVisible();
+            case CART -> new CartPage(driver).isPageVisible();
+            default -> throw new IllegalArgumentException(
+                    "Menu item does not represent a page: " + item);
+        };
     }
 
     public enum MenuItem {

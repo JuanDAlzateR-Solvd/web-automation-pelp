@@ -94,7 +94,7 @@ public abstract class AbstractPage {
     protected boolean isVisible(WebElement element, String elementName) {
         logger.info("Checking if visibility of element [{}]", elementName);
         try {
-            waitVisible(element);
+            waitUntilVisible(element);
             logger.info("Element [{}] is visible", elementName);
             return true;
         } catch (TimeoutException e) {
@@ -138,7 +138,7 @@ public abstract class AbstractPage {
         logger.info("Checking if clickable on element [{}]", elementName);
 
         try {
-            waitClickable(element);
+            waitUntilClickable(element);
             logger.info("Element [{}] is clickable", elementName);
             return true;
         } catch (TimeoutException e) {
@@ -176,11 +176,11 @@ public abstract class AbstractPage {
         }
     }
 
-    public void waitVisible(WebElement element) {
+    public void waitUntilVisible(WebElement element) {
         wait.until(ExpectedConditions.visibilityOf(element));
     }
 
-    protected void waitClickable(WebElement element) {
+    protected void waitUntilClickable(WebElement element) {
         wait.until(ExpectedConditions.elementToBeClickable(element));
     }
 

@@ -12,7 +12,7 @@ import java.util.stream.IntStream;
 
 public class CartPage extends AbstractPage {
 
-    @FindBy(css = "#tbodyid]")
+    @FindBy(css = "#tbodyid")
     private WebElement productGridContainer;
 
     @FindBy(css = "#totalp")
@@ -43,10 +43,6 @@ public class CartPage extends AbstractPage {
     public List<WebElement> getProductElements() {
         return productElements;
     }
-
-//    public List<WebElement> getProductElementsBy() {
-//        return productGridContainer.findElements(By.cssSelector(":scope tr[class='success']"));
-//    }
 
     public List<WebElement> getDeleteButtonsList() {
         return deleteButtonsList;
@@ -105,7 +101,7 @@ public class CartPage extends AbstractPage {
 
         if (!isCartEmpty()) {
             waitUntilCartDeletesProduct();
-            waitVisible(tableIndicator);
+            waitUntilVisible(tableIndicator);
         }
     }
 

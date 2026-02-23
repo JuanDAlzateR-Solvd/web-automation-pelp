@@ -9,7 +9,6 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class DemoblazeTest extends AbstractTest {
@@ -26,12 +25,15 @@ public class DemoblazeTest extends AbstractTest {
 
         SoftAssert sa = new SoftAssert();
 
-        Arrays.stream(TopMenu.MenuItem.values())
-                .forEach(menuItem -> {
-                    topMenu.click(menuItem);
-                    sa.assertTrue(topMenu.isVisible(menuItem));
-                    topMenu.clickClose(menuItem);
-                });
+        for (TopMenu.MenuItem menuItem : TopMenu.MenuItem.values()) {
+            logger.info("Testing Menu item: [{}]", menuItem);
+            try {
+                topMenu.click(menuItem);
+                sa.assertTrue(topMenu.isVisible(menuItem), "Menu item [" + menuItem + "] should be visible");
+            } finally {
+                topMenu.clickClose(menuItem);
+            }
+        }
 
         sa.assertAll();
     }

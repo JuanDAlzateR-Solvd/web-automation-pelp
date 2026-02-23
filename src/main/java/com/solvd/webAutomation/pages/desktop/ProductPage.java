@@ -17,15 +17,17 @@ public class ProductPage extends AbstractPage {
     private WebElement description;
     @FindBy(css = "a.btn.btn-success.btn-lg")
     private WebElement addToCartButton;
+    @FindBy(css = "#myCarousel-2")
+    private WebElement imageLocator;
 
     public ProductPage(WebDriver driver) {
         super(driver);
     }
 
     @Override
-    protected By getPageLoadedIndicator() {
-        return By.cssSelector("#myCarousel-2");
-    }//"#myCarousel-2 img"
+    protected WebElement getPageLoadedIndicator() {
+        return imageLocator;
+    }
 
     public boolean isVisible(InfoItem item) {
         return switch (item) {

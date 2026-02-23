@@ -14,12 +14,16 @@ public class LogInModal extends AbstractPage {
 
     @FindBy(id = "logInModalLabel")
     private WebElement title;
+
     @FindBy(css = "#logInModal button.btn.btn-primary")
     private WebElement logInButton;
+
     @FindBy(css = "#logInModal button.btn.btn-secondary")
     private WebElement closeButton;
+
     @FindBy(id = "loginusername")
     private WebElement usernameInput;
+
     @FindBy(id = "loginpassword")
     private WebElement passwordInput;
 
@@ -38,8 +42,8 @@ public class LogInModal extends AbstractPage {
     );
 
     @Override
-    protected By getPageLoadedIndicator() {
-        return By.id("logInModalLabel");
+    protected WebElement getPageLoadedIndicator() {
+        return title;
     }
 
     public WebElement getTitle() {

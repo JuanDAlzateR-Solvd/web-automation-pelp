@@ -46,8 +46,8 @@ public class ContactModal extends AbstractPage {
     );
 
     @Override
-    protected By getPageLoadedIndicator() {
-        return By.cssSelector("h5[id='exampleModalLabel']");
+    protected WebElement getPageLoadedIndicator() {
+        return title;
     }
 
     public WebElement getTitle() {

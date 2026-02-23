@@ -15,13 +15,16 @@ public class Footer extends AbstractPage {
     @FindBy(css = getInTouchCssSelector)
     private WebElement getInTouch;
 
+    @FindBy(css = "#fotcont img")
+    private WebElement imageLocator;
+
     public Footer(WebDriver driver) {
         super(driver);
     }
 
     @Override
-    protected By getPageLoadedIndicator() {
-        return By.cssSelector("#fotcont img");
+    protected WebElement getPageLoadedIndicator() {
+        return imageLocator;
     }
 
     public String[] getGetInTouchText() {

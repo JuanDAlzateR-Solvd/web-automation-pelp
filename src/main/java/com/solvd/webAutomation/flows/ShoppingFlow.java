@@ -37,14 +37,14 @@ public class ShoppingFlow {
         productPage.clickAddToCartButton();
         productPage.acceptProductAddedAlert();
 
-        topMenu.clickButton(TopMenu.MenuItem.HOME);
+        topMenu.click(TopMenu.MenuItem.HOME);
         productGrid.waitUntilPageIsReady();
 
         return productName;
     }
 
     public String addRandomProductToCart() {
-        productGrid.waitVisible(productGrid.getProductGridContainer());
+        productGrid.waitUntilVisible(productGrid.getProductGridContainer());
         List<WebElement> products = productGrid.getProductElements();
         int size = products.size();
 

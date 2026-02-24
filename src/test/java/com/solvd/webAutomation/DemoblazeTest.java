@@ -194,29 +194,24 @@ public class DemoblazeTest extends AbstractTest {
 
     @Test(testName = "Fill Contact Form - Task3 TC-005",
             description = "click on contact, then fills the form and sends it")
-    public void verifyFillInfoInContactFormAndSend() {
+    public void verifyFillInfoInContactFormAndSend2() {
         WebDriver driver = getDriver();
 
         HomePage homePage = new HomePage(driver);
-        TopMenu topMenu = new TopMenu(driver);
-        ContactModal contactModal = new ContactModal(driver);
 
-        homePage.waitUntilPageIsReady();
-
-        clickContact(topMenu, contactModal);
+        ContactModal contactModal = homePage.getTopMenu().openContactModal();
         SoftAssert sa = new SoftAssert();
+
         sa.assertTrue(contactModal.isContactModalVisible(), "Contact modal is not visible");
 
-        contactModal.type(ContactModal.MenuItem.EMAIL, "example@email.com");
-        contactModal.type(ContactModal.MenuItem.NAME, "Example Name");
-        contactModal.type(ContactModal.MenuItem.MESSAGE, "This is a test message");
+        contactModal.submitContactForm("example@email.com",
+                "Example Name",
+                "This is a test message");
 
-        contactModal.click(ContactModal.MenuItem.SEND);
         sa.assertTrue(contactModal.isAlertPresent());
         contactModal.acceptMessageAlert();
 
         sa.assertAll();
-
     }
 
     @Test(testName = "Log In with wrong credentials - Task3 TC-006",

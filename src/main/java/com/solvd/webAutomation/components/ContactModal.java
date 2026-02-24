@@ -69,6 +69,17 @@ public class ContactModal extends AbstractPage {
         alert.accept();
     }
 
+    public ContactModal submitContactForm(
+            String email,
+            String name,
+            String message) {
+        type(ContactModal.MenuItem.EMAIL, email);
+        type(ContactModal.MenuItem.NAME, name);
+        type(ContactModal.MenuItem.MESSAGE, message);
+        click(ContactModal.MenuItem.SEND);
+        return this;
+    }
+
     public enum MenuItem {
         EMAIL("Input Email"),
         NAME("Input Name"),

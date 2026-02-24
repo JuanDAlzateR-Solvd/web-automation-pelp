@@ -1,5 +1,7 @@
 package com.solvd.webAutomation.pages.desktop;
 
+import com.solvd.webAutomation.components.ProductGrid;
+import com.solvd.webAutomation.components.TopMenu;
 import com.solvd.webAutomation.pages.common.AbstractPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -61,22 +63,19 @@ public class HomePage extends AbstractPage {
         }
     }
 
-//    @Override
-//    public void waitUntilPageIsReady() {
-//        logger.info("Waiting for the page to load");
-//        WebDriverWait pageWait = new WebDriverWait(driver, Duration.ofSeconds(waitDuration));
-//        pageWait.until(driver ->
-//                ((JavascriptExecutor) driver)
-//                        .executeScript("return document.readyState")
-//                        .equals("complete")
-//        );
-//        pageWait.until(ExpectedConditions.invisibilityOfElementLocated(LOADER));
-//        By products = By.cssSelector("#tbodyid .card");
-//        pageWait.until(webDriver -> !driver.findElements(products).isEmpty());
-//        pageWait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(products));
-//
-//
-//        logger.info("The page is ready");
-//    }
+    //Test flow methods
+
+    public ProductGrid getProductGrid() {
+        return new ProductGrid(driver);
+    }
+
+    public TopMenu getTopMenu() {
+        return new TopMenu(driver);
+    }
+
+    public ProductGrid selectCategory(MenuItem item) {
+        click(item);
+        return new ProductGrid(driver);
+    }
 
 }

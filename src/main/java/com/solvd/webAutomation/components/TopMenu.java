@@ -131,4 +131,11 @@ public class TopMenu extends AbstractPage {
         }
     }
 
+    //Test flow methods
+
+    public CartPage goToCartPage() {
+        click(cartButton, MenuItem.CART.getName());
+        return new CartPage(driver);
+    }
+
 }

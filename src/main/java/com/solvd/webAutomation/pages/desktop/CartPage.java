@@ -151,4 +151,36 @@ public class CartPage extends AbstractPage {
         return rows.size() == 0;
     }
 
+    //Test flow methods
+
+    public boolean containsProduct(String productName) {
+        List<WebElement> products = getProductElements();
+        int index = findProductIndexInCart(products, productName);
+        return index >= 0;
+    }
+
+    public int getProductCount() {
+        logger.info("Checking number of products in shopping cart");
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.id("tbodyid")));
+
+        List<WebElement> rows =
+                driver.findElements(By.cssSelector("#tbodyid tr"));
+
+       int size = rows.size();
+        logger.info("Shopping cart has {} products", size);
+
+        return size;
+    }
+
+    public void deleteProduct(String productName) {
+        logger.info("Trying to delete product {}", productName);
+        int productIndex = findProductIndexInCart(getProductElements(), productName);
+        if (productIndex >= 0) {
+            deleteProduct(productIndex);
+        }else
+        {
+            logger.info("Product '{}' not found in cart", productName);
+        }
+    }
+
 }

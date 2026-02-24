@@ -97,5 +97,9 @@ public class ProductGrid extends AbstractPage {
         clickProduct(product);
         return new ProductPage(driver);
     }
+    public String getProductNameByIndex(int index) {
+        WebElement product =getProductByIndex(index);
+        return extractProductName(product);
+    }
 
 }

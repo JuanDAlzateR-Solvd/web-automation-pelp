@@ -32,6 +32,8 @@ public abstract class AbstractPage {
                 Thread.currentThread().getId(),
                 System.identityHashCode(driver)
         );
+
+        waitUntilPageIsReady();
     }
 
     protected abstract WebElement getPageLoadedIndicator();

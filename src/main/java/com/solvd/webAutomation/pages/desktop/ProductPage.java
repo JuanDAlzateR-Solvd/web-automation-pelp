@@ -1,5 +1,6 @@
 package com.solvd.webAutomation.pages.desktop;
 
+import com.solvd.webAutomation.components.TopMenu;
 import com.solvd.webAutomation.pages.common.AbstractPage;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
@@ -83,6 +84,18 @@ public class ProductPage extends AbstractPage {
         public String getName() {
             return name;
         }
+    }
+
+    //Test flow methods
+
+    public ProductPage addToCart() {
+        clickAddToCartButton();
+        return this;
+    }
+    public CartPage goToCartPage() {
+        TopMenu topMenu = new TopMenu(driver);
+        topMenu.goToCartPage();
+        return new CartPage(driver);
     }
 
 }

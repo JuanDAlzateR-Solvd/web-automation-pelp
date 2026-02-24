@@ -154,106 +154,33 @@ public class DemoblazeTest extends AbstractTest {
             dataProvider = "Category MenuItem Provider")
     public void verifyDeleteProductOfCategoryFromCart(HomePage.MenuItem category) {
         WebDriver driver = getDriver();
-
         HomePage homePage = new HomePage(driver);
-        ProductGrid productGrid = new ProductGrid(driver);
-        ProductPage productPage = new ProductPage(driver);
-        TopMenu topMenu = new TopMenu(driver);
-        CartPage cartPage = new CartPage(driver);
-
-        homePage.waitUntilPageIsReady();
-
-        clickCategory(homePage, category, productGrid);
-
-        WebElement firstProduct = productGrid.getProductByIndex(0);
-        String firstProductName = productGrid.getProductName(firstProduct);
-        productGrid.clickProduct(firstProduct);
 
         SoftAssert sa = new SoftAssert();
 
-        productPage.clickAddToCartButton();
-        sa.assertTrue(productPage.isProductAddedAlertPresent());
-        productPage.acceptProductAddedAlert();
-
-        clickCart(topMenu, cartPage);
-
-       // cartPage.waitUntilCartShowsProducts();
-
-        List<WebElement> cartProducts = cartPage.getCartProducts();
-        int initialCartSize = cartProducts.size();
-
-        sa.assertFalse(cartProducts.isEmpty(), "the shopping cart is empty");
-
-        int productIndex = cartPage.findProductIndexInCart(cartProducts, firstProductName);
-
-        sa.assertTrue(productIndex != -1, "Product not found in the cart");
-
-        if (productIndex != -1) {
-            cartPage.deleteProduct(productIndex);
-        }
-
-        cartPage.waitUntilPageIsReady();
-
-        int finalCartSize = 0;
-        if (!cartPage.isCartEmpty()) {
-            List<WebElement> newCartProducts = cartPage.getCartProducts();
-            finalCartSize = newCartProducts.size();
-        }
-
-        sa.assertTrue(finalCartSize == initialCartSize - 1, "The product was not deleted");
-
-        sa.assertAll();
-
-    }
-
-    @Test(testName = "Delete Product from Cart - Task3 TC-003",
-            description = "choose the first product from a category and add it to cart, then delete it, verifies info in shopping cart",
-            dataProvider = "Category MenuItem Provider")
-    public void verifyDeleteProductOfCategoryFromCart2(HomePage.MenuItem category) {
-        WebDriver driver = getDriver();
-
-        HomePage homePage = new HomePage(driver);
-
         homePage.waitUntilPageIsReady();
 
-        clickCategory(homePage, category, productGrid);
+        ProductGrid productGrid = homePage.selectCategory(category);
 
-        WebElement firstProduct = productGrid.getProductByIndex(0);
-        String firstProductName = productGrid.getProductName(firstProduct);
-        productGrid.clickProduct(firstProduct);
+        String productName = productGrid.getProductNameByIndex(0);
 
-        SoftAssert sa = new SoftAssert();
+        CartPage cartPage = productGrid
+                .openProductByIndex(0)
+                .addToCart()
+                .goToCartPage();
 
-        productPage.clickAddToCartButton();
-        sa.assertTrue(productPage.isProductAddedAlertPresent());
-        productPage.acceptProductAddedAlert();
+        sa.assertTrue(cartPage.containsProduct(productName),
+                "Product was not added to cart");
 
-        clickCart(topMenu, cartPage);
+        int initialSize = cartPage.getProductCount();
 
-        // cartPage.waitUntilCartShowsProducts();
+        cartPage.deleteProduct(productName);
 
-        List<WebElement> cartProducts = cartPage.getCartProducts();
-        int initialCartSize = cartProducts.size();
-
-        sa.assertFalse(cartProducts.isEmpty(), "the shopping cart is empty");
-
-        int productIndex = cartPage.findProductIndexInCart(cartProducts, firstProductName);
-
-        sa.assertTrue(productIndex != -1, "Product not found in the cart");
-
-        if (productIndex != -1) {
-            cartPage.deleteProduct(productIndex);
-        }
-
-        cartPage.waitUntilPageIsReady();
-
-        int finalCartSize = 0;
-        if (!cartPage.isCartEmpty()) {
-            List<WebElement> newCartProducts = cartPage.getCartProducts();
-            finalCartSize = newCartProducts.size();
-        }
-
-        sa.assertTrue(finalCartSize == initialCartSize - 1, "The product was not deleted");
+        sa.assertEquals(
+                cartPage.getProductCount(),
+                initialSize - 1,
+                "Product was not deleted"
+        );
 
         sa.assertAll();
 

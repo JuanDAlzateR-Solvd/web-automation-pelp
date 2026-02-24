@@ -193,6 +193,41 @@ public class DemoblazeTest extends AbstractTest {
 
     }
 
+    @Test(testName = "Empty Shopping Cart - Task3 TC-004",
+            description = "add random products to the shopping cart, then empties the cart")
+    public void verifyAllDeleteButtonsToEmptyShoppingCart2() {
+        WebDriver driver = getDriver();
+
+        HomePage homePage = new HomePage(driver);
+
+        ShoppingFlow shoppingFlow = new ShoppingFlow(productGrid, productPage, topMenu);
+
+        homePage.waitUntilPageIsReady();
+
+        String productName = "";
+        for (int i = 0; i < 5; i++) {
+            productName = shoppingFlow.addRandomProductToCart();
+        }
+
+        SoftAssert sa = new SoftAssert();
+        clickCart(topMenu, cartPage);
+
+        List<WebElement> cartProducts = cartPage.getCartProducts();
+
+        sa.assertFalse(cartProducts.isEmpty(), "The shopping cart is empty");
+
+        while (!cartPage.isCartEmpty()) {
+            cartPage.deleteProduct(0);
+        }
+
+        logger.debug("finished empty shopping cart");
+        sa.assertTrue(cartPage.isCartEmpty(), "The shopping cart is not empty");
+        logger.debug("finished checking shopping cart");
+
+        sa.assertAll();
+
+    }
+
     @Test(testName = "Fill Contact Form - Task3 TC-005",
             description = "click on contact, then fills the form and sends it")
     public void verifyFillInfoInContactFormAndSend() {

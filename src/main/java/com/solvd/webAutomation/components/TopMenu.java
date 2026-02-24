@@ -138,7 +138,9 @@ public class TopMenu extends AbstractPage {
 
     public CartPage goToCartPage() {
         click(MenuItem.CART);
-        return new CartPage(driver);
+        CartPage cartPage = new CartPage(driver);
+        cartPage.waitUntilCartLoadsProducts();
+        return cartPage;
     }
 
     public HomePage goToHomePage() {

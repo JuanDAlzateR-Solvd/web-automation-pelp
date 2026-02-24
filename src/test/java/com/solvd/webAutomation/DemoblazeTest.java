@@ -104,6 +104,7 @@ public class DemoblazeTest extends AbstractTest {
         CartPage cartPage = productGrid
                 .openProductByIndex(0)
                 .addToCart()
+                .getTopMenu()
                 .goToCartPage();
 
         SoftAssert sa = new SoftAssert();
@@ -135,6 +136,7 @@ public class DemoblazeTest extends AbstractTest {
         CartPage cartPage = productGrid
                 .openProductByIndex(0)
                 .addToCart()
+                .getTopMenu()
                 .goToCartPage();
 
         sa.assertTrue(cartPage.containsProduct(productName),
@@ -160,14 +162,8 @@ public class DemoblazeTest extends AbstractTest {
         WebDriver driver = getDriver();
 
         HomePage homePage = new HomePage(driver);
-        ProductGrid productGrid = new ProductGrid(driver);
-        ProductPage productPage = new ProductPage(driver);
-        TopMenu topMenu = new TopMenu(driver);
-        CartPage cartPage = new CartPage(driver);
 
-        ShoppingFlow shoppingFlow = new ShoppingFlow(productGrid, productPage, topMenu);
-
-        homePage.waitUntilPageIsReady();
+        ShoppingFlow shoppingFlow = new ShoppingFlow(driver);
 
         String productName = "";
         for (int i = 0; i < 5; i++) {
@@ -175,53 +171,21 @@ public class DemoblazeTest extends AbstractTest {
         }
 
         SoftAssert sa = new SoftAssert();
-        clickCart(topMenu, cartPage);
+        CartPage cartPage = homePage.getTopMenu().goToCartPage();
 
-        List<WebElement> cartProducts = cartPage.getCartProducts();
+        cartPage.waitUntilCartShowsProducts(); //change later
 
-        sa.assertFalse(cartProducts.isEmpty(), "The shopping cart is empty");
+        int initialSize = cartPage.getProductCount();
 
-        while (!cartPage.isCartEmpty()) {
-            cartPage.deleteProduct(0);
-        }
-
-        logger.debug("finished empty shopping cart");
-        sa.assertTrue(cartPage.isCartEmpty(), "The shopping cart is not empty");
-        logger.debug("finished checking shopping cart");
-
-        sa.assertAll();
-
-    }
-
-    @Test(testName = "Empty Shopping Cart - Task3 TC-004",
-            description = "add random products to the shopping cart, then empties the cart")
-    public void verifyAllDeleteButtonsToEmptyShoppingCart2() {
-        WebDriver driver = getDriver();
-
-        HomePage homePage = new HomePage(driver);
-
-        ShoppingFlow shoppingFlow = new ShoppingFlow(productGrid, productPage, topMenu);
-
-        homePage.waitUntilPageIsReady();
-
-        String productName = "";
-        for (int i = 0; i < 5; i++) {
-            productName = shoppingFlow.addRandomProductToCart();
-        }
-
-        SoftAssert sa = new SoftAssert();
-        clickCart(topMenu, cartPage);
-
-        List<WebElement> cartProducts = cartPage.getCartProducts();
-
-        sa.assertFalse(cartProducts.isEmpty(), "The shopping cart is empty");
+        sa.assertFalse(initialSize==0, "The shopping cart is empty");
 
         while (!cartPage.isCartEmpty()) {
             cartPage.deleteProduct(0);
         }
 
         logger.debug("finished empty shopping cart");
-        sa.assertTrue(cartPage.isCartEmpty(), "The shopping cart is not empty");
+        int finalSize = cartPage.getProductCount();
+        sa.assertTrue(finalSize==0, "The shopping cart is not empty");
         logger.debug("finished checking shopping cart");
 
         sa.assertAll();

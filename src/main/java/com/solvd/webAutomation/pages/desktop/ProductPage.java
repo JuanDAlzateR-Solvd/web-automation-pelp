@@ -90,12 +90,8 @@ public class ProductPage extends AbstractPage {
 
     public ProductPage addToCart() {
         clickAddToCartButton();
+        acceptProductAddedAlert();///
         return this;
-    }
-    public CartPage goToCartPage() {
-        TopMenu topMenu = new TopMenu(driver);
-        topMenu.goToCartPage();
-        return new CartPage(driver);
     }
 
     public TopMenu getTopMenu() {

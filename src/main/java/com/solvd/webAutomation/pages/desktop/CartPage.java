@@ -188,4 +188,11 @@ public class CartPage extends AbstractPage {
         }
     }
 
+    public void waitUntilCartLoadsProducts() {
+        if (!isCartEmpty()) {
+            waitUntilCartShowsProducts();
+            waitUntilVisible(tableIndicator);
+        }
+    }
+
 }

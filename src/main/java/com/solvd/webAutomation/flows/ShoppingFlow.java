@@ -63,39 +63,39 @@ public class ShoppingFlow {
         this.driver = driver;
     }
 
-    public String addProductToCart(HomePage.MenuItem category, int productIndex) {
+    public String addProductToCart(int productIndex) {
 
         HomePage homePage = new HomePage(driver);
 
-        ProductGrid productGrid = homePage.selectCategory(category);
+        ProductGrid productGrid = homePage.getProductGrid();
 
         String productName = productGrid.getProductNameByIndex(productIndex);
 
-        // Manejo del bug encapsulado
+        //Identified a bug specific for the Nexus 6 product, for now just change product.
         if ("Nexus 6".equals(productName)) {
             productIndex++;
             productName = productGrid.getProductNameByIndex(productIndex);
         }
 
-        CartPage cartPage = productGrid
+        productGrid
                 .openProductByIndex(productIndex)
                 .addToCart()
                 .getTopMenu()
-                .goToCartPage();
+                .goToHomePage();
 
         return productName;
     }
 
-    public String addRandomProductToCart(HomePage.MenuItem category) {
+    public String addRandomProductToCart() {
 
         HomePage homePage = new HomePage(driver);
 
-        ProductGrid productGrid = homePage.selectCategory(category);
+        ProductGrid productGrid = homePage.getProductGrid();
 
         int size = productGrid.getProductCount();
 
         int randomIndex = new Random().nextInt(size);
 
-        return addProductToCart(category, randomIndex);
+        return addProductToCart(randomIndex);
     }
 }

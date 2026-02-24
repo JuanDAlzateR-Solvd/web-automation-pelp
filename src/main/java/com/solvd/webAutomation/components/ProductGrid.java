@@ -94,12 +94,13 @@ public class ProductGrid extends AbstractPage {
     //Test flow methods
 
     public ProductPage openProductByIndex(int index) {
-        WebElement product =getProductByIndex(index);
+        WebElement product = getProductByIndex(index);
         clickProduct(product);
         return new ProductPage(driver);
     }
+
     public String getProductNameByIndex(int index) {
-        WebElement product =getProductByIndex(index);
+        WebElement product = getProductByIndex(index);
         return extractProductName(product);
     }
 

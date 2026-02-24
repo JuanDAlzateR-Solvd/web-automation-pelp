@@ -9,7 +9,6 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.util.List;
-import java.util.OptionalInt;
 import java.util.stream.IntStream;
 
 public class CartPage extends AbstractPage {
@@ -95,7 +94,9 @@ public class CartPage extends AbstractPage {
 
     public void printProductsInCart() {
         logger.info("Printing products in cart:");
-        getCartProducts().forEach(p -> {logger.info(p.getText());});
+        getCartProducts().forEach(p -> {
+            logger.info(p.getText());
+        });
         logger.info("Finished printing products in cart.");
     }
 
@@ -171,7 +172,7 @@ public class CartPage extends AbstractPage {
         List<WebElement> rows =
                 driver.findElements(By.cssSelector("#tbodyid tr"));
 
-       int size = rows.size();
+        int size = rows.size();
         logger.info("Shopping cart has {} products", size);
 
         return size;
@@ -182,8 +183,7 @@ public class CartPage extends AbstractPage {
         int productIndex = findProductIndexInCart(getProductElements(), productName);
         if (productIndex >= 0) {
             deleteProduct(productIndex);
-        }else
-        {
+        } else {
             logger.info("Product '{}' not found in cart", productName);
         }
     }

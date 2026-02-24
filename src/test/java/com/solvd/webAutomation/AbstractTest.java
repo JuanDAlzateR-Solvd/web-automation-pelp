@@ -35,7 +35,7 @@ public class AbstractTest {
         RemoteWebDriver remoteDriver = (RemoteWebDriver) DriverFactory.getDriver();
         SessionId session = remoteDriver.getSessionId();
         logger.info("Starting Test: " + method.getName() + "| Thread: " + Thread.currentThread().getName()
-        +" | Driver hash: " + driver.hashCode() +" | Session ID: "+session.toString());
+                + " | Driver hash: " + driver.hashCode() + " | Session ID: " + session.toString());
     }
 
     @AfterMethod(alwaysRun = true)

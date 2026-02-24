@@ -50,16 +50,11 @@ public class DemoblazeTest extends AbstractTest {
     }
 
     @Test(testName = "List of Products - Task1", description = "filters the products by category, then prints in console all the products")
-    public void verifyProductsDisplayedForSelectedCategory() {
+    public void verifyProductsDisplayedForSelectedCategory2() {
         WebDriver driver = getDriver();
         HomePage homePage = new HomePage(driver);
-        ProductGrid productGrid = new ProductGrid(driver);
 
-        homePage.waitUntilPageIsReady();
-
-        homePage.click(HomePage.MenuItem.LAPTOPS);
-
-        homePage.waitUntilPageIsReady();
+        ProductGrid productGrid = homePage.selectCategory(HomePage.MenuItem.LAPTOPS);
 
         List<String> productsList = productGrid.getProductTitles();
         productsList.forEach(logger::info);

@@ -4,6 +4,7 @@ import com.solvd.webAutomation.components.ContactModal;
 import com.solvd.webAutomation.components.LogInModal;
 import com.solvd.webAutomation.components.ProductGrid;
 import com.solvd.webAutomation.components.TopMenu;
+import com.solvd.webAutomation.config.ConfigReader;
 import com.solvd.webAutomation.driver.DriverFactory;
 import com.solvd.webAutomation.driver.DriverRunMode;
 import com.solvd.webAutomation.driver.DriverType;
@@ -29,9 +30,10 @@ public class AbstractTest {
         WebDriver driver = DriverFactory.getDriver();
         //DriverRunMode LOCAL or REMOTE. REMOTE Requires Selenium server standalone.
         driver.manage().window().maximize();
-        driver.get("https://demoblaze.com/");
+        driver.get(ConfigReader.get("url"));
 
-        SessionId session =((RemoteWebDriver) driver).getSessionId();
+        RemoteWebDriver remoteDriver = (RemoteWebDriver) DriverFactory.getDriver();
+        SessionId session = remoteDriver.getSessionId();
         logger.info("Starting Test: " + method.getName() + "| Thread: " + Thread.currentThread().getName()
         +" | Driver hash: " + driver.hashCode() +" | Session ID: "+session.toString());
     }

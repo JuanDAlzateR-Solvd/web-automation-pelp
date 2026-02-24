@@ -1,6 +1,5 @@
 package com.solvd.webAutomation.pages.common;
 
-import com.solvd.webAutomation.components.Footer;
 import com.solvd.webAutomation.config.ConfigReader;
 import org.jspecify.annotations.NonNull;
 import org.openqa.selenium.*;
@@ -56,17 +55,11 @@ public abstract class AbstractPage {
 //        waitUntilModalIsGone();
         WebElement element = driver.findElement(locator);
 
-        wait.until(driver -> {
-            try {
-                wait.until(ExpectedConditions.elementToBeClickable(element));
-                scrollTo(element);
-                element.click();
-                return true;
-            } catch (StaleElementReferenceException e) {
-                logger.warn("Stale element while clicking [{}], retrying...", elementName);
-                return false;
-            }
-        });
+        wait.withTimeout(Duration.ofSeconds(10))
+                .ignoring(StaleElementReferenceException.class)
+                .until(ExpectedConditions.elementToBeClickable(element));
+        scrollTo(element);
+        element.click();
     }
 
     protected void type(WebElement element, String elementName, String text) {

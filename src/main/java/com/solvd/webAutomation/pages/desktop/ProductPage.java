@@ -9,14 +9,19 @@ public class ProductPage extends AbstractPage {
 
     @FindBy(css = ".item.active")
     private WebElement image;
+
     @FindBy(css = "#tbodyid .name")
     private WebElement title;
+
     @FindBy(css = "#tbodyid .price-container")
     private WebElement price;
+
     @FindBy(css = "#tbodyid #more-information")
     private WebElement description;
+
     @FindBy(css = "a.btn.btn-success.btn-lg")
     private WebElement addToCartButton;
+
     @FindBy(css = "#myCarousel-2")
     private WebElement imageLocator;
 

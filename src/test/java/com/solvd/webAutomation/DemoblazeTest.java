@@ -316,9 +316,9 @@ public class DemoblazeTest extends AbstractTest {
         footer.scrollToBottom();
         sa.assertTrue(footer.isVisibleInScreen(), "Footer is not visible in screen at bottom of page");
 
-        sa.assertTrue(footer.getAddress().length() > 5);
-        sa.assertTrue(footer.getPhone().length() > 5);
-        sa.assertTrue(footer.getEmail().length() > 5);
+        sa.assertTrue(footer.getInfo(Footer.InfoItem.ADDRESS).length() > 5);
+        sa.assertTrue(footer.getInfo(Footer.InfoItem.PHONE).length() > 5);
+        sa.assertTrue(footer.getInfo(Footer.InfoItem.EMAIL).length() > 5);
 
         sa.assertAll();
 

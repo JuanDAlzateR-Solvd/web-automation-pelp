@@ -32,7 +32,6 @@ public class Footer extends AbstractPage {
     }
 
     private String extractValueFromLine(String[] lines, int lineIndex) {
-//        String[] lines = getContactInfoText();
         if (lines.length <= lineIndex) return "";
         String[] parts = lines[lineIndex].split(":", 2);
         return parts.length > 1 ? parts[1].trim() : "";
@@ -41,17 +40,6 @@ public class Footer extends AbstractPage {
     public String getInfo(InfoItem item){
         return extractValueFromLine(getContactInfoText(),item.getLineIndex());
     }
-//    public String getAddress() {
-//        return extractValueFromLine(getContactInfoText(),1);
-//    }
-//
-//    public String getPhone() {
-//        return extractValueFromLine(getContactInfoText(),2);
-//    }
-//
-//    public String getEmail() {
-//        return extractValueFromLine(getContactInfoText(),3);
-//    }
 
     public boolean isVisibleInScreen() {
         return isInViewport(contactInfo, "Get In Touch (Contact Info) Thumbnail");
@@ -79,6 +67,5 @@ public class Footer extends AbstractPage {
         }
         public int getLineIndex() {return lineIndex;}
     }
-
 
 }

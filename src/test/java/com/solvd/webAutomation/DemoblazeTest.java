@@ -113,36 +113,21 @@ public class DemoblazeTest extends AbstractTest {
         WebDriver driver = getDriver();
 
         HomePage homePage = new HomePage(driver);
-        ProductGrid productGrid = new ProductGrid(driver);
-        ProductPage productPage = new ProductPage(driver);
-        TopMenu topMenu = new TopMenu(driver);
-        CartPage cartPage = new CartPage(driver);
 
-        homePage.waitUntilPageIsReady();
+        ProductGrid productGrid = homePage.selectCategory(category);
 
-        clickCategory(homePage, category, productGrid);
+        String productName = productGrid.getProductNameByIndex(0);
 
-        WebElement firstProduct = productGrid.getProductByIndex(0);
-
-        String firstProductName = productGrid.getProductName(firstProduct);
-
-        productGrid.clickProduct(firstProduct);
+        CartPage cartPage = productGrid
+                .openProductByIndex(0)
+                .addToCart()
+                .goToCartPage();
 
         SoftAssert sa = new SoftAssert();
 
-        productPage.clickAddToCartButton();
-        sa.assertTrue(productPage.isProductAddedAlertPresent());
-        productPage.acceptProductAddedAlert();
+        sa.assertTrue(cartPage.containsProduct(productName),
+                "Product was not added to cart");
 
-        clickCart(topMenu, cartPage);
-
-        List<WebElement> cartProducts = cartPage.getCartProducts();
-
-        boolean productInCart = cartProducts.stream()
-                .map(WebElement::getText)
-                .anyMatch(s -> s.contains(firstProductName));
-
-        sa.assertTrue(productInCart, "The product is not in the cart");
         sa.assertFalse(cartPage.getTotalPrice().isEmpty(), "Total price is empty");
 
         sa.assertAll();
@@ -158,7 +143,7 @@ public class DemoblazeTest extends AbstractTest {
 
         SoftAssert sa = new SoftAssert();
 
-        homePage.waitUntilPageIsReady();
+//        homePage.waitUntilPageIsReady();
 
         ProductGrid productGrid = homePage.selectCategory(category);
 

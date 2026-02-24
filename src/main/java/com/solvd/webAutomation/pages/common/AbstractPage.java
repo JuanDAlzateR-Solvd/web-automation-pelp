@@ -43,6 +43,7 @@ public abstract class AbstractPage {
     public void click(WebElement element, String elementName) {
         logger.info("Clicking on element [{}]", elementName);
 
+        //better to use a new WebDriver Wait??
         wait.withTimeout(Duration.ofSeconds(10))
                 .ignoring(StaleElementReferenceException.class)
                 .until(ExpectedConditions.elementToBeClickable(element));

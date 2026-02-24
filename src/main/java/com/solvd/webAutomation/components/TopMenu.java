@@ -65,6 +65,7 @@ public class TopMenu extends AbstractPage {
             MenuItem.SIGN_UP, signUpCloseButton
     );
 
+
     @Override
     protected WebElement getPageLoadedIndicator() {
         return imageIndicator;
@@ -131,11 +132,38 @@ public class TopMenu extends AbstractPage {
         }
     }
 
+
+
     //Test flow methods
 
     public CartPage goToCartPage() {
-        click(cartButton, MenuItem.CART.getName());
+        click(MenuItem.CART);
         return new CartPage(driver);
+    }
+
+    public HomePage goToHomePage() {
+        click(MenuItem.HOME);
+        return new HomePage(driver);
+    }
+
+    public AboutUsModal openAboutUsModal() {
+        click(MenuItem.ABOUT_US);
+        return new AboutUsModal(driver);
+    }
+
+    public SignUpModal openSignUpModal() {
+        click(MenuItem.SIGN_UP);
+        return new SignUpModal(driver);
+    }
+
+    public ContactModal openContactModal() {
+        click(MenuItem.CONTACT);
+        return new ContactModal(driver);
+    }
+
+    public LogInModal openLogInModal() {
+        click(MenuItem.LOG_IN);
+        return new LogInModal(driver);
     }
 
 }

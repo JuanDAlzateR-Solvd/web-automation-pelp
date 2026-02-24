@@ -1,5 +1,6 @@
 package com.solvd.webAutomation.pages.desktop;
 
+import com.solvd.webAutomation.components.TopMenu;
 import com.solvd.webAutomation.pages.common.AbstractPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -152,6 +153,10 @@ public class CartPage extends AbstractPage {
     }
 
     //Test flow methods
+
+    public TopMenu getTopMenu() {
+        return new TopMenu(driver);
+    }
 
     public boolean containsProduct(String productName) {
         List<WebElement> products = getProductElements();

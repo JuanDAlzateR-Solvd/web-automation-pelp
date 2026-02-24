@@ -98,4 +98,8 @@ public class ProductPage extends AbstractPage {
         return new CartPage(driver);
     }
 
+    public TopMenu getTopMenu() {
+        return new TopMenu(driver);
+    }
+
 }

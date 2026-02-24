@@ -1,7 +1,6 @@
 package com.solvd.webAutomation.components;
 
 import com.solvd.webAutomation.pages.common.AbstractPage;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -11,7 +10,7 @@ import java.util.Arrays;
 public class Footer extends AbstractPage {
 
     @FindBy(css = "#fotcont div[class*='col-sm-3'] .caption")
-    private WebElement getInTouch;
+    private WebElement contactInfo;
 
     @FindBy(css = "#fotcont img")
     private WebElement imageLocator;
@@ -25,38 +24,61 @@ public class Footer extends AbstractPage {
         return imageLocator;
     }
 
-    public String[] getGetInTouchText() {
-//        logger.info(getInTouch.getText());
-        return Arrays.stream(getInTouch.getText().split("\n"))
+    public String[] getContactInfoText() {
+        logger.debug(contactInfo.getText());
+        return Arrays.stream(contactInfo.getText().split("\n"))
                 .map(String::trim)
                 .toArray(String[]::new);
     }
 
-    private String extractValueFromLine(int lineIndex) {
-        String[] lines = getGetInTouchText();
+    private String extractValueFromLine(String[] lines, int lineIndex) {
+//        String[] lines = getContactInfoText();
         if (lines.length <= lineIndex) return "";
         String[] parts = lines[lineIndex].split(":", 2);
         return parts.length > 1 ? parts[1].trim() : "";
     }
 
-    public String getAddress() {
-        return extractValueFromLine(1);
+    public String getInfo(InfoItem item){
+        return extractValueFromLine(getContactInfoText(),item.getLineIndex());
     }
-
-    public String getPhone() {
-        return extractValueFromLine(2);
-    }
-
-    public String getEmail() {
-        return extractValueFromLine(3);
-    }
+//    public String getAddress() {
+//        return extractValueFromLine(getContactInfoText(),1);
+//    }
+//
+//    public String getPhone() {
+//        return extractValueFromLine(getContactInfoText(),2);
+//    }
+//
+//    public String getEmail() {
+//        return extractValueFromLine(getContactInfoText(),3);
+//    }
 
     public boolean isVisibleInScreen() {
-        return isInViewport(getInTouch, "Get In Touch Thumbnail");
+        return isInViewport(contactInfo, "Get In Touch (Contact Info) Thumbnail");
     }
 
     public void scrollToBottom() {
-        scrollTo(getInTouch);
+        scrollTo(contactInfo);
     }
+
+    public enum InfoItem {
+        ADDRESS("Get in Touch Address",1),
+        PHONE("Get in Touch Phone",2),
+        EMAIL("Get in Touch Email",3);
+
+        private final String name;
+        private final int lineIndex;
+
+        InfoItem(String name, int lineIndex) {
+            this.name = name;
+            this.lineIndex = lineIndex;
+        }
+
+        public String getName() {
+            return name;
+        }
+        public int getLineIndex() {return lineIndex;}
+    }
+
 
 }

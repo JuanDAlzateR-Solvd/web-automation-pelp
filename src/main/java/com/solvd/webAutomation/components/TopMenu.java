@@ -33,10 +33,10 @@ public class TopMenu extends AbstractPage {
     @FindBy(css = "#exampleModal .close")
     private WebElement contactCloseButton;
 
-      @FindBy(css = "#videoModal .close")
+    @FindBy(css = "#videoModal .close")
     private WebElement aboutUsCloseButton;
 
-       @FindBy(css = "#logInModal .close")
+    @FindBy(css = "#logInModal .close")
     private WebElement logInCloseButton;
 
     @FindBy(css = "#signInModal .close")

@@ -26,31 +26,25 @@ public class DemoblazeTest extends AbstractTest {
     private static final Logger logger =
             LoggerFactory.getLogger(DemoblazeTest.class);
 
-    @Test(testName = "Functionality of top menu", description = "verifies that home page loads,top Menu works correctly")
+    @Test(testName = "Functionality of top menu modals", description = "verifies that home page loads, and top Menu modals works correctly")
     public void verifyTopMenuNavigation() {
         WebDriver driver = getDriver();
         HomePage homePage = new HomePage(driver);
-        TopMenu topMenu = new TopMenu(driver);
 
-        homePage.waitUntilPageIsReady();
-
+        TopMenu topMenu = homePage.getTopMenu();
         SoftAssert sa = new SoftAssert();
 
-        for (TopMenu.MenuItem menuItem : TopMenu.MenuItem.values()) {
-            logger.info("Testing Menu item: [{}]", menuItem);
-            try {
-                topMenu.click(menuItem);
-                sa.assertTrue(topMenu.isVisible(menuItem), "Menu item [" + menuItem + "] should be visible");
-            } finally {
-                topMenu.clickClose(menuItem);
-            }
-        }
+        logger.info("Testing Menu item: [Contact Modal]");
+        ContactModal contactModal = topMenu.openContactModal();
+        sa.assertTrue(contactModal.isContactModalVisible(), "Contact Modal should be visible");
+        contactModal.close();
 
+        //other modals
         sa.assertAll();
     }
 
     @Test(testName = "List of Products - Task1", description = "filters the products by category, then prints in console all the products")
-    public void verifyProductsDisplayedForSelectedCategory2() {
+    public void verifyProductsDisplayedForSelectedCategory() {
         WebDriver driver = getDriver();
         HomePage homePage = new HomePage(driver);
 
@@ -240,23 +234,18 @@ public class DemoblazeTest extends AbstractTest {
 
         HomePage homePage = new HomePage(driver);
 
-        Footer footer = new Footer(driver);
-
-        homePage.waitUntilPageIsReady();
+        Footer footer = homePage.getFooter();
 
         SoftAssert sa = new SoftAssert();
 
         sa.assertFalse(footer.isVisibleInScreen(), "Footer is visible in screen after load home page");
 
-        footer.scrollToBottom();
-        sa.assertTrue(footer.isVisibleInScreen(), "Footer is not visible in screen at bottom of page");
+        footer.ensureVisible();
 
-        sa.assertTrue(footer.getInfo(Footer.InfoItem.ADDRESS).length() > 5);
-        sa.assertTrue(footer.getInfo(Footer.InfoItem.PHONE).length() > 5);
-        sa.assertTrue(footer.getInfo(Footer.InfoItem.EMAIL).length() > 5);
+        sa.assertTrue(footer.isVisibleInScreen(), "Footer is not visible in screen at bottom of page");
+        sa.assertTrue(footer.verifyFooterInfo(),"Footer info is not completely visible");
 
         sa.assertAll();
-
     }
 
     //Data Providers
@@ -267,12 +256,13 @@ public class DemoblazeTest extends AbstractTest {
                 .toArray(Object[][]::new);
     }
 
-    @DataProvider(name = "Category MenuItem Provider2")
-    public Object[][] HomePageMenuItem2() {
+    @DataProvider(name = "TopMenu Modal MenuItem Provider")
+    public Object[][] ModalMenuItem() {
         return new Object[][]{
-                {TopMenu.MenuItem.HOME},
                 {TopMenu.MenuItem.CONTACT},
-                {TopMenu.MenuItem.CART}
+                {TopMenu.MenuItem.ABOUT_US},
+                {TopMenu.MenuItem.LOG_IN},
+                {TopMenu.MenuItem.SIGN_UP}
         };
     }
 

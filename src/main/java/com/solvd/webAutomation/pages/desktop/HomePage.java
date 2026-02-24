@@ -1,5 +1,6 @@
 package com.solvd.webAutomation.pages.desktop;
 
+import com.solvd.webAutomation.components.Footer;
 import com.solvd.webAutomation.components.ProductGrid;
 import com.solvd.webAutomation.components.TopMenu;
 import com.solvd.webAutomation.pages.common.AbstractPage;
@@ -71,6 +72,10 @@ public class HomePage extends AbstractPage {
 
     public TopMenu getTopMenu() {
         return new TopMenu(driver);
+    }
+
+    public Footer getFooter() {
+        return new Footer(driver);
     }
 
     public ProductGrid selectCategory(MenuItem item) {

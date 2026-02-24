@@ -80,6 +80,10 @@ public class ContactModal extends AbstractPage {
         return this;
     }
 
+    public void close() {
+        click(ContactModal.MenuItem.CLOSE);
+    }
+
     public enum MenuItem {
         EMAIL("Input Email"),
         NAME("Input Name"),

@@ -49,6 +49,22 @@ public class Footer extends AbstractPage {
         scrollTo(contactInfo);
     }
 
+    public boolean verifyAddress() {
+        return getInfo(InfoItem.ADDRESS).length() > 5;
+    }
+    public boolean verifyPhone() {
+        return getInfo(InfoItem.PHONE).length() > 5;
+    }
+    public boolean verifyEmail() {
+        return getInfo(InfoItem.EMAIL).length() > 5;
+    }
+    public boolean verifyFooterInfo() {
+        return verifyAddress()&&verifyPhone()&&verifyEmail();
+    }
+    public void ensureVisible() {
+        scrollToBottom();
+    }
+
     public enum InfoItem {
         ADDRESS("Get in Touch Address",1),
         PHONE("Get in Touch Phone",2),

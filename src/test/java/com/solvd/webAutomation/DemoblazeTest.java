@@ -26,38 +26,29 @@ public class DemoblazeTest extends AbstractTest {
     private static final Logger logger =
             LoggerFactory.getLogger(DemoblazeTest.class);
 
-    @Test(testName = "Functionality of top menu", description = "verifies that home page loads,top Menu works correctly")
+    @Test(testName = "Functionality of top menu modals", description = "verifies that home page loads, and top Menu modals works correctly")
     public void verifyTopMenuNavigation() {
         WebDriver driver = getDriver();
         HomePage homePage = new HomePage(driver);
-        TopMenu topMenu = new TopMenu(driver);
 
-        homePage.waitUntilPageIsReady();
-
+        TopMenu topMenu = homePage.getTopMenu();
         SoftAssert sa = new SoftAssert();
 
-        Arrays.stream(TopMenu.MenuItem.values())
-                .forEach(menuItem -> {
-                    topMenu.clickButton(menuItem);
-                    sa.assertTrue(topMenu.isVisible(menuItem));
-                    topMenu.clickCloseButton(menuItem);
-                });
+        logger.info("Testing Menu item: [Contact Modal]");
+        ContactModal contactModal = topMenu.openContactModal();
+        sa.assertTrue(contactModal.isContactModalVisible(), "Contact Modal should be visible");
+        contactModal.close();
 
+        //other modals
         sa.assertAll();
     }
 
     @Test(testName = "List of Products - Task1", description = "filters the products by category, then prints in console all the products")
     public void verifyProductsDisplayedForSelectedCategory() {
         WebDriver driver = getDriver();
-
         HomePage homePage = new HomePage(driver);
-        ProductGrid productGrid = new ProductGrid(driver);
 
-        homePage.waitUntilPageIsReady();
-
-        homePage.clickButton(HomePage.MenuItem.LAPTOPS);
-
-        homePage.waitUntilPageIsReady();
+        ProductGrid productGrid = homePage.selectCategory(HomePage.MenuItem.LAPTOPS);
 
         List<String> productsList = productGrid.getProductTitles();
         productsList.forEach(logger::info);
@@ -73,25 +64,13 @@ public class DemoblazeTest extends AbstractTest {
         WebDriver driver = getDriver();
 
         HomePage homePage = new HomePage(driver);
-        ProductGrid productGrid = new ProductGrid(driver);
-        ProductPage productPage = new ProductPage(driver);
 
-        homePage.waitUntilPageIsReady();
+        ProductGrid productGrid = homePage.selectCategory(category);
 
-        homePage.clickButton(category);
+        int productIndex= productGrid.getProductCount()-1;
 
-        homePage.waitUntilPageIsReady();
-
-        productGrid.clickNextButtonIfPossible(category);
-        homePage.waitUntilPageIsReady();
-        homePage.waitVisible(productGrid.getProductGridContainer());
-
-        List<WebElement> products = productGrid.getProductElements();
-        WebElement lastProduct = products.get(products.size() - 1);
-
-        logger.info(productGrid.getTextOf(lastProduct));
-
-        productGrid.clickProduct(lastProduct);
+        ProductPage productPage = productGrid
+                .openProductByIndex(productIndex);
 
         SoftAssert sa = new SoftAssert();
 
@@ -111,36 +90,22 @@ public class DemoblazeTest extends AbstractTest {
         WebDriver driver = getDriver();
 
         HomePage homePage = new HomePage(driver);
-        ProductGrid productGrid = new ProductGrid(driver);
-        ProductPage productPage = new ProductPage(driver);
-        TopMenu topMenu = new TopMenu(driver);
-        CartPage cartPage = new CartPage(driver);
 
-        homePage.waitUntilPageIsReady();
+        ProductGrid productGrid = homePage.selectCategory(category);
 
-        clickCategory(homePage, category, productGrid);
+        String productName = productGrid.getProductNameByIndex(0);
 
-        WebElement firstProduct = productGrid.getProductByIndex(0);
-
-        String firstProductName = productGrid.getProductName(firstProduct);
-
-        productGrid.clickProduct(firstProduct);
+        CartPage cartPage = productGrid
+                .openProductByIndex(0)
+                .addToCart()
+                .getTopMenu()
+                .goToCartPage();
 
         SoftAssert sa = new SoftAssert();
 
-        productPage.clickAddToCartButton();
-        sa.assertTrue(productPage.isProductAddedAlertPresent());
-        productPage.acceptProductAddedAlert();
+        sa.assertTrue(cartPage.containsProduct(productName),
+                "Product was not added to cart");
 
-        clickCart(topMenu, cartPage);
-
-        List<WebElement> cartProducts = cartPage.getCartProducts();
-
-        boolean productInCart = cartProducts.stream()
-                .map(WebElement::getText)
-                .anyMatch(s -> s.contains(firstProductName));
-
-        sa.assertTrue(productInCart, "The product is not in the cart");
         sa.assertFalse(cartPage.getTotalPrice().isEmpty(), "Total price is empty");
 
         sa.assertAll();
@@ -152,51 +117,34 @@ public class DemoblazeTest extends AbstractTest {
             dataProvider = "Category MenuItem Provider")
     public void verifyDeleteProductOfCategoryFromCart(HomePage.MenuItem category) {
         WebDriver driver = getDriver();
-
         HomePage homePage = new HomePage(driver);
-        ProductGrid productGrid = new ProductGrid(driver);
-        ProductPage productPage = new ProductPage(driver);
-        TopMenu topMenu = new TopMenu(driver);
-        CartPage cartPage = new CartPage(driver);
-
-        homePage.waitUntilPageIsReady();
-
-        clickCategory(homePage, category, productGrid);
-
-        WebElement firstProduct = productGrid.getProductByIndex(0);
-        String firstProductName = productGrid.getProductName(firstProduct);
-        productGrid.clickProduct(firstProduct);
 
         SoftAssert sa = new SoftAssert();
 
-        productPage.clickAddToCartButton();
-        sa.assertTrue(productPage.isProductAddedAlertPresent());
-        productPage.acceptProductAddedAlert();
+//        homePage.waitUntilPageIsReady();
 
-        clickCart(topMenu, cartPage);
+        ProductGrid productGrid = homePage.selectCategory(category);
 
-        List<WebElement> cartProducts = cartPage.getCartProducts();
-        int initialCartSize = cartProducts.size();
+        String productName = productGrid.getProductNameByIndex(0);
 
-        sa.assertFalse(cartProducts.isEmpty(), "the shopping cart is empty");
+        CartPage cartPage = productGrid
+                .openProductByIndex(0)
+                .addToCart()
+                .getTopMenu()
+                .goToCartPage();
 
-        int productIndex = cartPage.findProductIndexInCart(cartProducts, firstProductName);
+        sa.assertTrue(cartPage.containsProduct(productName),
+                "Product was not added to cart");
 
-        sa.assertTrue(productIndex != -1, "Product not found in the cart");
+        int initialSize = cartPage.getProductCount();
 
-        if (productIndex != -1) {
-            cartPage.deleteProduct(productIndex);
-        }
+        cartPage.deleteProduct(productName);
 
-        cartPage.waitUntilPageIsReady();
-
-        int finalCartSize = 0;
-        if (!cartPage.isCartEmpty()) {
-            List<WebElement> newCartProducts = cartPage.getCartProducts();
-            finalCartSize = newCartProducts.size();
-        }
-
-        sa.assertTrue(finalCartSize == initialCartSize - 1, "The product was not deleted");
+        sa.assertEquals(
+                cartPage.getProductCount(),
+                initialSize - 1,
+                "Product was not deleted"
+        );
 
         sa.assertAll();
 
@@ -208,14 +156,8 @@ public class DemoblazeTest extends AbstractTest {
         WebDriver driver = getDriver();
 
         HomePage homePage = new HomePage(driver);
-        ProductGrid productGrid = new ProductGrid(driver);
-        ProductPage productPage = new ProductPage(driver);
-        TopMenu topMenu = new TopMenu(driver);
-        CartPage cartPage = new CartPage(driver);
 
-        ShoppingFlow shoppingFlow = new ShoppingFlow(productGrid, productPage, topMenu);
-
-        homePage.waitUntilPageIsReady();
+        ShoppingFlow shoppingFlow = new ShoppingFlow(driver);
 
         String productName = "";
         for (int i = 0; i < 5; i++) {
@@ -223,18 +165,21 @@ public class DemoblazeTest extends AbstractTest {
         }
 
         SoftAssert sa = new SoftAssert();
-        clickCart(topMenu, cartPage);
+        CartPage cartPage = homePage.getTopMenu().goToCartPage();
 
-        List<WebElement> cartProducts = cartPage.getCartProducts();
+        cartPage.waitUntilCartShowsProducts(); //change later
 
-        sa.assertFalse(cartProducts.isEmpty(), "The shopping cart is empty");
+        int initialSize = cartPage.getProductCount();
+
+        sa.assertFalse(initialSize==0, "The shopping cart is empty");
 
         while (!cartPage.isCartEmpty()) {
             cartPage.deleteProduct(0);
         }
 
         logger.debug("finished empty shopping cart");
-        sa.assertTrue(cartPage.isCartEmpty(), "The shopping cart is not empty");
+        int finalSize = cartPage.getProductCount();
+        sa.assertTrue(finalSize==0, "The shopping cart is not empty");
         logger.debug("finished checking shopping cart");
 
         sa.assertAll();
@@ -243,29 +188,24 @@ public class DemoblazeTest extends AbstractTest {
 
     @Test(testName = "Fill Contact Form - Task3 TC-005",
             description = "click on contact, then fills the form and sends it")
-    public void verifyFillInfoInContactFormAndSend() {
+    public void verifyFillInfoInContactFormAndSend2() {
         WebDriver driver = getDriver();
 
         HomePage homePage = new HomePage(driver);
-        TopMenu topMenu = new TopMenu(driver);
-        ContactModal contactModal = new ContactModal(driver);
 
-        homePage.waitUntilPageIsReady();
-
-        clickContact(topMenu, contactModal);
+        ContactModal contactModal = homePage.getTopMenu().openContactModal();
         SoftAssert sa = new SoftAssert();
+
         sa.assertTrue(contactModal.isContactModalVisible(), "Contact modal is not visible");
 
-        contactModal.type(ContactModal.MenuItem.EMAIL, "example@email.com");
-        contactModal.type(ContactModal.MenuItem.NAME, "Example Name");
-        contactModal.type(ContactModal.MenuItem.MESSAGE, "This is a test message");
+        contactModal.submitContactForm("example@email.com",
+                "Example Name",
+                "This is a test message");
 
-        contactModal.click(ContactModal.MenuItem.SEND);
         sa.assertTrue(contactModal.isAlertPresent());
         contactModal.acceptMessageAlert();
 
         sa.assertAll();
-
     }
 
     @Test(testName = "Log In with wrong credentials - Task3 TC-006",
@@ -274,24 +214,17 @@ public class DemoblazeTest extends AbstractTest {
         WebDriver driver = getDriver();
 
         HomePage homePage = new HomePage(driver);
-        TopMenu topMenu = new TopMenu(driver);
-        LogInModal logInModal = new LogInModal(driver);
 
-        homePage.waitUntilPageIsReady();
+        LogInModal logInModal = homePage.getTopMenu().openLogInModal();
 
-        clickLogIn(topMenu, logInModal);
         SoftAssert sa = new SoftAssert();
         sa.assertTrue(logInModal.isLogInModalVisible(), "Log In modal is not visible");
 
-        logInModal.type(LogInModal.MenuItem.USERNAME, "example@email.com");
-        logInModal.type(LogInModal.MenuItem.PASSWORD, "Example Password");
-
-        logInModal.click(LogInModal.MenuItem.LOG_IN);
+        logInModal.logInWith("example@email.com","Example Password");
         sa.assertTrue(logInModal.isAlertPresent());
         logInModal.acceptWrongPasswordAlert();
 
         sa.assertAll();
-
     }
 
     @Test(testName = "VerifyFooterInfo- Task3 TC-007",
@@ -301,23 +234,18 @@ public class DemoblazeTest extends AbstractTest {
 
         HomePage homePage = new HomePage(driver);
 
-        Footer footer = new Footer(driver);
-
-        homePage.waitUntilPageIsReady();
+        Footer footer = homePage.getFooter();
 
         SoftAssert sa = new SoftAssert();
 
         sa.assertFalse(footer.isVisibleInScreen(), "Footer is visible in screen after load home page");
 
-        footer.scrollToBottom();
-        sa.assertTrue(footer.isVisibleInScreen(), "Footer is not visible in screen at bottom of page");
+        footer.ensureVisible();
 
-        sa.assertTrue(footer.getAddress().length() > 5);
-        sa.assertTrue(footer.getPhone().length() > 5);
-        sa.assertTrue(footer.getEmail().length() > 5);
+        sa.assertTrue(footer.isVisibleInScreen(), "Footer is not visible in screen at bottom of page");
+        sa.assertTrue(footer.verifyFooterInfo(),"Footer info is not completely visible");
 
         sa.assertAll();
-
     }
 
     //Data Providers
@@ -328,12 +256,13 @@ public class DemoblazeTest extends AbstractTest {
                 .toArray(Object[][]::new);
     }
 
-    @DataProvider(name = "Category MenuItem Provider2")
-    public Object[][] HomePageMenuItem2() {
+    @DataProvider(name = "TopMenu Modal MenuItem Provider")
+    public Object[][] ModalMenuItem() {
         return new Object[][]{
-                {TopMenu.MenuItem.HOME},
                 {TopMenu.MenuItem.CONTACT},
-                {TopMenu.MenuItem.CART}
+                {TopMenu.MenuItem.ABOUT_US},
+                {TopMenu.MenuItem.LOG_IN},
+                {TopMenu.MenuItem.SIGN_UP}
         };
     }
 

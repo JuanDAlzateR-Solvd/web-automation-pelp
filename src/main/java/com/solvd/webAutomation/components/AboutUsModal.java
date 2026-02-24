@@ -2,7 +2,6 @@ package com.solvd.webAutomation.components;
 
 import com.solvd.webAutomation.pages.common.AbstractPage;
 import org.openqa.selenium.Alert;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -10,8 +9,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.util.Map;
 
-public class LogInModal extends AbstractPage {
-
+public class AboutUsModal extends AbstractPage {
+    //Needs refactoring
     @FindBy(id = "logInModalLabel")
     private WebElement title;
 
@@ -27,7 +26,7 @@ public class LogInModal extends AbstractPage {
     @FindBy(id = "loginpassword")
     private WebElement passwordInput;
 
-    public LogInModal(WebDriver driver) {
+    public AboutUsModal(WebDriver driver) {
         super(driver);
     }
 
@@ -68,15 +67,6 @@ public class LogInModal extends AbstractPage {
         logger.info("accepting 'Wrong password' Alert");
         Alert alert = wait.until(ExpectedConditions.alertIsPresent());
         alert.accept();
-    }
-
-    public LogInModal logInWith(
-            String username,
-            String password) {
-        type(MenuItem.USERNAME, username);
-        type(MenuItem.PASSWORD, password);
-        click(MenuItem.LOG_IN);
-        return this;
     }
 
     public enum MenuItem {

@@ -1,5 +1,6 @@
 package com.solvd.webAutomation.pages.desktop;
 
+import com.solvd.webAutomation.components.TopMenu;
 import com.solvd.webAutomation.pages.common.AbstractPage;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
@@ -9,23 +10,30 @@ public class ProductPage extends AbstractPage {
 
     @FindBy(css = ".item.active")
     private WebElement image;
+
     @FindBy(css = "#tbodyid .name")
     private WebElement title;
+
     @FindBy(css = "#tbodyid .price-container")
     private WebElement price;
+
     @FindBy(css = "#tbodyid #more-information")
     private WebElement description;
+
     @FindBy(css = "a.btn.btn-success.btn-lg")
     private WebElement addToCartButton;
+
+    @FindBy(css = "#myCarousel-2")
+    private WebElement imageLocator;
 
     public ProductPage(WebDriver driver) {
         super(driver);
     }
 
     @Override
-    protected By getPageLoadedIndicator() {
-        return By.cssSelector("#myCarousel-2");
-    }//"#myCarousel-2 img"
+    protected WebElement getPageLoadedIndicator() {
+        return imageLocator;
+    }
 
     public boolean isVisible(InfoItem item) {
         return switch (item) {
@@ -76,6 +84,18 @@ public class ProductPage extends AbstractPage {
         public String getName() {
             return name;
         }
+    }
+
+    //Test flow methods
+
+    public ProductPage addToCart() {
+        clickAddToCartButton();
+        acceptProductAddedAlert();///
+        return this;
+    }
+
+    public TopMenu getTopMenu() {
+        return new TopMenu(driver);
     }
 
 }

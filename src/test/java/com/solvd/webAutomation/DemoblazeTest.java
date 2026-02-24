@@ -75,25 +75,13 @@ public class DemoblazeTest extends AbstractTest {
         WebDriver driver = getDriver();
 
         HomePage homePage = new HomePage(driver);
-        ProductGrid productGrid = new ProductGrid(driver);
-        ProductPage productPage = new ProductPage(driver);
 
-        homePage.waitUntilPageIsReady();
+        ProductGrid productGrid = homePage.selectCategory(category);
 
-        homePage.click(category);
+        int productIndex= productGrid.getProductCount()-1;
 
-        homePage.waitUntilPageIsReady();
-
-        productGrid.clickNextButtonIfPossible(category);
-        homePage.waitUntilPageIsReady();
-        homePage.waitUntilVisible(productGrid.getProductGridContainer());
-
-        List<WebElement> products = productGrid.getProductElements();
-        WebElement lastProduct = products.get(products.size() - 1);
-
-        logger.info(productGrid.getTextOf(lastProduct));
-
-        productGrid.clickProduct(lastProduct);
+        ProductPage productPage = productGrid
+                .openProductByIndex(productIndex);
 
         SoftAssert sa = new SoftAssert();
 

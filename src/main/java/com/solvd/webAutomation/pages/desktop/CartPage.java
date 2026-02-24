@@ -99,13 +99,23 @@ public class CartPage extends AbstractPage {
     }
 
     public void deleteProduct(int productIndex) {
-        List<WebElement> products = getProductElements();
-        List<WebElement> deleteButtons = getDeleteButtonsList();
-        WebElement productToDelete = products.get(productIndex);
-        String productName = getTextOf(productToDelete);
-        logger.info("Deleting product {}", productName);
-        click(deleteButtons.get(productIndex), "deleteButton" + productIndex);
+        logger.info("Deleting product {}", getProductName(productIndex));
+        clickDeleteButton(productIndex);
+        waitCartUpdatesAfterDeleteProduct();
+    }
 
+    public String getProductName(int productIndex) {
+        List<WebElement> products = getProductElements();
+        WebElement productToDelete = products.get(productIndex);
+        return getTextOf(productToDelete);
+    }
+
+    private void clickDeleteButton(int productIndex) {
+        List<WebElement> deleteButtons = getDeleteButtonsList();
+        click(deleteButtons.get(productIndex), "deleteButton" + productIndex);
+    }
+
+    private void waitCartUpdatesAfterDeleteProduct() {
         if (!isCartEmpty()) {
             waitUntilCartDeletesProduct();
             waitUntilVisible(tableIndicator);

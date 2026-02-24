@@ -2,6 +2,7 @@ package com.solvd.webAutomation.components;
 
 import com.solvd.webAutomation.pages.common.AbstractPage;
 import com.solvd.webAutomation.pages.desktop.HomePage;
+import com.solvd.webAutomation.pages.desktop.ProductPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -87,6 +88,14 @@ public class ProductGrid extends AbstractPage {
         WebElement product = products.get(productIndex);
         logger.info(getTextOf(product));
         return product;
+    }
+
+    //Test flow methods
+
+    public ProductPage openProductByIndex(int index) {
+        WebElement product =getProductByIndex(index);
+        clickProduct(product);
+        return new ProductPage(driver);
     }
 
 }

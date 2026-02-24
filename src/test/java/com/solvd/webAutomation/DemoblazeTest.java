@@ -220,24 +220,17 @@ public class DemoblazeTest extends AbstractTest {
         WebDriver driver = getDriver();
 
         HomePage homePage = new HomePage(driver);
-        TopMenu topMenu = new TopMenu(driver);
-        LogInModal logInModal = new LogInModal(driver);
 
-        homePage.waitUntilPageIsReady();
+        LogInModal logInModal = homePage.getTopMenu().openLogInModal();
 
-        clickLogIn(topMenu, logInModal);
         SoftAssert sa = new SoftAssert();
         sa.assertTrue(logInModal.isLogInModalVisible(), "Log In modal is not visible");
 
-        logInModal.type(LogInModal.MenuItem.USERNAME, "example@email.com");
-        logInModal.type(LogInModal.MenuItem.PASSWORD, "Example Password");
-
-        logInModal.click(LogInModal.MenuItem.LOG_IN);
+        logInModal.logInWith("example@email.com","Example Password");
         sa.assertTrue(logInModal.isAlertPresent());
         logInModal.acceptWrongPasswordAlert();
 
         sa.assertAll();
-
     }
 
     @Test(testName = "VerifyFooterInfo- Task3 TC-007",

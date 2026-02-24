@@ -70,6 +70,15 @@ public class LogInModal extends AbstractPage {
         alert.accept();
     }
 
+    public LogInModal logInWith(
+            String username,
+            String password) {
+        type(MenuItem.USERNAME, username);
+        type(MenuItem.PASSWORD, password);
+        click(MenuItem.LOG_IN);
+        return this;
+    }
+
     public enum MenuItem {
         USERNAME("Input Username"),
         PASSWORD("Input Password"),

@@ -1,5 +1,6 @@
 package com.solvd.webAutomation.pages.common;
 
+import com.solvd.webAutomation.components.Footer;
 import com.solvd.webAutomation.config.ConfigReader;
 import org.jspecify.annotations.NonNull;
 import org.openqa.selenium.*;
@@ -43,17 +44,11 @@ public abstract class AbstractPage {
     public void click(WebElement element, String elementName) {
         logger.info("Clicking on element [{}]", elementName);
 
-        wait.until(driver -> {
-            try {
-                wait.until(ExpectedConditions.elementToBeClickable(element));
-                scrollTo(element);
-                element.click();
-                return true;
-            } catch (StaleElementReferenceException e) {
-                logger.warn("Stale element while clicking [{}], retrying...", elementName);
-                return false;
-            }
-        });
+        wait.withTimeout(Duration.ofSeconds(10))
+                .ignoring(StaleElementReferenceException.class)
+                .until(ExpectedConditions.elementToBeClickable(element));
+        scrollTo(element);
+        element.click();
     }
 
     public void click(By locator, String elementName) {
@@ -74,38 +69,16 @@ public abstract class AbstractPage {
         });
     }
 
-    public void type(By locator, String elementName, String text) {
-        logger.info("Typing into element [{}] value [{}]", elementName, text);
-        WebElement element = driver.findElement(locator);
-
-        wait.until(driver -> {
-            try {
-                wait.until(ExpectedConditions.visibilityOf(element));
-                scrollTo(element);
-                element.clear();
-                element.sendKeys(text);
-                return true;
-            } catch (StaleElementReferenceException e) {
-                logger.warn("Stale element while typing [{}], retrying...", elementName);
-                return false;
-            }
-        });
-    }
-
     protected void type(WebElement element, String elementName, String text) {
         logger.info("Typing on element [{}]", elementName);
-        wait.until(driver -> {
-            try {
-                wait.until(ExpectedConditions.visibilityOf(element));
-                scrollTo(element);
-                element.clear();
-                element.sendKeys(text);
-                return true;
-            } catch (StaleElementReferenceException e) {
-                logger.warn("Stale element while typing [{}], retrying...", elementName);
-                return false;
-            }
-        });
+
+        wait.withTimeout(Duration.ofSeconds(10))
+                .ignoring(StaleElementReferenceException.class)
+                .until(ExpectedConditions.visibilityOf(element));
+        scrollTo(element);
+        element.clear();
+        element.sendKeys(text);
+
     }
 
     protected String getText(WebElement element) {
@@ -114,16 +87,12 @@ public abstract class AbstractPage {
 
     protected String getText(WebElement element, String elementName) {
         logger.info("Getting text from element [{}]", elementName);
-        wait.until(driver -> {
-            try {
-                wait.until(ExpectedConditions.visibilityOf(element));
-                scrollTo(element);
-                return true;
-            } catch (StaleElementReferenceException e) {
-                logger.warn("Stale element while getting text from [{}], retrying...", elementName);
-                return false;
-            }
-        });
+
+        wait.withTimeout(Duration.ofSeconds(10))
+                .ignoring(StaleElementReferenceException.class)
+                .until(ExpectedConditions.visibilityOf(element));
+        scrollTo(element);
+
         return element.getText();
     }
 
@@ -218,16 +187,11 @@ public abstract class AbstractPage {
     }
 
     public void waitUntilVisible(WebElement element) {
-        wait.until(driver -> {
-            try {
-                wait.until(ExpectedConditions.visibilityOf(element));
-                scrollTo(element);
-                return true;
-            } catch (StaleElementReferenceException e) {
-                logger.warn("Stale element while waiting visibility of [{}], retrying...", element.getTagName());
-                return false;
-            }
-        });
+
+        wait.withTimeout(Duration.ofSeconds(10))
+                .ignoring(StaleElementReferenceException.class)
+                .until(ExpectedConditions.visibilityOf(element));
+        scrollTo(element);
     }
 
     protected void waitUntilClickable(WebElement element) {

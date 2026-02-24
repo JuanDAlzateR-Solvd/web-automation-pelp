@@ -90,8 +90,6 @@ public abstract class AbstractPage {
                 return false;
             }
         });
-
-
     }
 
     protected void type(WebElement element, String elementName, String text) {

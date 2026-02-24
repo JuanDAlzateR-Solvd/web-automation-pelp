@@ -34,13 +34,10 @@ public class ContactModal extends AbstractPage {
         super(driver);
     }
 
-    private final Map<MenuItem, WebElement> menuInputs = Map.of(
+    private final Map<MenuItem, WebElement> menuItems = Map.of(
             MenuItem.EMAIL, emailInput,
             MenuItem.NAME, nameInput,
-            MenuItem.MESSAGE, messageInput
-    );
-
-    private final Map<MenuItem, WebElement> menuButtons = Map.of(
+            MenuItem.MESSAGE, messageInput,
             MenuItem.CLOSE, closeButton,
             MenuItem.SEND, sendButton
     );
@@ -55,13 +52,11 @@ public class ContactModal extends AbstractPage {
     }
 
     public void click(MenuItem item) {
-        WebElement element = menuButtons.get(item);
-        click(element, item.getName());
+        click(menuItems.get(item), item.getName());
     }
 
     public void type(MenuItem item, String text) {
-        WebElement element = menuInputs.get(item);
-        type(element, item.getName(), text);
+        type(menuItems.get(item), item.getName(), text);
     }
 
     public boolean isContactModalVisible() {

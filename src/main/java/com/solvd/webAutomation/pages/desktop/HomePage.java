@@ -66,22 +66,22 @@ public class HomePage extends AbstractPage {
         }
     }
 
-    @Override
-    public void waitUntilPageIsReady() {
-        logger.info("Waiting for the page to load");
-        WebDriverWait pageWait = new WebDriverWait(driver, Duration.ofSeconds(waitDuration));
-        pageWait.until(driver ->
-                ((JavascriptExecutor) driver)
-                        .executeScript("return document.readyState")
-                        .equals("complete")
-        );
-        pageWait.until(ExpectedConditions.invisibilityOfElementLocated(LOADER));
-        By products = By.cssSelector("#tbodyid .card");
-        pageWait.until(webDriver -> !driver.findElements(products).isEmpty());
-        pageWait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(products));
-
-
-        logger.info("The page is ready");
-    }
+//    @Override
+//    public void waitUntilPageIsReady() {
+//        logger.info("Waiting for the page to load");
+//        WebDriverWait pageWait = new WebDriverWait(driver, Duration.ofSeconds(waitDuration));
+//        pageWait.until(driver ->
+//                ((JavascriptExecutor) driver)
+//                        .executeScript("return document.readyState")
+//                        .equals("complete")
+//        );
+//        pageWait.until(ExpectedConditions.invisibilityOfElementLocated(LOADER));
+//        By products = By.cssSelector("#tbodyid .card");
+//        pageWait.until(webDriver -> !driver.findElements(products).isEmpty());
+//        pageWait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(products));
+//
+//
+//        logger.info("The page is ready");
+//    }
 
 }

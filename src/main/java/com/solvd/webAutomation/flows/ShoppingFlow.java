@@ -8,6 +8,7 @@ import com.solvd.webAutomation.pages.desktop.ProductPage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -53,5 +54,14 @@ public class ShoppingFlow {
         int randomIndex = new Random().nextInt(size);
 
         return addProductToCart(randomIndex);
+    }
+
+    public List<String> addRandomProductsToCart(int numberOfProducts) {
+
+        List<String> productNames = new ArrayList<>();
+        for (int i = 0; i < numberOfProducts; i++) {
+            productNames.add(addRandomProductToCart());
+        }
+        return productNames;
     }
 }

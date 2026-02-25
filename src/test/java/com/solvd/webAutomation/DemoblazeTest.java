@@ -35,7 +35,7 @@ public class DemoblazeTest extends AbstractTest {
 
         logger.info("Testing Menu item: [Contact Modal]");
         ContactModal contactModal = topMenu.openContactModal();
-        sa.assertTrue(contactModal.isContactModalVisible(), "Contact Modal should be visible");
+        sa.assertTrue(contactModal.isModalVisible(), "Contact Modal should be visible");
         contactModal.close();
 
         //other modals
@@ -53,7 +53,6 @@ public class DemoblazeTest extends AbstractTest {
         productsList.forEach(logger::info);
 
         Assert.assertFalse(productsList.isEmpty(), "There are no products in the grid");
-
     }
 
     @Test(testName = "Product Search by Category - Task3 TC-001",
@@ -73,13 +72,9 @@ public class DemoblazeTest extends AbstractTest {
 
         SoftAssert sa = new SoftAssert();
 
-        Arrays.stream(ProductPage.InfoItem.values()).sequential()
-                .forEach(info -> {
-                    sa.assertTrue(productPage.isVisible(info));
-                });
+        sa.assertTrue(productPage.isInfoVisible(), "Product Page should have all info visible");
 
         sa.assertAll();
-
     }
 
     @Test(testName = "Add Product to Cart - Task3 TC-002",
@@ -153,7 +148,6 @@ public class DemoblazeTest extends AbstractTest {
         WebDriver driver = getDriver();
 
         HomePage homePage = new HomePage(driver);
-
         ShoppingFlow shoppingFlow = new ShoppingFlow(driver);
 
         String productName = "";

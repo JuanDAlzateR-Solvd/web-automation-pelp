@@ -60,7 +60,7 @@ public class LogInModal extends AbstractPage {
         type(element, item.name, text);
     }
 
-    public boolean isLogInModalVisible() {
+    public boolean isModalVisible() {
         return title.isDisplayed();
     }
 

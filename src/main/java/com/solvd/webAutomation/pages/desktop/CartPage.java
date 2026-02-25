@@ -195,4 +195,10 @@ public class CartPage extends AbstractPage {
         }
     }
 
+    public void emptyShoppingCart() {
+        while (!isCartEmpty()) {
+            deleteProduct(0);
+        }
+    }
+
 }

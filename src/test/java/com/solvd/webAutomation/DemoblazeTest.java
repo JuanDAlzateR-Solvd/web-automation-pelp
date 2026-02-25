@@ -103,7 +103,6 @@ public class DemoblazeTest extends AbstractTest {
         sa.assertFalse(cartPage.getTotalPrice().isEmpty(), "Total price is empty");
 
         sa.assertAll();
-
     }
 
     @Test(testName = "Delete Product from Cart - Task3 TC-003",
@@ -139,7 +138,6 @@ public class DemoblazeTest extends AbstractTest {
         );
 
         sa.assertAll();
-
     }
 
     @Test(testName = "Empty Shopping Cart - Task3 TC-004",
@@ -150,10 +148,7 @@ public class DemoblazeTest extends AbstractTest {
         HomePage homePage = new HomePage(driver);
         ShoppingFlow shoppingFlow = new ShoppingFlow(driver);
 
-        String productName = "";
-        for (int i = 0; i < 5; i++) {
-            productName = shoppingFlow.addRandomProductToCart();
-        }
+        List<String> productNames = shoppingFlow.addRandomProductsToCart(5);
 
         SoftAssert sa = new SoftAssert();
         CartPage cartPage = homePage.getTopMenu().goToCartPage();
@@ -164,17 +159,14 @@ public class DemoblazeTest extends AbstractTest {
 
         sa.assertFalse(initialSize == 0, "The shopping cart is empty");
 
-        while (!cartPage.isCartEmpty()) {
-            cartPage.deleteProduct(0);
-        }
-
+        cartPage.emptyShoppingCart();
         logger.debug("finished empty shopping cart");
+
         int finalSize = cartPage.getProductCount();
         sa.assertTrue(finalSize == 0, "The shopping cart is not empty");
         logger.debug("finished checking shopping cart");
 
         sa.assertAll();
-
     }
 
     @Test(testName = "Fill Contact Form - Task3 TC-005",
@@ -187,7 +179,7 @@ public class DemoblazeTest extends AbstractTest {
         ContactModal contactModal = homePage.getTopMenu().openContactModal();
         SoftAssert sa = new SoftAssert();
 
-        sa.assertTrue(contactModal.isContactModalVisible(), "Contact modal is not visible");
+        sa.assertTrue(contactModal.isModalVisible(), "Contact modal is not visible");
 
         contactModal.submitContactForm("example@email.com",
                 "Example Name",
@@ -209,7 +201,7 @@ public class DemoblazeTest extends AbstractTest {
         LogInModal logInModal = homePage.getTopMenu().openLogInModal();
 
         SoftAssert sa = new SoftAssert();
-        sa.assertTrue(logInModal.isLogInModalVisible(), "Log In modal is not visible");
+        sa.assertTrue(logInModal.isModalVisible(), "Log In modal is not visible");
 
         logInModal.logInWith("example@email.com", "Example Password");
         sa.assertTrue(logInModal.isAlertPresent());

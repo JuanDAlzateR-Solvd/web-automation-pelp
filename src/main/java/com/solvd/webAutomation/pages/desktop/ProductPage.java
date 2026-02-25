@@ -104,7 +104,7 @@ public class ProductPage extends AbstractPage {
         final boolean[] visible = {true};
         Arrays.stream(ProductPage.InfoItem.values()).sequential()
                 .forEach(info -> {
-                    visible[0] = visible[0] &&isVisible(info);
+                    visible[0] = visible[0] && isVisible(info);
                 });
         return visible[0];
     }

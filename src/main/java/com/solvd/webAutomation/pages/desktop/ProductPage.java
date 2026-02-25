@@ -56,7 +56,7 @@ public class ProductPage extends AbstractPage {
 
     public void acceptProductAddedAlert() {
         logger.info("accepting 'Product Added' Alert");
-        Alert alert = waitService.getAlert();
+        Alert alert = waitService.waitForAlert();
         alert.accept();
     }
 

@@ -119,7 +119,7 @@ public class CartPage extends AbstractPage {
     private void waitCartUpdatesAfterDeleteProduct() {
         if (!isCartEmpty()) {
             waitUntilCartDeletesProduct();
-            waitUntilVisible(tableIndicator);
+            waitUntilVisible(tableIndicator,"Shopping cart table");
         }
     }
 
@@ -190,7 +190,7 @@ public class CartPage extends AbstractPage {
     public void waitUntilCartLoadsProducts() {
         if (!isCartEmpty()) {
             waitUntilCartShowsProducts();
-            waitUntilVisible(tableIndicator);
+            waitUntilVisible(tableIndicator,"Shopping cart table");
         }
     }
 

@@ -54,7 +54,7 @@ public class AbstractTest {
     public void clickCategory(HomePage homePage, HomePage.MenuItem category, ProductGrid productGrid) {
         homePage.click(category);
         homePage.waitUntilPageIsReady();
-        homePage.waitUntilVisible(productGrid.getProductGridContainer());
+        homePage.waitUntilVisible(productGrid.getProductGridContainer(),"product grid");
     }
 
     public void clickCart(TopMenu topMenu, CartPage cartPage) {
@@ -72,7 +72,7 @@ public class AbstractTest {
     public void clickLogIn(TopMenu topMenu, LogInModal logInModal) {
         topMenu.click(TopMenu.MenuItem.LOG_IN);
         logInModal.waitUntilPageIsReady();
-        logInModal.waitUntilVisible(logInModal.getTitle());
+        logInModal.waitUntilVisible(logInModal.getTitle(),"LogInModal");
     }
 
 }

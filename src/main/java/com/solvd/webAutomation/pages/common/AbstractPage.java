@@ -1,16 +1,13 @@
 package com.solvd.webAutomation.pages.common;
 
 import com.solvd.webAutomation.config.ConfigReader;
-import com.solvd.webAutomation.utils.WaitService;
+import com.solvd.webAutomation.wait.WaitService;
 import org.jspecify.annotations.NonNull;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.pagefactory.AjaxElementLocatorFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.time.Duration;
-
 
 public abstract class AbstractPage {
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -44,7 +41,7 @@ public abstract class AbstractPage {
     public void click(WebElement element, String elementName) {
         logger.info("Clicking on element [{}]", elementName);
 
-        waitService.waitForElementClickable(element, 10);
+        waitService.waitForElementClickable(element, elementName);
         scrollTo(element);
         element.click();
     }
@@ -54,7 +51,7 @@ public abstract class AbstractPage {
 //        waitUntilModalIsGone();
         WebElement element = driver.findElement(locator);
 
-        waitService.waitForElementClickable(element, 10);
+        waitService.waitForElementClickable(element,  elementName);
         scrollTo(element);
         element.click();
     }
@@ -62,7 +59,7 @@ public abstract class AbstractPage {
     protected void type(WebElement element, String elementName, String text) {
         logger.info("Typing on element [{}]", elementName);
 
-        waitService.waitForElementVisible(element, 10);
+        waitService.waitForElementVisible(element,  elementName);
         scrollTo(element);
         element.clear();
         element.sendKeys(text);
@@ -76,7 +73,7 @@ public abstract class AbstractPage {
     protected String getText(WebElement element, String elementName) {
         logger.info("Getting text from element [{}]", elementName);
 
-        waitService.waitForElementVisible(element, 10);
+        waitService.waitForElementVisible(element, elementName);
         scrollTo(element);
 
         return element.getText();
@@ -89,7 +86,7 @@ public abstract class AbstractPage {
     protected boolean isVisible(WebElement element, String elementName) {
         logger.info("Checking if visibility of element [{}]", elementName);
         try {
-            waitUntilVisible(element);
+            waitUntilVisible(element,elementName);
             logger.info("Element [{}] is visible", elementName);
             return true;
         } catch (TimeoutException e) {
@@ -133,7 +130,7 @@ public abstract class AbstractPage {
 
         logger.info("Checking if clickable on element [{}]", elementName);
         try {
-            waitUntilClickable(element);
+            waitUntilClickable(element,elementName);
             logger.info("Element [{}] is clickable", elementName);
             return true;
         } catch (TimeoutException e) {
@@ -143,11 +140,12 @@ public abstract class AbstractPage {
     }
 
     public void waitUntilPageIsReady() {
-        logger.info("Waiting for the page [{}] to load", this.getClass().getSimpleName());
+        String className = this.getClass().getSimpleName();
+        logger.info("Waiting for the page [{}] to load", className);
 
         waitService.waitForPageLoad();
-        waitService.waitForInvisibilityOfElementLocated(LOADER);
-        waitService.waitForElementVisible(getPageLoadedIndicator());
+        waitService.waitForInvisibilityOfElementLocated(LOADER, "Page Loader");
+        waitService.waitForElementVisible(getPageLoadedIndicator(),className+" Indicator");
 
         logger.info("The page [{}] is ready", this.getClass().getSimpleName());
     }
@@ -158,28 +156,28 @@ public abstract class AbstractPage {
         );
     }
 
-    protected void waitUntilModalIsGone(WebElement element) {
-        try {
-            logger.info("Waiting for modal to be invisible");
-            waitService.waitForInvisibility(element);
-        } catch (TimeoutException e) {
-            logger.info("Modal is not visible, continuing");
-        }
-    }
+//    protected void waitUntilModalIsGone(WebElement element) {
+//        try {
+//            logger.info("Waiting for modal to be invisible");
+//            waitService.waitForInvisibility(element);
+//        } catch (TimeoutException e) {
+//            logger.info("Modal is not visible, continuing");
+//        }
+//    }
 
-    public void waitUntilVisible(WebElement element) {
-        waitService.waitForElementVisible(element, 10);
+    public void waitUntilVisible(WebElement element, String elementName) {
+        waitService.waitForElementVisible(element,  elementName);
         scrollTo(element);
     }
 
-    protected void waitUntilClickable(WebElement element) {
-        waitService.waitForElementClickable(element);
+    protected void waitUntilClickable(WebElement element,String elementName) {
+        waitService.waitForElementClickable(element,elementName);
     }
 
     /**
      * Pauses using Thread sleep. Use only for debug code, not for test implementation.
      *
-     * @param milliseconds int number of milliseconds to pause     *
+     * @param milliseconds int number of milliseconds to pause*
      */
     public void debugPause(int milliseconds) {
         try {

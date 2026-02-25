@@ -64,7 +64,7 @@ public class SignUpModal extends AbstractPage {
 
     public void acceptWrongPasswordAlert() {
         logger.info("accepting 'Wrong password' Alert");
-        Alert alert = waitService.getAlert();
+        Alert alert = waitService.waitForAlert();
         alert.accept();
     }
 

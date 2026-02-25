@@ -64,7 +64,7 @@ public class ContactModal extends AbstractPage {
 
     public void acceptMessageAlert() {
         logger.info("accepting 'Thanks for message' Alert");
-        Alert alert = waitService.getAlert();
+        Alert alert = waitService.waitForAlert();
         alert.accept();
     }
 

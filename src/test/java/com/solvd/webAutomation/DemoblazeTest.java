@@ -11,7 +11,6 @@ import com.solvd.webAutomation.pages.desktop.HomePage;
 
 import com.solvd.webAutomation.pages.desktop.ProductPage;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
@@ -67,7 +66,7 @@ public class DemoblazeTest extends AbstractTest {
 
         ProductGrid productGrid = homePage.selectCategory(category);
 
-        int productIndex= productGrid.getProductCount()-1;
+        int productIndex = productGrid.getProductCount() - 1;
 
         ProductPage productPage = productGrid
                 .openProductByIndex(productIndex);
@@ -121,8 +120,6 @@ public class DemoblazeTest extends AbstractTest {
 
         SoftAssert sa = new SoftAssert();
 
-//        homePage.waitUntilPageIsReady();
-
         ProductGrid productGrid = homePage.selectCategory(category);
 
         String productName = productGrid.getProductNameByIndex(0);
@@ -171,7 +168,7 @@ public class DemoblazeTest extends AbstractTest {
 
         int initialSize = cartPage.getProductCount();
 
-        sa.assertFalse(initialSize==0, "The shopping cart is empty");
+        sa.assertFalse(initialSize == 0, "The shopping cart is empty");
 
         while (!cartPage.isCartEmpty()) {
             cartPage.deleteProduct(0);
@@ -179,7 +176,7 @@ public class DemoblazeTest extends AbstractTest {
 
         logger.debug("finished empty shopping cart");
         int finalSize = cartPage.getProductCount();
-        sa.assertTrue(finalSize==0, "The shopping cart is not empty");
+        sa.assertTrue(finalSize == 0, "The shopping cart is not empty");
         logger.debug("finished checking shopping cart");
 
         sa.assertAll();
@@ -220,7 +217,7 @@ public class DemoblazeTest extends AbstractTest {
         SoftAssert sa = new SoftAssert();
         sa.assertTrue(logInModal.isLogInModalVisible(), "Log In modal is not visible");
 
-        logInModal.logInWith("example@email.com","Example Password");
+        logInModal.logInWith("example@email.com", "Example Password");
         sa.assertTrue(logInModal.isAlertPresent());
         logInModal.acceptWrongPasswordAlert();
 
@@ -243,7 +240,7 @@ public class DemoblazeTest extends AbstractTest {
         footer.ensureVisible();
 
         sa.assertTrue(footer.isVisibleInScreen(), "Footer is not visible in screen at bottom of page");
-        sa.assertTrue(footer.verifyFooterInfo(),"Footer info is not completely visible");
+        sa.assertTrue(footer.verifyFooterInfo(), "Footer info is not completely visible");
 
         sa.assertAll();
     }

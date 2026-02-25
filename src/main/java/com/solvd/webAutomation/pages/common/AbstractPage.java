@@ -112,6 +112,7 @@ public abstract class AbstractPage {
         WebElement element = getPageLoadedIndicator();
         return isVisible(element, this.getClass().getSimpleName() + " Indicator");
     }
+
     protected boolean isInViewport(WebElement element, String elementName) {
         logger.info("Checking if element [{}] is in viewport", elementName);
 
@@ -152,7 +153,7 @@ public abstract class AbstractPage {
     }
 
     public void waitUntilPageIsReady() {
-        logger.info("Waiting for the page [{}] to load",this.getClass().getSimpleName());
+        logger.info("Waiting for the page [{}] to load", this.getClass().getSimpleName());
 
         WebDriverWait pageWait = new WebDriverWait(driver, Duration.ofSeconds(waitDuration));
         pageWait.until(driver ->
@@ -163,7 +164,7 @@ public abstract class AbstractPage {
 
         pageWait.until(ExpectedConditions.invisibilityOfElementLocated(LOADER));
         pageWait.until(ExpectedConditions.visibilityOf(getPageLoadedIndicator()));
-        logger.info("The page [{}] is ready",this.getClass().getSimpleName());
+        logger.info("The page [{}] is ready", this.getClass().getSimpleName());
     }
 
     protected void scrollTo(@NonNull WebElement element) {

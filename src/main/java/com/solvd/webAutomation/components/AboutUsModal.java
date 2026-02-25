@@ -10,34 +10,23 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import java.util.Map;
 
 public class AboutUsModal extends AbstractPage {
-    //Needs refactoring
-    @FindBy(id = "logInModalLabel")
+
+    @FindBy(id = "videoModalLabel")
     private WebElement title;
 
-    @FindBy(css = "#logInModal button.btn.btn-primary")
-    private WebElement logInButton;
-
-    @FindBy(css = "#logInModal button.btn.btn-secondary")
+    @FindBy(css = "#videoModal button.btn.btn-secondary")
     private WebElement closeButton;
 
-    @FindBy(id = "loginusername")
-    private WebElement usernameInput;
-
-    @FindBy(id = "loginpassword")
-    private WebElement passwordInput;
+    @FindBy(css = "#videoModal .close")
+    private WebElement exitButton;
 
     public AboutUsModal(WebDriver driver) {
         super(driver);
     }
 
-    private final Map<MenuItem, WebElement> menuInputs = Map.of(
-            MenuItem.USERNAME, usernameInput,
-            MenuItem.PASSWORD, passwordInput
-    );
-
     private final Map<MenuItem, WebElement> menuButtons = Map.of(
             MenuItem.CLOSE, closeButton,
-            MenuItem.LOG_IN, logInButton
+            MenuItem.EXIT, exitButton
     );
 
     @Override
@@ -54,26 +43,13 @@ public class AboutUsModal extends AbstractPage {
         click(button, item.name);
     }
 
-    public void type(MenuItem item, String text) {
-        WebElement element = menuInputs.get(item);
-        type(element, item.name, text);
-    }
-
-    public boolean isLogInModalVisible() {
+    public boolean isModalVisible() {
         return title.isDisplayed();
     }
 
-    public void acceptWrongPasswordAlert() {
-        logger.info("accepting 'Wrong password' Alert");
-        Alert alert = wait.until(ExpectedConditions.alertIsPresent());
-        alert.accept();
-    }
-
     public enum MenuItem {
-        USERNAME("Input Username"),
-        PASSWORD("Input Password"),
         CLOSE("Close Button"),
-        LOG_IN("Log In Button");
+        EXIT("Exit Button");
 
         private final String name;
 

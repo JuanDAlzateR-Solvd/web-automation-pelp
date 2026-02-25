@@ -4,7 +4,6 @@ import com.solvd.webAutomation.components.TopMenu;
 import com.solvd.webAutomation.pages.common.AbstractPage;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.util.Arrays;
 
@@ -57,14 +56,14 @@ public class ProductPage extends AbstractPage {
 
     public void acceptProductAddedAlert() {
         logger.info("accepting 'Product Added' Alert");
-        Alert alert = wait.until(ExpectedConditions.alertIsPresent());
+        Alert alert = waitService.getAlert();
         alert.accept();
     }
 
     public boolean isProductAddedAlertPresent() {
         logger.info("checking 'Product Added' Alert Present");
         try {
-            wait.until(ExpectedConditions.alertIsPresent());
+            waitService.waitForAlert();
             return true;
         } catch (TimeoutException e) {
             return false;

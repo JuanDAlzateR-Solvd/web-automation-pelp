@@ -1,12 +1,11 @@
 package com.solvd.webAutomation.pages.common;
 
 import com.solvd.webAutomation.config.ConfigReader;
+import com.solvd.webAutomation.utils.WaitService;
 import org.jspecify.annotations.NonNull;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.pagefactory.AjaxElementLocatorFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,15 +15,15 @@ import java.time.Duration;
 public abstract class AbstractPage {
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
     protected WebDriver driver;
-    protected WebDriverWait wait;
-    public int waitDuration;
+    protected WaitService waitService;
+    private int waitDuration;
 
     private static final By LOADER = By.cssSelector(".loader, .spinner, .loading");
 
     public AbstractPage(WebDriver driver) {
         this.driver = driver;
-        waitDuration = Integer.parseInt(ConfigReader.get("wait_duration"));
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(waitDuration));
+        this.waitService = new WaitService(driver);
+        this.waitDuration = Integer.parseInt(ConfigReader.get("wait_duration"));
         PageFactory.initElements(
                 new AjaxElementLocatorFactory(driver, waitDuration), this);
 
@@ -45,10 +44,7 @@ public abstract class AbstractPage {
     public void click(WebElement element, String elementName) {
         logger.info("Clicking on element [{}]", elementName);
 
-        //better to use a new WebDriver Wait??
-        wait.withTimeout(Duration.ofSeconds(10))
-                .ignoring(StaleElementReferenceException.class)
-                .until(ExpectedConditions.elementToBeClickable(element));
+        waitService.waitForElementClickable(element, 10);
         scrollTo(element);
         element.click();
     }
@@ -58,9 +54,7 @@ public abstract class AbstractPage {
 //        waitUntilModalIsGone();
         WebElement element = driver.findElement(locator);
 
-        wait.withTimeout(Duration.ofSeconds(10))
-                .ignoring(StaleElementReferenceException.class)
-                .until(ExpectedConditions.elementToBeClickable(element));
+        waitService.waitForElementClickable(element, 10);
         scrollTo(element);
         element.click();
     }
@@ -68,9 +62,7 @@ public abstract class AbstractPage {
     protected void type(WebElement element, String elementName, String text) {
         logger.info("Typing on element [{}]", elementName);
 
-        wait.withTimeout(Duration.ofSeconds(10))
-                .ignoring(StaleElementReferenceException.class)
-                .until(ExpectedConditions.visibilityOf(element));
+        waitService.waitForElementVisible(element, 10);
         scrollTo(element);
         element.clear();
         element.sendKeys(text);
@@ -84,9 +76,7 @@ public abstract class AbstractPage {
     protected String getText(WebElement element, String elementName) {
         logger.info("Getting text from element [{}]", elementName);
 
-        wait.withTimeout(Duration.ofSeconds(10))
-                .ignoring(StaleElementReferenceException.class)
-                .until(ExpectedConditions.visibilityOf(element));
+        waitService.waitForElementVisible(element, 10);
         scrollTo(element);
 
         return element.getText();
@@ -155,15 +145,10 @@ public abstract class AbstractPage {
     public void waitUntilPageIsReady() {
         logger.info("Waiting for the page [{}] to load", this.getClass().getSimpleName());
 
-        WebDriverWait pageWait = new WebDriverWait(driver, Duration.ofSeconds(waitDuration));
-        pageWait.until(driver ->
-                ((JavascriptExecutor) driver)
-                        .executeScript("return document.readyState")
-                        .equals("complete")
-        );
+        waitService.waitForPageLoad();
+        waitService.waitForInvisibilityOfElementLocated(LOADER);
+        waitService.waitForElementVisible(getPageLoadedIndicator());
 
-        pageWait.until(ExpectedConditions.invisibilityOfElementLocated(LOADER));
-        pageWait.until(ExpectedConditions.visibilityOf(getPageLoadedIndicator()));
         logger.info("The page [{}] is ready", this.getClass().getSimpleName());
     }
 
@@ -176,22 +161,19 @@ public abstract class AbstractPage {
     protected void waitUntilModalIsGone(WebElement element) {
         try {
             logger.info("Waiting for modal to be invisible");
-            wait.until(ExpectedConditions.invisibilityOf(element));
+            waitService.waitForInvisibility(element);
         } catch (TimeoutException e) {
             logger.info("Modal is not visible, continuing");
         }
     }
 
     public void waitUntilVisible(WebElement element) {
-
-        wait.withTimeout(Duration.ofSeconds(10))
-                .ignoring(StaleElementReferenceException.class)
-                .until(ExpectedConditions.visibilityOf(element));
+        waitService.waitForElementVisible(element, 10);
         scrollTo(element);
     }
 
     protected void waitUntilClickable(WebElement element) {
-        wait.until(ExpectedConditions.elementToBeClickable(element));
+        waitService.waitForElementClickable(element);
     }
 
     /**
@@ -209,7 +191,7 @@ public abstract class AbstractPage {
 
     public boolean isAlertPresent() {
         try {
-            wait.until(ExpectedConditions.alertIsPresent());
+            waitService.waitForAlert();
             return true;
         } catch (TimeoutException e) {
             return false;

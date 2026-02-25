@@ -6,7 +6,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.util.Map;
 
@@ -65,7 +64,7 @@ public class ContactModal extends AbstractPage {
 
     public void acceptMessageAlert() {
         logger.info("accepting 'Thanks for message' Alert");
-        Alert alert = wait.until(ExpectedConditions.alertIsPresent());
+        Alert alert = waitService.getAlert();
         alert.accept();
     }
 

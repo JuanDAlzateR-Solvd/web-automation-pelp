@@ -6,7 +6,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.util.List;
 import java.util.stream.IntStream;
@@ -127,20 +126,20 @@ public class CartPage extends AbstractPage {
     public void waitUntilCartShowsProducts() {
         logger.info("Waiting for the shopping cart to show products");
         By by = By.cssSelector("#tbodyid .success");
-        wait.until(ExpectedConditions.numberOfElementsToBeMoreThan(by, 0));
+        waitService.waitForNumberOfElementsToBeMoreThan(by, 0);
     }
 
     public void waitUntilCartDeletesProduct() {
         logger.info("Waiting for the shopping cart to reload");
         int cartSize = getCartProducts().size();
         By by = By.cssSelector("#tbodyid .success");
-        wait.until(ExpectedConditions.numberOfElementsToBe(by, cartSize - 1));
+        waitService.waitForNumberOfElementsToBe(by, cartSize - 1);
     }
 
     public boolean isCartEmpty() {
 
         logger.info("Checking if shopping cart is empty");
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.id("tbodyid")));
+        waitService.waitForPresenceOfElementLocated(By.id("tbodyid"));
 
         List<WebElement> rows =
                 driver.findElements(By.cssSelector("#tbodyid tr"));
@@ -167,7 +166,7 @@ public class CartPage extends AbstractPage {
 
     public int getProductCount() {
         logger.info("Checking number of products in shopping cart");
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.id("tbodyid")));
+        waitService.waitForPresenceOfElementLocated(By.id("tbodyid"));
 
         List<WebElement> rows =
                 driver.findElements(By.cssSelector("#tbodyid tr"));

@@ -7,7 +7,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -106,7 +105,7 @@ public class ProductGrid extends AbstractPage {
 
     public int getProductCount() {
         logger.info("Checking number of products in product grid");
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.id("tbodyid")));
+        waitService.waitForPresenceOfElementLocated(By.id("tbodyid"));
 
         List<WebElement> rows =
                 driver.findElements(By.cssSelector("#tbodyid .card-title"));

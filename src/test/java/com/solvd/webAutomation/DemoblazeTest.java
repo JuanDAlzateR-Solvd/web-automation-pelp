@@ -35,7 +35,7 @@ public class DemoblazeTest extends AbstractTest {
 
         logger.info("Testing Menu item: [Contact Modal]");
         ContactModal contactModal = topMenu.openContactModal();
-        sa.assertTrue(contactModal.isContactModalVisible(), "Contact Modal should be visible");
+        sa.assertTrue(contactModal.isModalVisible(), "Contact Modal should be visible");
         contactModal.close();
 
         //other modals
@@ -53,7 +53,6 @@ public class DemoblazeTest extends AbstractTest {
         productsList.forEach(logger::info);
 
         Assert.assertFalse(productsList.isEmpty(), "There are no products in the grid");
-
     }
 
     @Test(testName = "Product Search by Category - Task3 TC-001",
@@ -73,13 +72,9 @@ public class DemoblazeTest extends AbstractTest {
 
         SoftAssert sa = new SoftAssert();
 
-        Arrays.stream(ProductPage.InfoItem.values()).sequential()
-                .forEach(info -> {
-                    sa.assertTrue(productPage.isVisible(info));
-                });
+        sa.assertTrue(productPage.isInfoVisible(), "Product Page should have all info visible");
 
         sa.assertAll();
-
     }
 
     @Test(testName = "Add Product to Cart - Task3 TC-002",
@@ -108,7 +103,6 @@ public class DemoblazeTest extends AbstractTest {
         sa.assertFalse(cartPage.getTotalPrice().isEmpty(), "Total price is empty");
 
         sa.assertAll();
-
     }
 
     @Test(testName = "Delete Product from Cart - Task3 TC-003",
@@ -119,8 +113,6 @@ public class DemoblazeTest extends AbstractTest {
         HomePage homePage = new HomePage(driver);
 
         SoftAssert sa = new SoftAssert();
-
-//        homePage.waitUntilPageIsReady();
 
         ProductGrid productGrid = homePage.selectCategory(category);
 
@@ -146,7 +138,6 @@ public class DemoblazeTest extends AbstractTest {
         );
 
         sa.assertAll();
-
     }
 
     @Test(testName = "Empty Shopping Cart - Task3 TC-004",
@@ -155,13 +146,9 @@ public class DemoblazeTest extends AbstractTest {
         WebDriver driver = getDriver();
 
         HomePage homePage = new HomePage(driver);
-
         ShoppingFlow shoppingFlow = new ShoppingFlow(driver);
 
-        String productName = "";
-        for (int i = 0; i < 5; i++) {
-            productName = shoppingFlow.addRandomProductToCart();
-        }
+        List<String> productNames = shoppingFlow.addRandomProductsToCart(5);
 
         SoftAssert sa = new SoftAssert();
         CartPage cartPage = homePage.getTopMenu().goToCartPage();
@@ -172,17 +159,14 @@ public class DemoblazeTest extends AbstractTest {
 
         sa.assertFalse(initialSize == 0, "The shopping cart is empty");
 
-        while (!cartPage.isCartEmpty()) {
-            cartPage.deleteProduct(0);
-        }
-
+        cartPage.emptyShoppingCart();
         logger.debug("finished empty shopping cart");
+
         int finalSize = cartPage.getProductCount();
         sa.assertTrue(finalSize == 0, "The shopping cart is not empty");
         logger.debug("finished checking shopping cart");
 
         sa.assertAll();
-
     }
 
     @Test(testName = "Fill Contact Form - Task3 TC-005",
@@ -195,7 +179,7 @@ public class DemoblazeTest extends AbstractTest {
         ContactModal contactModal = homePage.getTopMenu().openContactModal();
         SoftAssert sa = new SoftAssert();
 
-        sa.assertTrue(contactModal.isContactModalVisible(), "Contact modal is not visible");
+        sa.assertTrue(contactModal.isModalVisible(), "Contact modal is not visible");
 
         contactModal.submitContactForm("example@email.com",
                 "Example Name",
@@ -217,7 +201,7 @@ public class DemoblazeTest extends AbstractTest {
         LogInModal logInModal = homePage.getTopMenu().openLogInModal();
 
         SoftAssert sa = new SoftAssert();
-        sa.assertTrue(logInModal.isLogInModalVisible(), "Log In modal is not visible");
+        sa.assertTrue(logInModal.isModalVisible(), "Log In modal is not visible");
 
         logInModal.logInWith("example@email.com", "Example Password");
         sa.assertTrue(logInModal.isAlertPresent());

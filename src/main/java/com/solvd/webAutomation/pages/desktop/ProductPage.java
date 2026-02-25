@@ -6,6 +6,8 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
+import java.util.Arrays;
+
 public class ProductPage extends AbstractPage {
 
     @FindBy(css = ".item.active")
@@ -96,6 +98,15 @@ public class ProductPage extends AbstractPage {
 
     public TopMenu getTopMenu() {
         return new TopMenu(driver);
+    }
+
+    public boolean isInfoVisible() {
+        final boolean[] visible = {true};
+        Arrays.stream(ProductPage.InfoItem.values()).sequential()
+                .forEach(info -> {
+                    visible[0] = visible[0] && isVisible(info);
+                });
+        return visible[0];
     }
 
 }

@@ -59,7 +59,7 @@ public class ContactModal extends AbstractPage {
         type(menuItems.get(item), item.getName(), text);
     }
 
-    public boolean isContactModalVisible() {
+    public boolean isModalVisible() {
         return title.isDisplayed();
     }
 

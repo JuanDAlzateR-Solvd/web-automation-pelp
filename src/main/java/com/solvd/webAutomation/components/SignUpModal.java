@@ -10,20 +10,20 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import java.util.Map;
 
 public class SignUpModal extends AbstractPage {
-    //Needs refactoring
-    @FindBy(id = "logInModalLabel")
+
+    @FindBy(id = "signInModalLabel")
     private WebElement title;
 
-    @FindBy(css = "#logInModal button.btn.btn-primary")
-    private WebElement logInButton;
+    @FindBy(css = "#signInModal button.btn.btn-primary")
+    private WebElement signInButton;
 
-    @FindBy(css = "#logInModal button.btn.btn-secondary")
+    @FindBy(css = "#signInModal button.btn.btn-secondary")
     private WebElement closeButton;
 
-    @FindBy(id = "loginusername")
+    @FindBy(id = "sign-username")
     private WebElement usernameInput;
 
-    @FindBy(id = "loginpassword")
+    @FindBy(id = "sign-password")
     private WebElement passwordInput;
 
     public SignUpModal(WebDriver driver) {
@@ -37,7 +37,7 @@ public class SignUpModal extends AbstractPage {
 
     private final Map<MenuItem, WebElement> menuButtons = Map.of(
             MenuItem.CLOSE, closeButton,
-            MenuItem.LOG_IN, logInButton
+            MenuItem.SIGN_IN, signInButton
     );
 
     @Override
@@ -59,7 +59,7 @@ public class SignUpModal extends AbstractPage {
         type(element, item.name, text);
     }
 
-    public boolean isLogInModalVisible() {
+    public boolean isModalVisible() {
         return title.isDisplayed();
     }
 
@@ -73,7 +73,7 @@ public class SignUpModal extends AbstractPage {
         USERNAME("Input Username"),
         PASSWORD("Input Password"),
         CLOSE("Close Button"),
-        LOG_IN("Log In Button");
+        SIGN_IN("Sign In Button");
 
         private final String name;
 

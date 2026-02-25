@@ -1,12 +1,8 @@
 package com.solvd.webAutomation.flows;
 
 import com.solvd.webAutomation.components.ProductGrid;
-import com.solvd.webAutomation.components.TopMenu;
-import com.solvd.webAutomation.pages.desktop.CartPage;
 import com.solvd.webAutomation.pages.desktop.HomePage;
-import com.solvd.webAutomation.pages.desktop.ProductPage;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +46,6 @@ public class ShoppingFlow {
         ProductGrid productGrid = homePage.getProductGrid();
 
         int size = productGrid.getProductCount();
-
         int randomIndex = new Random().nextInt(size);
 
         return addProductToCart(randomIndex);

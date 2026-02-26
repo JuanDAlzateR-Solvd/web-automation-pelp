@@ -34,16 +34,15 @@ public class ProductGrid extends AbstractPage {
         return imageIndicator;
     }
 
-    public List<WebElement> getProductElements() {
-        return productElements;
+    public List<ProductGridItemComponent> getProductComponents() {
+        return productElements.stream().map(ProductGridItemComponent::new).toList();
     }
 
     public List<String> getProductTitles() {
-        List<String> productsList = new ArrayList<>();
-        for (WebElement product : getProductElements()) {
-            productsList.add(getText(product));
-        }
-        return productsList;
+        return  getProductComponents().stream()
+                .map(ProductGridItemComponent::getTitle)
+                .map(WebElement::getText)
+                .toList();
     }
 
     public boolean isNextButtonClickable() {
@@ -61,19 +60,6 @@ public class ProductGrid extends AbstractPage {
         }
     }
 
-    public String getTextOf(WebElement product) {
-        String productName = extractProductName(product);
-        return getText(product, productName);
-    }
-
-    public String getProductName(WebElement product) {
-        return extractProductName(product);
-    }
-
-    private String extractProductName(WebElement product) {
-        return getText(product).split("\n")[0];
-    }
-
     public void clickProduct(WebElement product) {
         String productName = getProductName(product);
         click(product, productName);
@@ -84,8 +70,8 @@ public class ProductGrid extends AbstractPage {
     }
 
     public WebElement getProductByIndex(int productIndex) {
-        List<WebElement> products = getProductElements();
-        WebElement product = products.get(productIndex);
+        List<ProductGridItemComponent> products = getProductComponents();
+        WebElement product = products.get(productIndex).getRoot();
         logger.info(getTextOf(product));
         return product;
     }

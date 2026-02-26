@@ -1,5 +1,6 @@
 package com.solvd.webAutomation.pages.common;
 
+import com.solvd.webAutomation.actions.ElementActions;
 import com.solvd.webAutomation.config.ConfigReader;
 import com.solvd.webAutomation.wait.WaitService;
 import org.jspecify.annotations.NonNull;
@@ -13,7 +14,9 @@ public abstract class AbstractPage {
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
     protected WebDriver driver;
     protected WaitService waitService;
+    protected ElementActions actions;
     private int waitDuration;
+
 
     private static final By LOADER = By.cssSelector(".loader, .spinner, .loading");
 
@@ -35,48 +38,27 @@ public abstract class AbstractPage {
     protected abstract WebElement getPageLoadedIndicator();
 
     public void click(WebElement element) {
-        click(element, element.getTagName());
+        actions.click(element);
     }
 
     public void click(WebElement element, String elementName) {
-        logger.info("Clicking on element [{}]", elementName);
-
-        waitService.waitForElementClickable(element, elementName);
-        scrollTo(element);
-        element.click();
+        actions.click(element, elementName);
     }
 
     public void click(By locator, String elementName) {
-        logger.info("Clicking on element [{}]", elementName);
-//        waitUntilModalIsGone();
-        WebElement element = driver.findElement(locator);
-
-        waitService.waitForElementClickable(element,  elementName);
-        scrollTo(element);
-        element.click();
+        actions.click(locator, elementName);
     }
 
     protected void type(WebElement element, String elementName, String text) {
-        logger.info("Typing on element [{}]", elementName);
-
-        waitService.waitForElementVisible(element,  elementName);
-        scrollTo(element);
-        element.clear();
-        element.sendKeys(text);
-
+        actions.type(element, elementName, text);
     }
 
     protected String getText(WebElement element) {
-        return getText(element, element.getTagName());
+        return actions.getText(element);
     }
 
     protected String getText(WebElement element, String elementName) {
-        logger.info("Getting text from element [{}]", elementName);
-
-        waitService.waitForElementVisible(element, elementName);
-        scrollTo(element);
-
-        return element.getText();
+        return actions.getText(element, elementName);
     }
 
     protected boolean isVisible(WebElement element) {
@@ -151,19 +133,8 @@ public abstract class AbstractPage {
     }
 
     protected void scrollTo(@NonNull WebElement element) {
-        ((JavascriptExecutor) driver).executeScript(
-                "arguments[0].scrollIntoView({block:'center', inline:'nearest'});", element
-        );
+       actions.scrollTo(element);
     }
-
-//    protected void waitUntilModalIsGone(WebElement element) {
-//        try {
-//            logger.info("Waiting for modal to be invisible");
-//            waitService.waitForInvisibility(element);
-//        } catch (TimeoutException e) {
-//            logger.info("Modal is not visible, continuing");
-//        }
-//    }
 
     public void waitUntilVisible(WebElement element, String elementName) {
         waitService.waitForElementVisible(element,  elementName);
@@ -174,17 +145,8 @@ public abstract class AbstractPage {
         waitService.waitForElementClickable(element,elementName);
     }
 
-    /**
-     * Pauses using Thread sleep. Use only for debug code, not for test implementation.
-     *
-     * @param milliseconds int number of milliseconds to pause*
-     */
     public void debugPause(int milliseconds) {
-        try {
-            Thread.sleep(milliseconds);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        actions.debugPause(milliseconds);
     }
 
     public boolean isAlertPresent() {

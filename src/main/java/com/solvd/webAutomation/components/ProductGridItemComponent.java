@@ -1,6 +1,7 @@
 package com.solvd.webAutomation.components;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 public class ProductGridItemComponent extends AbstractComponent {
@@ -13,8 +14,8 @@ public class ProductGridItemComponent extends AbstractComponent {
 
     private WebElement imageIndicator;
 
-    public ProductGridItemComponent(WebElement root) {
-        super(root);
+    public ProductGridItemComponent(WebDriver driver,WebElement root) {
+        super(driver,root);
     }
 
     public WebElement getComponentLoadedIndicator() {
@@ -48,7 +49,7 @@ public class ProductGridItemComponent extends AbstractComponent {
         getDescription();
     }
 
-    public String getText() {
+    public String getText(WebElement product) {
         String productName = extractProductName(product);
         return getText(product, productName);
     }
@@ -58,6 +59,6 @@ public class ProductGridItemComponent extends AbstractComponent {
     }
 
     private String extractProductName(WebElement product) {
-        return (getTitle());
+        return getText(getTitle());
     }
 }

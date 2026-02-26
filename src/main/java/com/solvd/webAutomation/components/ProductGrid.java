@@ -11,7 +11,7 @@ import org.openqa.selenium.support.FindBy;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductGrid extends AbstractPage {
+public class ProductGrid extends AbstractComponent {
 
     @FindBy(css = "#tbodyid")
     private WebElement productGridContainer;
@@ -25,17 +25,17 @@ public class ProductGrid extends AbstractPage {
     @FindBy(css = "#tbodyid .card-img-top.img-fluid")
     private WebElement imageIndicator;
 
-    public ProductGrid(WebDriver driver) {
-        super(driver);
+    public ProductGrid(WebDriver driver, WebElement root) {
+        super(driver,root);
     }
 
     @Override
-    protected WebElement getPageLoadedIndicator() {
+    protected WebElement getComponentLoadedIndicator() {
         return imageIndicator;
     }
 
     public List<ProductGridItemComponent> getProductComponents() {
-        return productElements.stream().map(ProductGridItemComponent::new).toList();
+        return productElements.stream().map(p->new ProductGridItemComponent(driver,p)).toList();
     }
 
     public List<String> getProductTitles() {

@@ -61,6 +61,10 @@ public abstract class AbstractPage {
         return actions.getText(element, elementName);
     }
 
+    protected void scrollTo(@NonNull WebElement element) {
+        actions.scrollTo(element);
+    }
+
     protected boolean isVisible(WebElement element) {
         return isVisible(element, element.getTagName());
     }
@@ -130,10 +134,6 @@ public abstract class AbstractPage {
         waitService.waitForElementVisible(getPageLoadedIndicator(),className+" Indicator");
 
         logger.info("The page [{}] is ready", this.getClass().getSimpleName());
-    }
-
-    protected void scrollTo(@NonNull WebElement element) {
-       actions.scrollTo(element);
     }
 
     public void waitUntilVisible(WebElement element, String elementName) {

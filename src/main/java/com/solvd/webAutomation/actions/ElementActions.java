@@ -11,9 +11,9 @@ public class ElementActions {
     protected WebDriver driver;
     protected WaitService waitService;
 
-    public ElementActions(WebDriver driver) {
+    public ElementActions(WebDriver driver,WaitService waitService) {
         this.driver = driver;
-        this.waitService = new WaitService(driver);
+        this.waitService = waitService;
     }
 
     public void click(WebElement element) {

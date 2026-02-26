@@ -9,7 +9,6 @@ import java.util.List;
 
 public class ProductGridItemComponent extends AbstractComponent {
 
-
     @FindBy(css = ".card-title")
     private WebElement title;
 
@@ -21,7 +20,6 @@ public class ProductGridItemComponent extends AbstractComponent {
 
     @FindBy(css = ".card-img-top")
     private WebElement imageIndicator;
-
 
     public ProductGridItemComponent(WebDriver driver, WebElement root) {
         super(driver, root);
@@ -39,7 +37,6 @@ public class ProductGridItemComponent extends AbstractComponent {
 
         return getText(title, "Product Component"); //It doesn't work with root -> used title.
     }
-
 
     public String getProductName() {
         return getText(title, "Product title");

@@ -1,11 +1,8 @@
 package com.solvd.webAutomation.actions;
 
-import com.solvd.webAutomation.config.ConfigReader;
 import com.solvd.webAutomation.wait.WaitService;
 import org.jspecify.annotations.NonNull;
 import org.openqa.selenium.*;
-import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.pagefactory.AjaxElementLocatorFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

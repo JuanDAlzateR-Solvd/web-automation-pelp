@@ -15,7 +15,7 @@ import java.util.Map;
 
 public class HomePage extends AbstractPage {
 
-    @FindBy(css = ".list-group a[onclick*='phone']")
+        @FindBy(css = ".list-group a[onclick*='phone']")
     private WebElement phonesButton;
 
     @FindBy(css = ".list-group a[onclick*='notebook']")
@@ -26,6 +26,9 @@ public class HomePage extends AbstractPage {
 
     @FindBy(css = "#tbodyid .card-img-top.img-fluid")// "#tbodyid .card-img-top.img-fluid"
     private List<WebElement> imageIndicator;
+
+    @FindBy(css = "#contcont")
+    private WebElement productGridContainer;
 
     private static final By LOADER = By.cssSelector(".loader, .spinner, .loading");
 
@@ -67,7 +70,7 @@ public class HomePage extends AbstractPage {
     //Test flow methods
 
     public ProductGrid getProductGrid() {
-        return new ProductGrid(driver);
+        return new ProductGrid(driver,productGridContainer);
     }
 
     public TopMenu getTopMenu() {
@@ -80,7 +83,7 @@ public class HomePage extends AbstractPage {
 
     public ProductGrid selectCategory(MenuItem item) {
         click(item);
-        return new ProductGrid(driver);
+        return new ProductGrid(driver,productGridContainer);
     }
 
 }

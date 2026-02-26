@@ -3,62 +3,56 @@ package com.solvd.webAutomation.components;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+
+import java.util.List;
 
 public class ProductGridItemComponent extends AbstractComponent {
 
+
+    @FindBy(css = ".card-title")
     private WebElement title;
 
+    @FindBy(css = "h5")
     private WebElement price;
 
+    @FindBy(css = ".card-text")
     private WebElement description;
 
+    @FindBy(css = ".card-img-top")
     private WebElement imageIndicator;
 
-    public ProductGridItemComponent(WebDriver driver,WebElement root) {
-        super(driver,root);
+
+    public ProductGridItemComponent(WebDriver driver, WebElement root) {
+        super(driver, root);
     }
 
+    @Override
     public WebElement getComponentLoadedIndicator() {
-        return getImageIndicator();
-    }
-
-    public WebElement getImageIndicator() {
-        imageIndicator=root.findElement(By.cssSelector(".card-img-top"));
         return imageIndicator;
     }
-
     public WebElement getTitle() {
-        title=root.findElement(By.cssSelector(".card-title"));
         return title;
     }
 
+    public String getText() {
+        return getText(root, "Product Component");
+    }
+
+
+    public String getProductName() {
+        return getText(title, "Product title");
+    }
+
     public WebElement getPrice() {
-        price=root.findElement(By.cssSelector("h5"));
         return price;
     }
 
     public WebElement getDescription() {
-        description=root.findElement(By.cssSelector("#article"));
         return description;
     }
 
-    public void loadComponent(){
-        getImageIndicator();
-        getTitle();
-        getPrice();
-        getDescription();
-    }
-
-    public String getText(WebElement product) {
-        String productName = extractProductName(product);
-        return getText(product, productName);
-    }
-
-    public String getProductName(WebElement product) {
-        return extractProductName(product);
-    }
-
-    private String extractProductName(WebElement product) {
-        return getText(getTitle());
+    public void clickProduct() {
+        click(title, getProductName());
     }
 }

@@ -24,6 +24,7 @@ public abstract class AbstractPage {
         this.driver = driver;
         this.waitService = new WaitService(driver);
         this.waitDuration = Integer.parseInt(ConfigReader.get("wait_duration"));
+        this.actions = new ElementActions(driver);
         PageFactory.initElements(
                 new AjaxElementLocatorFactory(driver, waitDuration), this);
 

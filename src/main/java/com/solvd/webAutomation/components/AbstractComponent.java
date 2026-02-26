@@ -1,10 +1,14 @@
 package com.solvd.webAutomation.components;
 
 import com.solvd.webAutomation.actions.ElementActions;
+import com.solvd.webAutomation.config.ConfigReader;
 import com.solvd.webAutomation.pages.common.AbstractPage;
 import com.solvd.webAutomation.wait.WaitService;
 import org.jspecify.annotations.NonNull;
 import org.openqa.selenium.*;
+import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.pagefactory.AjaxElementLocatorFactory;
+import org.openqa.selenium.support.pagefactory.DefaultElementLocatorFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,12 +18,28 @@ public abstract class AbstractComponent {
     protected WebElement root;
     protected WaitService waitService;
     protected ElementActions actions;
+    private int waitDuration;
 
+    private static final By LOADER = By.cssSelector(".loader, .spinner, .loading");
 
     public AbstractComponent(WebDriver driver,WebElement root){
         this.driver=driver;
         this.root=root;
         this.waitService = new WaitService(driver);
+        this.actions = new ElementActions(driver);
+        this.waitDuration = Integer.parseInt(ConfigReader.get("wait_duration"));
+
+        PageFactory.initElements(
+                new DefaultElementLocatorFactory(root),
+                this
+        );
+
+        logger.info("Page Created | Thread: {} | Driver: {}",
+                Thread.currentThread().getId(),
+                System.identityHashCode(driver)
+        );
+
+        waitUntilComponentIsReady();
     }
 
     protected abstract WebElement getComponentLoadedIndicator();
@@ -74,5 +94,15 @@ public abstract class AbstractComponent {
     }
     protected void waitUntilClickable(WebElement element,String elementName) {
         waitService.waitForElementClickable(element,elementName);
+    }
+    public void waitUntilComponentIsReady() {
+        String className = this.getClass().getSimpleName();
+        logger.info("Waiting for the component [{}] to load", className);
+
+        waitService.waitForPageLoad();
+//        waitService.waitForInvisibilityOfElementLocated(LOADER, "Component Loader");
+        waitService.waitForElementVisible(getComponentLoadedIndicator(),className+" Indicator");
+
+        logger.info("The page [{}] is ready", this.getClass().getSimpleName());
     }
 }

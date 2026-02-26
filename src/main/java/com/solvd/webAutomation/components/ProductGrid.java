@@ -13,19 +13,20 @@ import java.util.List;
 
 public class ProductGrid extends AbstractComponent {
 
-    @FindBy(css = "#tbodyid")
-    private WebElement productGridContainer;
+//    @FindBy(css = "#contcont")//"#tbodyid"
+//    private WebElement productGridContainer;
 
     @FindBy(css = ".pagination #next2")
     private WebElement nextButton;
 
-    @FindBy(css = "#tbodyid .card-title")
+    @FindBy(css = ".col-lg-4")
     private List<WebElement> productElements;
 
-    @FindBy(css = "#tbodyid .card-img-top.img-fluid")
+    @FindBy(css = ".card-img-top.img-fluid")
     private WebElement imageIndicator;
 
     public ProductGrid(WebDriver driver, WebElement root) {
+
         super(driver,root);
     }
 
@@ -35,10 +36,13 @@ public class ProductGrid extends AbstractComponent {
     }
 
     public List<ProductGridItemComponent> getProductComponents() {
+        logger.debug("Getting product components: found {} products", productElements.size());
         return productElements.stream().map(p->new ProductGridItemComponent(driver,p)).toList();
     }
 
     public List<String> getProductTitles() {
+//        By by = By.cssSelector("#tbodyid .card-title");
+//        waitService.waitForNumberOfElementsToBeMoreThan(by,0);
         return  getProductComponents().stream()
                 .map(ProductGridItemComponent::getTitle)
                 .map(WebElement::getText)
@@ -60,33 +64,28 @@ public class ProductGrid extends AbstractComponent {
         }
     }
 
-    public void clickProduct(WebElement product) {
-        String productName = getProductName(product);
-        click(product, productName);
-    }
-
     public WebElement getProductGridContainer() {
-        return productGridContainer;
+        return root;
     }
 
-    public WebElement getProductByIndex(int productIndex) {
+    public ProductGridItemComponent getProductByIndex(int productIndex) {
         List<ProductGridItemComponent> products = getProductComponents();
-        WebElement product = products.get(productIndex).getRoot();
-        logger.info(getTextOf(product));
+        ProductGridItemComponent product = products.get(productIndex);
+        logger.info(product.getText());
         return product;
     }
 
     //Test flow methods
 
     public ProductPage openProductByIndex(int index) {
-        WebElement product = getProductByIndex(index);
-        clickProduct(product);
+        ProductGridItemComponent product = getProductByIndex(index);
+        product.clickProduct();
         return new ProductPage(driver);
     }
 
     public String getProductNameByIndex(int index) {
-        WebElement product = getProductByIndex(index);
-        return extractProductName(product);
+        ProductGridItemComponent product = getProductByIndex(index);
+        return product.getProductName();
     }
 
     public int getProductCount() {

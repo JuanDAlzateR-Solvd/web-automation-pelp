@@ -59,6 +59,10 @@ public class WaitService {
         logger.debug("Waiting for presence of element located by {}", locator);
         return buildWait().until(ExpectedConditions.presenceOfElementLocated(locator));
     }
+    public void waitForPresenceOfElement(WebElement element, String elementName) {
+        logger.debug("Waiting for presence of element: {}", elementName);
+         buildWait().until(ExpectedConditions.textToBePresentInElement(element,""));
+    }
 
     public void waitForNumberOfElementsToBeMoreThan(By locator, int number) {
         logger.debug("Waiting for number of elements located by {} to be more than {}", locator, number);

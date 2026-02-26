@@ -58,6 +58,7 @@ public class ElementActions {
         logger.info("Getting text from element [{}]", elementName);
 
         waitService.waitForElementVisible(element, elementName);
+//        waitService.waitForPresenceOfElement(element, elementName);
         scrollTo(element);
 
         return element.getText();

@@ -29,14 +29,15 @@ public class ProductGridItemComponent extends AbstractComponent {
 
     @Override
     public WebElement getComponentLoadedIndicator() {
-        return imageIndicator;
+        return title;
     }
     public WebElement getTitle() {
         return title;
     }
 
     public String getText() {
-        return getText(root, "Product Component");
+
+        return getText(title, "Product Component"); //It doesn't work with root -> used title.
     }
 
 

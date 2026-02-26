@@ -100,7 +100,7 @@ public abstract class AbstractComponent {
         logger.info("Waiting for the component [{}] to load", className);
 
         waitService.waitForPageLoad();
-//        waitService.waitForInvisibilityOfElementLocated(LOADER, "Component Loader");
+        waitService.waitForInvisibilityOfElementLocated(LOADER, "Component Loader");
         waitService.waitForElementVisible(getComponentLoadedIndicator(),className+" Indicator");
 
         logger.info("The page [{}] is ready", this.getClass().getSimpleName());

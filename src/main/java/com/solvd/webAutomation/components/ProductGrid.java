@@ -71,6 +71,7 @@ public class ProductGrid extends AbstractComponent {
     public ProductGridItemComponent getProductByIndex(int productIndex) {
         List<ProductGridItemComponent> products = getProductComponents();
         ProductGridItemComponent product = products.get(productIndex);
+        logger.debug("Getting product {} from product grid", productIndex);
         logger.info(product.getText());
         return product;
     }

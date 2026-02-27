@@ -39,7 +39,7 @@ public class DriverFactory {
                 }
                 options.addArguments("--start-maximized");
 
-                return new ChromeDriver();
+                return new ChromeDriver(options);
 
             default:
                 throw new IllegalArgumentException("Unsupported driver type: " + driverType);

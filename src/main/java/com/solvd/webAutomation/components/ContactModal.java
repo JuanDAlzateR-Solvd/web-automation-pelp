@@ -42,6 +42,7 @@ public class ContactModal extends AbstractPage {
         );
     }
 
+
     @Override
     protected WebElement getPageLoadedIndicator() {
         return title;
@@ -73,15 +74,15 @@ public class ContactModal extends AbstractPage {
             String email,
             String name,
             String message) {
-        type(ContactModal.MenuItem.EMAIL, email);
-        type(ContactModal.MenuItem.NAME, name);
-        type(ContactModal.MenuItem.MESSAGE, message);
-        click(ContactModal.MenuItem.SEND);
+        type(MenuItem.EMAIL, email);
+        type(MenuItem.NAME, name);
+        type(MenuItem.MESSAGE, message);
+        click(MenuItem.SEND);
         return this;
     }
 
     public void close() {
-        click(ContactModal.MenuItem.CLOSE);
+        click(MenuItem.CLOSE);
     }
 
     public enum MenuItem {

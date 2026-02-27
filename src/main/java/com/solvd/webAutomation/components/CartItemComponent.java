@@ -4,50 +4,72 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import java.util.List;
+
 public class CartItemComponent extends AbstractComponent {
 
-    @FindBy(css = ".card-title")
-    private WebElement title;
-
-    @FindBy(css = "h5")
-    private WebElement price;
+    @FindBy(css = "a[onclick*='deleteItem']")
+    private WebElement deleteButton;
 
     @FindBy(css = ".card-text")
-    private WebElement description;
+    private List<WebElement> tableDataList;
 
-    @FindBy(css = ".card-img-top")
+    @FindBy(css = "img")
     private WebElement imageIndicator;
 
     public CartItemComponent(WebDriver driver, WebElement root) {
         super(driver, root);
     }
 
+
     @Override
     public WebElement getComponentLoadedIndicator() {
-        return title;
+        return imageIndicator;
     }
-    public WebElement getTitle() {
-        return title;
+
+    public String getTitle() {
+        return getText(dataItem.TITLE);
+    }
+    public String getPrice() {
+        return getText(dataItem.PRICE);
     }
 
     public String getText() {
-
-        return getText(title, "Product Component"); //It doesn't work with root -> used title.
+        return getText(root, "Product Component"); //It doesn't work with root -> used title.
     }
 
-    public String getProductName() {
-        return getText(title, "Product title");
+    public void deleteProduct() {
+        click(deleteButton, "Delete Button");
     }
 
-    public WebElement getPrice() {
-        return price;
+    protected String getText(dataItem item) {
+        return getText(getElementFrom(item), item.getName());
     }
 
-    public WebElement getDescription() {
-        return description;
+    protected WebElement getElementFrom(dataItem item) {
+        return tableDataList.get(item.getColumnIndex());
     }
 
-    public void clickProduct() {
-        click(title, getProductName());
+    public enum dataItem {
+        PICTURE("Product Picture", 0),
+        TITLE("Product Title", 1),
+        PRICE("Product Price", 2),
+        DELETE("Product Delete", 3);
+
+        private final String name;
+        private final int columnIndex;
+
+        dataItem(String name, int lineIndex) {
+            this.name = name;
+            this.columnIndex = lineIndex;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public int getColumnIndex() {
+            return columnIndex;
+        }
     }
 }

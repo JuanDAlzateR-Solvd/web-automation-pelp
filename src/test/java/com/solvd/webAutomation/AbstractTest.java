@@ -51,28 +51,28 @@ public class AbstractTest {
         return DriverFactory.getDriver();
     }
 
-    public void clickCategory(HomePage homePage, HomePage.MenuItem category, ProductGrid productGrid) {
-        homePage.click(category);
-        homePage.waitUntilPageIsReady();
-        homePage.waitUntilVisible(productGrid.getProductGridContainer(),"product grid");
-    }
-
-    public void clickCart(TopMenu topMenu, CartPage cartPage) {
-        topMenu.click(TopMenu.MenuItem.CART);
-        cartPage.waitUntilPageIsReady();
-//        cartPage.waitVisible(cartPage.getProductGridContainer());
-    }
-
-    public void clickContact(TopMenu topMenu, ContactModal contactModal) {
-        topMenu.click(TopMenu.MenuItem.CONTACT);
-        contactModal.waitUntilPageIsReady();
-        contactModal.click(contactModal.getTitle());
-    }
-
-    public void clickLogIn(TopMenu topMenu, LogInModal logInModal) {
-        topMenu.click(TopMenu.MenuItem.LOG_IN);
-        logInModal.waitUntilPageIsReady();
-        logInModal.waitUntilVisible(logInModal.getTitle(),"LogInModal");
-    }
+//    public void clickCategory(HomePage homePage, HomePage.MenuItem category, ProductGrid productGrid) {
+//        homePage.click(category);
+//        homePage.waitUntilPageIsReady();
+//        homePage.waitUntilVisible(productGrid.getProductGridContainer(),"product grid");
+//    }
+//
+//    public void clickCart(TopMenu topMenu, CartPage cartPage) {
+//        topMenu.click(TopMenu.MenuItem.CART);
+//        cartPage.waitUntilPageIsReady();
+////        cartPage.waitVisible(cartPage.getProductGridContainer());
+//    }
+//
+//    public void clickContact(TopMenu topMenu, ContactModal contactModal) {
+//        topMenu.click(TopMenu.MenuItem.CONTACT);
+//        contactModal.waitUntilPageIsReady();
+//        contactModal.click(contactModal.getTitle());
+//    }
+//
+//    public void clickLogIn(TopMenu topMenu, LogInModal logInModal) {
+//        topMenu.click(TopMenu.MenuItem.LOG_IN);
+//        logInModal.waitUntilPageIsReady();
+//        logInModal.waitUntilVisible(logInModal.getTitle(),"LogInModal");
+//    }
 
 }

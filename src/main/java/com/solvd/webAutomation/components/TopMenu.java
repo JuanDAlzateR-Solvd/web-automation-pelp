@@ -45,26 +45,27 @@ public class TopMenu extends AbstractPage {
     @FindBy(css = "a[id='nava'] img")
     private WebElement imageIndicator;
 
+    private final Map<MenuItem, WebElement> menuButtons ;
+
+    private final Map<MenuItem, WebElement> closeButtons ;
+
     public TopMenu(WebDriver driver) {
         super(driver);
+        menuButtons = Map.of(
+                MenuItem.HOME, homeButton,
+                MenuItem.CONTACT, contactButton,
+                MenuItem.ABOUT_US, aboutUsButton,
+                MenuItem.CART, cartButton,
+                MenuItem.LOG_IN, logInButton,
+                MenuItem.SIGN_UP, signUpButton
+        );
+        closeButtons = Map.of(
+                MenuItem.CONTACT, contactCloseButton,
+                MenuItem.ABOUT_US, aboutUsCloseButton,
+                MenuItem.LOG_IN, logInCloseButton,
+                MenuItem.SIGN_UP, signUpCloseButton
+        );
     }
-
-    private final Map<MenuItem, WebElement> menuButtons = Map.of(
-            MenuItem.HOME, homeButton,
-            MenuItem.CONTACT, contactButton,
-            MenuItem.ABOUT_US, aboutUsButton,
-            MenuItem.CART, cartButton,
-            MenuItem.LOG_IN, logInButton,
-            MenuItem.SIGN_UP, signUpButton
-    );
-
-    private final Map<MenuItem, WebElement> closeButtons = Map.of(
-            MenuItem.CONTACT, contactCloseButton,
-            MenuItem.ABOUT_US, aboutUsCloseButton,
-            MenuItem.LOG_IN, logInCloseButton,
-            MenuItem.SIGN_UP, signUpCloseButton
-    );
-
 
     @Override
     protected WebElement getPageLoadedIndicator() {

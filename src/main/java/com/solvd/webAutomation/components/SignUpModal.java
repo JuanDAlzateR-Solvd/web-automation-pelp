@@ -25,19 +25,20 @@ public class SignUpModal extends AbstractPage {
     @FindBy(id = "sign-password")
     private WebElement passwordInput;
 
+    private final Map<MenuItem, WebElement> menuInputs;
+    private final Map<MenuItem, WebElement> menuButtons;
+
     public SignUpModal(WebDriver driver) {
-        super(driver);
+                super(driver);
+        menuInputs= Map.of(
+                MenuItem.USERNAME, usernameInput,
+                MenuItem.PASSWORD, passwordInput
+        );
+        menuButtons = Map.of(
+                MenuItem.CLOSE, closeButton,
+                MenuItem.SIGN_IN, signInButton
+        );
     }
-
-    private final Map<MenuItem, WebElement> menuInputs = Map.of(
-            MenuItem.USERNAME, usernameInput,
-            MenuItem.PASSWORD, passwordInput
-    );
-
-    private final Map<MenuItem, WebElement> menuButtons = Map.of(
-            MenuItem.CLOSE, closeButton,
-            MenuItem.SIGN_IN, signInButton
-    );
 
     @Override
     protected WebElement getPageLoadedIndicator() {
@@ -50,22 +51,16 @@ public class SignUpModal extends AbstractPage {
 
     public void click(MenuItem item) {
         WebElement button = menuButtons.get(item);
-        click(button, item.name);
+        click(button, item.getName());
     }
 
     public void type(MenuItem item, String text) {
         WebElement element = menuInputs.get(item);
-        type(element, item.name, text);
+        type(element, item.getName(), text);
     }
 
     public boolean isModalVisible() {
         return title.isDisplayed();
-    }
-
-    public void acceptWrongPasswordAlert() {
-        logger.info("accepting 'Wrong password' Alert");
-        Alert alert = waitService.waitForAlert();
-        alert.accept();
     }
 
     public enum MenuItem {

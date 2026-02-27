@@ -13,7 +13,7 @@ import java.util.List;
 
 public class ProductGrid extends AbstractComponent {
 
-//    @FindBy(css = "#contcont")//"#tbodyid"
+//    @FindBy(css = "#contcont")  //"#tbodyid"
 //    private WebElement productGridContainer;
 
     @FindBy(css = ".pagination #next2")
@@ -72,7 +72,7 @@ public class ProductGrid extends AbstractComponent {
         List<ProductGridItemComponent> products = getProductComponents();
         ProductGridItemComponent product = products.get(productIndex);
         logger.debug("Getting product {} from product grid", productIndex);
-        logger.info(product.getText());
+//        logger.info("product [{}] in {} grid position",product.getProductName(), productIndex);
         return product;
     }
 

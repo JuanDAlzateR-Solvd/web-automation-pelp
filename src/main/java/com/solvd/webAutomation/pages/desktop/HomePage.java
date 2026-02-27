@@ -32,15 +32,16 @@ public class HomePage extends AbstractPage {
 
     private static final By LOADER = By.cssSelector(".loader, .spinner, .loading");
 
+    private final Map<MenuItem, WebElement> menuButtons ;
+
     public HomePage(WebDriver driver) {
         super(driver);
+        menuButtons = Map.of(
+                MenuItem.PHONES, phonesButton,
+                MenuItem.LAPTOPS, laptopsButton,
+                MenuItem.MONITORS, monitorsButton
+        );
     }
-
-    private final Map<MenuItem, WebElement> menuButtons = Map.of(
-            MenuItem.PHONES, phonesButton,
-            MenuItem.LAPTOPS, laptopsButton,
-            MenuItem.MONITORS, monitorsButton
-    );
 
     @Override
     public WebElement getPageLoadedIndicator() {
@@ -48,7 +49,7 @@ public class HomePage extends AbstractPage {
     }
 
     public void click(MenuItem item) {
-        click(menuButtons.get(item), item.name);
+        click(menuButtons.get(item), item.getName());
     }
 
     public enum MenuItem {

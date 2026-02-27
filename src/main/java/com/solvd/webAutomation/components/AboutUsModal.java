@@ -18,14 +18,15 @@ public class AboutUsModal extends AbstractPage {
     @FindBy(css = "#videoModal .close")
     private WebElement exitButton;
 
+    private final Map<MenuItem, WebElement> menuButtons;
+
     public AboutUsModal(WebDriver driver) {
         super(driver);
+        menuButtons = Map.of(
+                MenuItem.CLOSE, closeButton,
+                MenuItem.EXIT, exitButton
+        );
     }
-
-    private final Map<MenuItem, WebElement> menuButtons = Map.of(
-            MenuItem.CLOSE, closeButton,
-            MenuItem.EXIT, exitButton
-    );
 
     @Override
     protected WebElement getPageLoadedIndicator() {

@@ -29,17 +29,18 @@ public class ContactModal extends AbstractPage {
     @FindBy(css = "#exampleModal button.btn.btn-secondary")
     private WebElement closeButton;
 
+    private final Map<MenuItem, WebElement> menuItems;
+
     public ContactModal(WebDriver driver) {
         super(driver);
+        menuItems = Map.of(
+                MenuItem.EMAIL, emailInput,
+                MenuItem.NAME, nameInput,
+                MenuItem.MESSAGE, messageInput,
+                MenuItem.CLOSE, closeButton,
+                MenuItem.SEND, sendButton
+        );
     }
-
-    private final Map<MenuItem, WebElement> menuItems = Map.of(
-            MenuItem.EMAIL, emailInput,
-            MenuItem.NAME, nameInput,
-            MenuItem.MESSAGE, messageInput,
-            MenuItem.CLOSE, closeButton,
-            MenuItem.SEND, sendButton
-    );
 
     @Override
     protected WebElement getPageLoadedIndicator() {

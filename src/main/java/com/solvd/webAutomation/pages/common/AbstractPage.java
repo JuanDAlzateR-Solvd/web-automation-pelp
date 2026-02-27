@@ -52,4 +52,10 @@ public abstract class AbstractPage extends AbstractUIObject {
         }
     }
 
+    public void acceptWrongPasswordAlert() {
+        logger.info("accepting 'Wrong password' Alert");
+        Alert alert = waitService.waitForAlert();
+        alert.accept();
+    }
+
 }

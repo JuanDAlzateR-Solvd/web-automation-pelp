@@ -101,8 +101,9 @@ public class CartPage extends AbstractPage {
 
     public void deleteProduct(int productIndex) {
         logger.info("Deleting product {}", getProductName(productIndex));
+        int initialCartSize = getProductCount();
         clickDeleteButton(productIndex);
-        waitCartUpdatesAfterDeleteProduct();
+        waitCartUpdatesAfterDeleteProduct(initialCartSize);
     }
 
     public String getProductName(int productIndex) {
@@ -112,13 +113,18 @@ public class CartPage extends AbstractPage {
     }
 
     private void clickDeleteButton(int productIndex) {
-        List<WebElement> deleteButtons = getDeleteButtonsList();
+        //DOM updates after delete.
+
+//        List<WebElement> deleteButtons = getDeleteButtonsList();
+//        click(deleteButtons.get(productIndex), "deleteButton" + productIndex);
+        By by = By.cssSelector("#tbodyid a[onclick*='deleteItem']");
+        List<WebElement> deleteButtons = driver.findElements(by);
         click(deleteButtons.get(productIndex), "deleteButton" + productIndex);
     }
 
-    private void waitCartUpdatesAfterDeleteProduct() {
+    private void waitCartUpdatesAfterDeleteProduct(int initialCartSize) {
         if (!isCartEmpty()) {
-            waitUntilCartDeletesProduct();
+            waitUntilCartDeletesProduct(initialCartSize);
             waitUntilVisible(tableIndicator,"Shopping cart table");
         }
     }
@@ -129,11 +135,10 @@ public class CartPage extends AbstractPage {
         waitService.waitForNumberOfElementsToBeMoreThan(by, 0);
     }
 
-    public void waitUntilCartDeletesProduct() {
+    public void waitUntilCartDeletesProduct(int initialCartSize) {
         logger.info("Waiting for the shopping cart to reload");
-        int cartSize = getCartProducts().size();
         By by = By.cssSelector("#tbodyid .success");
-        waitService.waitForNumberOfElementsToBe(by, cartSize - 1);
+        waitService.waitForNumberOfElementsToBe(by, initialCartSize - 1);
     }
 
     public boolean isCartEmpty() {
@@ -169,7 +174,7 @@ public class CartPage extends AbstractPage {
         waitService.waitForPresenceOfElementLocated(By.id("tbodyid"));
 
         List<WebElement> rows =
-                driver.findElements(By.cssSelector("#tbodyid tr"));
+                driver.findElements(By.cssSelector("#tbodyid .success"));
 
         int size = rows.size();
         logger.info("Shopping cart has {} products", size);

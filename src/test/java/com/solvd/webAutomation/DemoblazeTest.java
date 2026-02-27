@@ -98,6 +98,7 @@ public class DemoblazeTest extends AbstractTest {
                 .getTopMenu()
                 .goToCartPage();
 
+
         Assert.assertTrue(cartPage.containsProduct(productName), "Product was not added to cart");
 
         Assert.assertFalse(cartPage.getTotalPrice().isEmpty(), "Total price is empty");

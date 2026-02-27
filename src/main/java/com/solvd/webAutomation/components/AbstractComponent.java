@@ -25,7 +25,7 @@ public abstract class AbstractComponent extends AbstractUIObject {
                 System.identityHashCode(driver)
         );
 
-        waitUntilComponentIsReady();
+//        waitUntilComponentIsReady();
     }
 
     protected abstract WebElement getComponentLoadedIndicator();
@@ -44,4 +44,6 @@ public abstract class AbstractComponent extends AbstractUIObject {
 
         logger.info("The page [{}] is ready", this.getClass().getSimpleName());
     }
+
+
 }

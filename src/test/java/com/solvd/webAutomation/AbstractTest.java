@@ -50,6 +50,14 @@ public class AbstractTest {
 
     @AfterMethod(alwaysRun = true)
     public void tearDown(ITestResult result) {
+        if (ITestResult.FAILURE == result.getStatus()) {
+
+            ScreenshotUtils.takeScreenshot(
+                    DriverFactory.getDriver(),
+                    result.getName()
+            );
+        }
+
         try {
             DriverFactory.quitDriver();
         } catch (Exception e) {

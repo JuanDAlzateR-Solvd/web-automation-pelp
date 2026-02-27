@@ -34,8 +34,15 @@ public class ProductGrid extends AbstractComponent {
     }
 
     public List<ProductGridItemComponent> getProductComponents() {
-        logger.debug("Getting product components: found {} products", productElements.size());
-        return productElements.stream().map(p->new ProductGridItemComponent(driver,p)).toList();
+        List<WebElement> elements = getProductElements();
+        logger.debug("Getting product components: found {} products", elements.size());
+        return elements.stream()
+                .map(el -> new ProductGridItemComponent(driver, el))
+                .toList();
+    }
+
+    public  List<WebElement> getProductElements() {
+        return driver.findElements(By.cssSelector("#tbodyid .col-lg-4"));
     }
 
     public List<String> getProductTitles() {

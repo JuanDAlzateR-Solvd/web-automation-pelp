@@ -1,6 +1,7 @@
 package com.solvd.webAutomation.pages.common;
 
 import com.solvd.webAutomation.config.ConfigReader;
+import com.solvd.webAutomation.pages.desktop.HomePage;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.pagefactory.AjaxElementLocatorFactory;
@@ -22,7 +23,7 @@ public abstract class AbstractPage extends AbstractUIObject {
                 System.identityHashCode(driver)
         );
 
-        waitUntilPageIsReady(); // move out of constructor??
+//        waitUntilPageIsReady(); // move out of constructor??
     }
 
     protected abstract WebElement getPageLoadedIndicator();
@@ -56,6 +57,12 @@ public abstract class AbstractPage extends AbstractUIObject {
         logger.info("accepting 'Wrong password' Alert");
         Alert alert = waitService.waitForAlert();
         alert.accept();
+    }
+
+    public static HomePage openHomePage(WebDriver driver) {
+        HomePage homePage = new HomePage(driver);
+        homePage.waitUntilPageIsReady();
+        return homePage;
     }
 
 }

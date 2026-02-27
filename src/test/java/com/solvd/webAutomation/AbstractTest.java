@@ -26,16 +26,26 @@ public class AbstractTest {
 
     @BeforeMethod
     public void setUp(Method method) {
-        DriverFactory.createDriver(DriverRunMode.LOCAL, DriverType.CHROME);
+        DriverRunMode runMode = DriverRunMode.valueOf(ConfigReader.get("run_mode"));
+        DriverType driverType = DriverType.valueOf(ConfigReader.get("browser"));
+        DriverFactory.createDriver(runMode, driverType);
         WebDriver driver = DriverFactory.getDriver();
         //DriverRunMode LOCAL or REMOTE. REMOTE Requires Selenium server standalone.
         driver.manage().window().maximize();
         driver.get(ConfigReader.get("url"));
 
-        RemoteWebDriver remoteDriver = (RemoteWebDriver) DriverFactory.getDriver();
-        SessionId session = remoteDriver.getSessionId();
-        logger.info("Starting Test: " + method.getName() + "| Thread: " + Thread.currentThread().getName()
-                + " | Driver hash: " + driver.hashCode() + " | Session ID: " + session.toString());
+        String sessionId = "N/A";
+        if (driver instanceof RemoteWebDriver remoteDriver) {
+            SessionId session = remoteDriver.getSessionId();
+            sessionId = (session != null) ? session.toString() : "null";
+        }
+
+        logger.info("Starting Test: {} | Thread: {} | Driver hash: {} | Session ID: {}",
+                method.getName(),
+                Thread.currentThread().getName(),
+                driver.hashCode(),
+                sessionId
+        );
     }
 
     @AfterMethod(alwaysRun = true)

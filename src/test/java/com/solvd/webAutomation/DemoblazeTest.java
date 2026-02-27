@@ -6,6 +6,7 @@ import com.solvd.webAutomation.components.TopMenu;
 import com.solvd.webAutomation.components.*;
 
 import com.solvd.webAutomation.flows.ShoppingFlow;
+import com.solvd.webAutomation.pages.common.AbstractPage;
 import com.solvd.webAutomation.pages.desktop.CartPage;
 import com.solvd.webAutomation.pages.desktop.HomePage;
 
@@ -28,7 +29,7 @@ public class DemoblazeTest extends AbstractTest {
     @Test(testName = "Functionality of top menu modals", description = "verifies that home page loads, and top Menu modals works correctly")
     public void verifyTopMenuNavigation() {
         WebDriver driver = getDriver();
-        HomePage homePage = new HomePage(driver);
+        HomePage homePage = AbstractPage.openHomePage(driver);
 
         TopMenu topMenu = homePage.getTopMenu();
         SoftAssert sa = new SoftAssert();
@@ -39,15 +40,20 @@ public class DemoblazeTest extends AbstractTest {
         contactModal.close();
 
         //other modals
+        logger.info("Testing Menu item: [About Us Modal]");
+        AboutUsModal aboutUsModal = topMenu.openAboutUsModal();
+        sa.assertTrue(aboutUsModal.isModalVisible(), "About Us Modal should be visible");
+        aboutUsModal.close();
+
         sa.assertAll();
     }
 
     @Test(testName = "List of Products - Task1", description = "filters the products by category, then prints in console all the products")
     public void verifyProductsDisplayedForSelectedCategory() {
         WebDriver driver = getDriver();
-        HomePage homePage = new HomePage(driver);
+        HomePage homePage = AbstractPage.openHomePage(driver);
 
-        ProductGrid productGrid = homePage.selectCategory(HomePage.MenuItem.LAPTOPS);
+        ProductGrid productGrid = homePage.selectCategory(HomePage.Category.LAPTOPS);
 
         List<String> productsList = productGrid.getProductTitles();
         productsList.forEach(logger::info);
@@ -58,10 +64,10 @@ public class DemoblazeTest extends AbstractTest {
     @Test(testName = "Product Search by Category - Task3 TC-001",
             description = "filters the products by a category, then verifies info from the last product of last page",
             dataProvider = "Category MenuItem Provider")
-    public void verifyInfoOfLastProductOfACategory(HomePage.MenuItem category) {
+    public void verifyLastProductInfoForCategory(HomePage.Category category) {
         WebDriver driver = getDriver();
 
-        HomePage homePage = new HomePage(driver);
+        HomePage homePage = AbstractPage.openHomePage(driver);
 
         ProductGrid productGrid = homePage.selectCategory(category);
 
@@ -70,20 +76,17 @@ public class DemoblazeTest extends AbstractTest {
         ProductPage productPage = productGrid
                 .openProductByIndex(productIndex);
 
-        SoftAssert sa = new SoftAssert();
+        Assert.assertTrue(productPage.isInfoVisible(), "Product Page should have all info visible");
 
-        sa.assertTrue(productPage.isInfoVisible(), "Product Page should have all info visible");
-
-        sa.assertAll();
     }
 
     @Test(testName = "Add Product to Cart - Task3 TC-002",
             description = "choose the first product from a category and add it to cart, then verifies info in shopping cart",
             dataProvider = "Category MenuItem Provider")
-    public void verifyAddFirstProductOfCategoryToCart(HomePage.MenuItem category) {
+    public void verifyAddFirstProductToCart(HomePage.Category category) {
         WebDriver driver = getDriver();
 
-        HomePage homePage = new HomePage(driver);
+        HomePage homePage = AbstractPage.openHomePage(driver);
 
         ProductGrid productGrid = homePage.selectCategory(category);
 
@@ -95,23 +98,18 @@ public class DemoblazeTest extends AbstractTest {
                 .getTopMenu()
                 .goToCartPage();
 
-        SoftAssert sa = new SoftAssert();
+        Assert.assertTrue(cartPage.containsProduct(productName), "Product was not added to cart");
 
-        sa.assertTrue(cartPage.containsProduct(productName),
-                "Product was not added to cart");
+        Assert.assertFalse(cartPage.getTotalPrice().isEmpty(), "Total price is empty");
 
-        sa.assertFalse(cartPage.getTotalPrice().isEmpty(), "Total price is empty");
-
-        sa.assertAll();
     }
 
     @Test(testName = "Delete Product from Cart - Task3 TC-003",
             description = "choose the first product from a category and add it to cart, then delete it, verifies info in shopping cart",
             dataProvider = "Category MenuItem Provider")
-    public void verifyDeleteProductOfCategoryFromCart(HomePage.MenuItem category) {
+    public void verifyDeleteProductFromCart(HomePage.Category category) {
         WebDriver driver = getDriver();
-        HomePage homePage = new HomePage(driver);
-
+        HomePage homePage = AbstractPage.openHomePage(driver);
         SoftAssert sa = new SoftAssert();
 
         ProductGrid productGrid = homePage.selectCategory(category);
@@ -145,7 +143,7 @@ public class DemoblazeTest extends AbstractTest {
     public void verifyAllDeleteButtonsToEmptyShoppingCart() {
         WebDriver driver = getDriver();
 
-        HomePage homePage = new HomePage(driver);
+        HomePage homePage = AbstractPage.openHomePage(driver);
         ShoppingFlow shoppingFlow = new ShoppingFlow(driver);
 
         List<String> productNames = shoppingFlow.addRandomProductsToCart(5);
@@ -171,10 +169,10 @@ public class DemoblazeTest extends AbstractTest {
 
     @Test(testName = "Fill Contact Form - Task3 TC-005",
             description = "click on contact, then fills the form and sends it")
-    public void verifyFillInfoInContactFormAndSend2() {
+    public void verifyFillInfoInContactFormAndSend() {
         WebDriver driver = getDriver();
 
-        HomePage homePage = new HomePage(driver);
+        HomePage homePage = AbstractPage.openHomePage(driver);
 
         ContactModal contactModal = homePage.getTopMenu().openContactModal();
         SoftAssert sa = new SoftAssert();
@@ -185,7 +183,7 @@ public class DemoblazeTest extends AbstractTest {
                 "Example Name",
                 "This is a test message");
 
-        sa.assertTrue(contactModal.isAlertPresent());
+        sa.assertTrue(contactModal.isAlertPresent(), "Alert should be present after submitting form");
         contactModal.acceptMessageAlert();
 
         sa.assertAll();
@@ -196,15 +194,14 @@ public class DemoblazeTest extends AbstractTest {
     public void verifyLogInAttemptWithWrongCredentials() {
         WebDriver driver = getDriver();
 
-        HomePage homePage = new HomePage(driver);
-
+        HomePage homePage = AbstractPage.openHomePage(driver);
         LogInModal logInModal = homePage.getTopMenu().openLogInModal();
 
         SoftAssert sa = new SoftAssert();
         sa.assertTrue(logInModal.isModalVisible(), "Log In modal is not visible");
 
         logInModal.logInWith("example@email.com", "Example Password");
-        sa.assertTrue(logInModal.isAlertPresent());
+        sa.assertTrue(logInModal.isAlertPresent(), "Alert should be present after submitting form");
         logInModal.acceptWrongPasswordAlert();
 
         sa.assertAll();
@@ -215,8 +212,7 @@ public class DemoblazeTest extends AbstractTest {
     public void verifyFooterVisibilityAndInfo() {
         WebDriver driver = getDriver();
 
-        HomePage homePage = new HomePage(driver);
-
+        HomePage homePage = AbstractPage.openHomePage(driver);
         Footer footer = homePage.getFooter();
 
         SoftAssert sa = new SoftAssert();
@@ -233,14 +229,14 @@ public class DemoblazeTest extends AbstractTest {
 
     //Data Providers
     @DataProvider(name = "Category MenuItem Provider")
-    public Object[][] HomePageMenuItem() {
-        return Arrays.stream(HomePage.MenuItem.values())
+    public Object[][] homePageMenuItem() {
+        return Arrays.stream(HomePage.Category.values())
                 .map(type -> new Object[]{type})
                 .toArray(Object[][]::new);
     }
 
     @DataProvider(name = "TopMenu Modal MenuItem Provider")
-    public Object[][] ModalMenuItem() {
+    public Object[][] modalMenuItem() {
         return new Object[][]{
                 {TopMenu.MenuItem.CONTACT},
                 {TopMenu.MenuItem.ABOUT_US},

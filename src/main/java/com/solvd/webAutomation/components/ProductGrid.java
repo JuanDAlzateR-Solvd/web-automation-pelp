@@ -1,6 +1,5 @@
 package com.solvd.webAutomation.components;
 
-import com.solvd.webAutomation.pages.common.AbstractPage;
 import com.solvd.webAutomation.pages.desktop.HomePage;
 import com.solvd.webAutomation.pages.desktop.ProductPage;
 import org.openqa.selenium.By;
@@ -8,7 +7,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ProductGrid extends AbstractComponent {
@@ -57,8 +55,8 @@ public class ProductGrid extends AbstractComponent {
         click(nextButton, "Next Button");
     }
 
-    public void clickNextButtonIfPossible(HomePage.MenuItem category) {
-        if (isNextButtonClickable() && category != HomePage.MenuItem.MONITORS) {
+    public void clickNextButtonIfPossible(HomePage.Category category) {
+        if (isNextButtonClickable() && category != HomePage.Category.MONITORS) {
             //demoblaze.com has a bug, when click on category monitors it shows the next button, even thought it shouldn't.
             clickNextButton();
         }

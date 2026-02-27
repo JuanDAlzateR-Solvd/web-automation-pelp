@@ -49,8 +49,10 @@ public class CartPage extends AbstractPage {
     }
 
     public String getTextOf(WebElement product) {
+        logger.debug("Getting text of product [{}]",product.getAccessibleName());
         String productName = getText(product).split("\n")[0];
-        return getText(product, productName);
+        logger.debug("Got text of product [{}] with name [{}]",product.getAccessibleName(),productName);
+        return productName;
     }
 
     public String getTotalPrice() {
@@ -70,7 +72,7 @@ public class CartPage extends AbstractPage {
      * Returns the index of the first cart product whose visible text contains
      * the given product name.
      *
-     * <p>The search performs a match using {@code String.equalsIgnoreCase()}.
+     * <p>The search performs a match using {@code String.contains()}.
      *
      * @param cartProducts list of product elements displayed in the cart
      * @param productName  text to match against each product's visible name
@@ -78,17 +80,16 @@ public class CartPage extends AbstractPage {
      * or -1 if no match is found
      */
     public int findProductIndexInCart(List<WebElement> cartProducts, String productName) {
-        int index = IntStream.range(0, cartProducts.size())
-                .filter(i -> cartProducts.get(i).getText().contains(productName))
-                .findFirst()
-                .orElse(-1);
-
-        if (index >= 0) {
-            logger.info("Product '{}' found in cart at index {}", productName, index);
-        } else {
-            logger.info("Product '{}' not found in cart", productName);
+        for (int i = 0; i < cartProducts.size(); i++) {
+            WebElement product = cartProducts.get(i);
+            String rowText = getTextOf(product);
+            if (rowText.contains(productName)) {
+                logger.info("Product '{}' found in cart at index {}", productName, i);
+                return i;
+            }
         }
-        return index;
+        logger.info("Product '{}' not found in cart", productName);
+        return -1;
     }
 
     public void printProductsInCart() {

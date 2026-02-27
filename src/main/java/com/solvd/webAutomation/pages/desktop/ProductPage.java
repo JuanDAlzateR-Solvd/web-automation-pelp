@@ -45,11 +45,6 @@ public class ProductPage extends AbstractPage {
         };
     }
 
-    public void clickAddToCartButton2() {//It doesn't work
-        By by = By.cssSelector("a.btn.btn-success.btn-lg");
-        click(by, "Add To Cart Button");
-    }
-
     public void clickAddToCartButton() {
         click(addToCartButton, "Add To Cart Button");
     }
@@ -100,12 +95,12 @@ public class ProductPage extends AbstractPage {
     }
 
     public boolean isInfoVisible() {
-        final boolean[] visible = {true};
-        Arrays.stream(ProductPage.InfoItem.values()).sequential()
-                .forEach(info -> {
-                    visible[0] = visible[0] && isVisible(info);
-                });
-        return visible[0];
+        for (InfoItem item : InfoItem.values()) {
+            if (!isVisible(item)) {
+                return false;
+            }
+        }
+        return true;
     }
 
 }

@@ -14,10 +14,14 @@ public class ConfigReader {
                              .getClassLoader()
                              .getResourceAsStream("_config.properties")) {
 
+            if (input == null) {
+                throw new IllegalStateException("Config file _config.properties not found on classpath");
+            }
+
             properties.load(input);
 
         } catch (IOException e) {
-            throw new RuntimeException("Failed to load config file");
+            throw new RuntimeException("Failed to load config file _config.properties", e);
         }
     }
 

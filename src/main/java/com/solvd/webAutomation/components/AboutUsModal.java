@@ -61,4 +61,8 @@ public class AboutUsModal extends AbstractPage {
         }
     }
 
+    public void close() {
+        click(AboutUsModal.MenuItem.CLOSE);
+    }
+
 }

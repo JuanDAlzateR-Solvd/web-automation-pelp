@@ -139,33 +139,44 @@ public class TopMenu extends AbstractPage {
     public CartPage goToCartPage() {
         click(MenuItem.CART);
         CartPage cartPage = new CartPage(driver);
+        cartPage.waitUntilPageIsReady();//just added
         cartPage.waitUntilCartLoadsProducts();
         return cartPage;
     }
 
     public HomePage goToHomePage() {
         click(MenuItem.HOME);
-        return new HomePage(driver);
+        HomePage homePage = new HomePage(driver);
+        homePage.waitUntilPageIsReady();
+        return homePage;
     }
 
     public AboutUsModal openAboutUsModal() {
         click(MenuItem.ABOUT_US);
-        return new AboutUsModal(driver);
+        AboutUsModal aboutUsModal = new AboutUsModal(driver);
+        aboutUsModal.waitUntilPageIsReady();
+        return aboutUsModal;
     }
 
     public SignUpModal openSignUpModal() {
         click(MenuItem.SIGN_UP);
-        return new SignUpModal(driver);
+        SignUpModal signUpModal = new SignUpModal(driver);
+        signUpModal.waitUntilPageIsReady();
+        return signUpModal;
     }
 
     public ContactModal openContactModal() {
         click(MenuItem.CONTACT);
-        return new ContactModal(driver);
+        ContactModal contactModal = new ContactModal(driver);
+        contactModal.waitUntilPageIsReady();
+        return contactModal;
     }
 
     public LogInModal openLogInModal() {
         click(MenuItem.LOG_IN);
-        return new LogInModal(driver);
+        LogInModal logInModal = new LogInModal(driver);
+        logInModal.waitUntilPageIsReady();
+        return logInModal;
     }
 
 }

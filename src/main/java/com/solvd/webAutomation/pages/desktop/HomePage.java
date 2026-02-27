@@ -32,14 +32,14 @@ public class HomePage extends AbstractPage {
 
     private static final By LOADER = By.cssSelector(".loader, .spinner, .loading");
 
-    private final Map<MenuItem, WebElement> menuButtons ;
+    private final Map<Category, WebElement> menuButtons ;
 
     public HomePage(WebDriver driver) {
         super(driver);
         menuButtons = Map.of(
-                MenuItem.PHONES, phonesButton,
-                MenuItem.LAPTOPS, laptopsButton,
-                MenuItem.MONITORS, monitorsButton
+                Category.PHONES, phonesButton,
+                Category.LAPTOPS, laptopsButton,
+                Category.MONITORS, monitorsButton
         );
     }
 
@@ -48,18 +48,18 @@ public class HomePage extends AbstractPage {
         return imageIndicator.get(0);
     }
 
-    public void click(MenuItem item) {
+    public void click(Category item) {
         click(menuButtons.get(item), item.getName());
     }
 
-    public enum MenuItem {
+    public enum Category {
         PHONES("Category Phones"),
         LAPTOPS("Category Laptops"),
         MONITORS("Category Monitors");
 
         private final String name;
 
-        MenuItem(String name) {
+        Category(String name) {
             this.name = name;
         }
 
@@ -82,7 +82,7 @@ public class HomePage extends AbstractPage {
         return new Footer(driver);
     }
 
-    public ProductGrid selectCategory(MenuItem item) {
+    public ProductGrid selectCategory(Category item) {
         click(item);
         return new ProductGrid(driver,productGridContainer);
     }

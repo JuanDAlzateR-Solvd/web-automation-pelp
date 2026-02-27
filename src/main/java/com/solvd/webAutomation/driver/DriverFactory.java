@@ -32,6 +32,13 @@ public class DriverFactory {
     private static WebDriver createLocalDriver(DriverType driverType) {
         switch (driverType) {
             case CHROME:
+                ChromeOptions options = new ChromeOptions();
+
+                if (Boolean.parseBoolean(ConfigReader.get("headless"))) {
+                    options.addArguments("--headless=new");
+                }
+                options.addArguments("--start-maximized");
+
                 return new ChromeDriver();
 
             default:

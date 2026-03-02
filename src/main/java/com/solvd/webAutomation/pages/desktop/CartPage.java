@@ -1,7 +1,6 @@
 package com.solvd.webAutomation.pages.desktop;
 
 import com.solvd.webAutomation.components.CartItemComponent;
-import com.solvd.webAutomation.components.ProductGridItemComponent;
 import com.solvd.webAutomation.components.TopMenu;
 import com.solvd.webAutomation.pages.common.AbstractPage;
 import org.openqa.selenium.By;
@@ -10,7 +9,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
-import java.util.stream.IntStream;
 
 public class CartPage extends AbstractPage {
 
@@ -60,6 +58,7 @@ public class CartPage extends AbstractPage {
     }
 
     public void deleteProduct(String productName) {
+        //DOM updates after delete.
         waitUntilPageIsReady();
         waitUntilCartLoadsProducts();
 
@@ -87,16 +86,6 @@ public class CartPage extends AbstractPage {
         });
         logger.info("Finished printing products in cart.");
     }
-
-//    private void clickDeleteButton(int productIndex) {
-//        //DOM updates after delete.
-//
-////        List<WebElement> deleteButtons = getDeleteButtonsList();
-////        click(deleteButtons.get(productIndex), "deleteButton" + productIndex);
-//        By by = By.cssSelector("#tbodyid a[onclick*='deleteItem']");
-//        List<WebElement> deleteButtons = driver.findElements(by);
-//        click(deleteButtons.get(productIndex), "deleteButton" + productIndex);
-//    }
 
     private void waitCartUpdatesAfterDeleteProduct(int initialCartSize) {
         if (!isCartEmpty()) {
@@ -168,7 +157,8 @@ public class CartPage extends AbstractPage {
     public void emptyShoppingCart() {
         while (!isCartEmpty()) {
             logger.info("DELETE Deleting {} products from cart",getProductCount());
-            getCartItemComponents().get(0).deleteProduct();
+            String productName=getCartItemComponents().get(0).getTitle();
+            deleteProduct(productName);
         }
     }
 

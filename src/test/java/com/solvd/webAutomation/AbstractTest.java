@@ -10,6 +10,7 @@ import com.solvd.webAutomation.driver.DriverRunMode;
 import com.solvd.webAutomation.driver.DriverType;
 import com.solvd.webAutomation.pages.desktop.CartPage;
 import com.solvd.webAutomation.pages.desktop.HomePage;
+import com.solvd.webAutomation.utils.ScreenshotUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.SessionId;

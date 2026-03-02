@@ -98,6 +98,7 @@ public class DemoblazeTest extends AbstractTest {
                 .getTopMenu()
                 .goToCartPage();
 
+        cartPage.waitUntilCartShowsProducts();
 
         Assert.assertTrue(cartPage.containsProduct(productName), "Product was not added to cart");
 
@@ -122,6 +123,8 @@ public class DemoblazeTest extends AbstractTest {
                 .addToCart()
                 .getTopMenu()
                 .goToCartPage();
+
+        cartPage.waitUntilCartShowsProducts();
 
         sa.assertTrue(cartPage.containsProduct(productName),
                 "Product was not added to cart");

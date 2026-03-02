@@ -11,7 +11,7 @@ public class CartItemComponent extends AbstractComponent {
     @FindBy(css = "a[onclick*='deleteItem']")
     private WebElement deleteButton;
 
-    @FindBy(css = ".card-text")
+    @FindBy(css = "td") // ".card-text"
     private List<WebElement> tableDataList;
 
     @FindBy(css = "img")

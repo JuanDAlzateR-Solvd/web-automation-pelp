@@ -7,28 +7,27 @@ import org.openqa.selenium.support.FindBy;
 
 import java.util.Map;
 
-public class LogInModal extends AbstractPage {
+public class SignUpModal extends AbstractPage {
 
-    @FindBy(id = "logInModalLabel")
+    @FindBy(id = "signInModalLabel")
     private WebElement title;
 
-    @FindBy(css = "#logInModal button.btn.btn-primary")
-    private WebElement logInButton;
+    @FindBy(css = "#signInModal button.btn.btn-primary")
+    private WebElement signInButton;
 
-    @FindBy(css = "#logInModal button.btn.btn-secondary")
+    @FindBy(css = "#signInModal button.btn.btn-secondary")
     private WebElement closeButton;
 
-    @FindBy(id = "loginusername")
+    @FindBy(id = "sign-username")
     private WebElement usernameInput;
 
-    @FindBy(id = "loginpassword")
+    @FindBy(id = "sign-password")
     private WebElement passwordInput;
 
     private final Map<MenuItem, WebElement> menuInputs;
-
     private final Map<MenuItem, WebElement> menuButtons;
 
-    public LogInModal(WebDriver driver) {
+    public SignUpModal(WebDriver driver) {
         super(driver);
         menuInputs = Map.of(
                 MenuItem.USERNAME, usernameInput,
@@ -36,7 +35,7 @@ public class LogInModal extends AbstractPage {
         );
         menuButtons = Map.of(
                 MenuItem.CLOSE, closeButton,
-                MenuItem.LOG_IN, logInButton
+                MenuItem.SIGN_IN, signInButton
         );
     }
 
@@ -63,20 +62,11 @@ public class LogInModal extends AbstractPage {
         return title.isDisplayed();
     }
 
-    public LogInModal logInWith(
-            String username,
-            String password) {
-        type(MenuItem.USERNAME, username);
-        type(MenuItem.PASSWORD, password);
-        click(MenuItem.LOG_IN);
-        return this;
-    }
-
     public enum MenuItem {
         USERNAME("Input Username"),
         PASSWORD("Input Password"),
         CLOSE("Close Button"),
-        LOG_IN("Log In Button");
+        SIGN_IN("Sign In Button");
 
         private final String name;
 

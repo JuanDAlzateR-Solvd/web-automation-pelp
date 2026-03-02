@@ -5,10 +5,6 @@ import com.solvd.webAutomation.driver.DriverFactory;
 import com.solvd.webAutomation.driver.DriverRunMode;
 import com.solvd.webAutomation.driver.DriverType;
 import com.solvd.webAutomation.utils.ScreenshotUtils;
-import com.solvd.webAutomation.pages.desktop.CartPage;
-import com.solvd.webAutomation.pages.desktop.HomePage;
-
-import com.solvd.webAutomation.utils.ScreenshotUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.SessionId;
@@ -17,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 
 
@@ -27,9 +24,9 @@ public class AbstractTest {
 
     @Parameters("browser")
     @BeforeMethod
-    public void setUp(Method method) {
+    public void setUp(Method method, @Optional("FIREFOX") String browser) {
         DriverRunMode runMode = DriverRunMode.valueOf(ConfigReader.get("run_mode"));
-        DriverType driverType = DriverType.valueOf(ConfigReader.get("browser"));
+        DriverType driverType = DriverType.valueOf(browser);
         DriverFactory.createDriver(runMode, driverType);
         WebDriver driver = DriverFactory.getDriver();
         //DriverRunMode LOCAL or REMOTE. REMOTE Requires Selenium server standalone.

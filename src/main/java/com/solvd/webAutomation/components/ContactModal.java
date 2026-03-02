@@ -82,6 +82,7 @@ public class ContactModal extends AbstractPage {
 
     public void close() {
         click(MenuItem.CLOSE);
+        waitService.waitForInvisibility(closeButton, "Close Button");
     }
 
     public enum MenuItem {

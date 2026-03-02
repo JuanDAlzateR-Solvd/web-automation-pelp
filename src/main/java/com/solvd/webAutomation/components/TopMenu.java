@@ -30,40 +30,42 @@ public class TopMenu extends AbstractPage {
     @FindBy(css = "a.nav-link#signin2")
     private WebElement signUpButton;
 
-    @FindBy(css = "div[id='exampleModal'] button[class='close']")
+    @FindBy(css = "#exampleModal .close")
     private WebElement contactCloseButton;
 
-    @FindBy(css = "div[id='videoModal'] button[class='close']")
+    @FindBy(css = "#videoModal .close")
     private WebElement aboutUsCloseButton;
 
-    @FindBy(css = "div[id='logInModal'] button[class='close']")
+    @FindBy(css = "#logInModal .close")
     private WebElement logInCloseButton;
 
-    @FindBy(css = "div[id='signInModal'] button[class='close']")
+    @FindBy(css = "#signInModal .close")
     private WebElement signUpCloseButton;
 
     @FindBy(css = "a[id='nava'] img")
     private WebElement imageIndicator;
 
+    private final Map<MenuItem, WebElement> menuButtons;
+
+    private final Map<MenuItem, WebElement> closeButtons;
+
     public TopMenu(WebDriver driver) {
         super(driver);
+        menuButtons = Map.of(
+                MenuItem.HOME, homeButton,
+                MenuItem.CONTACT, contactButton,
+                MenuItem.ABOUT_US, aboutUsButton,
+                MenuItem.CART, cartButton,
+                MenuItem.LOG_IN, logInButton,
+                MenuItem.SIGN_UP, signUpButton
+        );
+        closeButtons = Map.of(
+                MenuItem.CONTACT, contactCloseButton,
+                MenuItem.ABOUT_US, aboutUsCloseButton,
+                MenuItem.LOG_IN, logInCloseButton,
+                MenuItem.SIGN_UP, signUpCloseButton
+        );
     }
-
-    private final Map<MenuItem, WebElement> menuButtons = Map.of(
-            MenuItem.HOME, homeButton,
-            MenuItem.CONTACT, contactButton,
-            MenuItem.ABOUT_US, aboutUsButton,
-            MenuItem.CART, cartButton,
-            MenuItem.LOG_IN, logInButton,
-            MenuItem.SIGN_UP, signUpButton
-    );
-
-    private final Map<MenuItem, WebElement> closeButtons = Map.of(
-            MenuItem.CONTACT, contactCloseButton,
-            MenuItem.ABOUT_US, aboutUsCloseButton,
-            MenuItem.LOG_IN, logInCloseButton,
-            MenuItem.SIGN_UP, signUpCloseButton
-    );
 
     @Override
     protected WebElement getPageLoadedIndicator() {
@@ -83,13 +85,13 @@ public class TopMenu extends AbstractPage {
 
     public boolean isVisible(MenuItem item) {
         boolean result = false;
-        try {
-            result = isModalVisible(item);
-        } catch (IllegalArgumentException e) {
-            try {
-                result = isPageOpened(item);
-            } catch (IllegalArgumentException e2) {
-                logger.error("Menu item has no modal and does not represent a page: " + item.getName());
+
+        if (closeButtons.containsKey(item)) {
+            result = isVisible(closeButtons.get(item));
+        } else {
+            switch (item) {
+                case HOME -> result = driver.getCurrentUrl().contains("index.html");
+                case CART -> result = driver.getCurrentUrl().contains("cart.html");
             }
         }
         return result;
@@ -129,6 +131,52 @@ public class TopMenu extends AbstractPage {
         public String getName() {
             return name;
         }
+    }
+
+
+    //Test flow methods
+
+    public CartPage goToCartPage() {
+        click(MenuItem.CART);
+        CartPage cartPage = new CartPage(driver);
+        cartPage.waitUntilPageIsReady();//just added
+        cartPage.waitUntilCartLoadsProducts();
+        return cartPage;
+    }
+
+    public HomePage goToHomePage() {
+        click(MenuItem.HOME);
+        HomePage homePage = new HomePage(driver);
+        homePage.waitUntilPageIsReady();
+        return homePage;
+    }
+
+    public AboutUsModal openAboutUsModal() {
+        click(MenuItem.ABOUT_US);
+        AboutUsModal aboutUsModal = new AboutUsModal(driver);
+        aboutUsModal.waitUntilPageIsReady();
+        return aboutUsModal;
+    }
+
+    public SignUpModal openSignUpModal() {
+        click(MenuItem.SIGN_UP);
+        SignUpModal signUpModal = new SignUpModal(driver);
+        signUpModal.waitUntilPageIsReady();
+        return signUpModal;
+    }
+
+    public ContactModal openContactModal() {
+        click(MenuItem.CONTACT);
+        ContactModal contactModal = new ContactModal(driver);
+        contactModal.waitUntilPageIsReady();
+        return contactModal;
+    }
+
+    public LogInModal openLogInModal() {
+        click(MenuItem.LOG_IN);
+        LogInModal logInModal = new LogInModal(driver);
+        logInModal.waitUntilPageIsReady();
+        return logInModal;
     }
 
 }

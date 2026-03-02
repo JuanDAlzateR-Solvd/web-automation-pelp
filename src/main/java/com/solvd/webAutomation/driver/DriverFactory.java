@@ -32,7 +32,14 @@ public class DriverFactory {
     private static WebDriver createLocalDriver(DriverType driverType) {
         switch (driverType) {
             case CHROME:
-                return new ChromeDriver();
+                ChromeOptions options = new ChromeOptions();
+
+                if (Boolean.parseBoolean(ConfigReader.get("headless"))) {
+                    options.addArguments("--headless=new");
+                }
+                options.addArguments("--start-maximized");
+
+                return new ChromeDriver(options);
 
             default:
                 throw new IllegalArgumentException("Unsupported driver type: " + driverType);

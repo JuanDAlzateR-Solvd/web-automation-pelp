@@ -1,14 +1,14 @@
 package com.solvd.webAutomation.pages.desktop;
 
+import com.solvd.webAutomation.components.CartItemComponent;
+import com.solvd.webAutomation.components.TopMenu;
 import com.solvd.webAutomation.pages.common.AbstractPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.util.List;
-import java.util.stream.IntStream;
 
 public class CartPage extends AbstractPage {
 
@@ -19,10 +19,7 @@ public class CartPage extends AbstractPage {
     private WebElement totalPrice;
 
     @FindBy(css = "#tbodyid .success")
-    private List<WebElement> productElements;
-
-    @FindBy(css = "#tbodyid a[onclick*='deleteItem']")
-    private List<WebElement> deleteButtonsList;
+    private List<WebElement> tableRows;
 
     @FindBy(css = ".table-responsive")
     private WebElement tableIndicator;
@@ -40,85 +37,83 @@ public class CartPage extends AbstractPage {
         return tableIndicator;
     }
 
-    public List<WebElement> getProductElements() {
-        return productElements;
+    public List<CartItemComponent> getCartItemComponents() {
+        waitUntilPageIsReady();
+        waitService.waitForPresenceOfElementLocated(By.id("tbodyid"));
+
+        By by = By.cssSelector("#tbodyid .success");
+        List<WebElement> elements = driver.findElements(by);
+        logger.debug("Getting cart item components: found {} products", elements.size());
+        return elements.stream()
+                .map(el -> new CartItemComponent(driver, el))
+                .toList();
     }
 
-    public List<WebElement> getDeleteButtonsList() {
-        return deleteButtonsList;
+    public CartItemComponent getCartItemComponentByName(String productName) {
+        List<CartItemComponent> cartItems = getCartItemComponents();
+        return cartItems.stream()
+                .filter(ci -> ci.getTitle().equalsIgnoreCase(productName))
+                .findFirst()
+                .orElse(null);
     }
 
-    public String getTextOf(WebElement product) {
-        String productName = getText(product).split("\n")[0];
-        return getText(product, productName);
+    public void deleteProduct(String productName) {
+        //DOM updates after delete.
+        waitUntilPageIsReady();
+        waitUntilCartLoadsProducts();
+
+        logger.info("Trying to delete Product [{}] in cart", productName);
+        CartItemComponent cartItem = getCartItemComponentByName(productName);
+        if (cartItem == null) {
+            logger.warn("Product [{}] not found in cart", productName);
+            return;
+        }
+        cartItem.waitUntilComponentIsReady();
+        int initialCartSize = getProductCount();
+        cartItem.deleteProduct();
+        waitCartUpdatesAfterDeleteProduct(initialCartSize);
     }
 
     public String getTotalPrice() {
         return getText(totalPrice, "totalPrice");
     }
 
-    public List<WebElement> getCartProducts() {
-        List<WebElement> cartProducts = getProductElements();
-        logger.info("products in cart:{}", cartProducts.size());
-        cartProducts.forEach(p -> {
+    public void printProductsInCart() {
+        List<CartItemComponent> cartItems = getCartItemComponents();
+        logger.info("Printing products in cart:");
+        cartItems.forEach(p -> {
             logger.info(p.getText());
         });
-        return cartProducts;
+        logger.info("Finished printing products in cart.");
     }
 
-    /**
-     * Returns the index of the first cart product whose visible text contains
-     * the given product name.
-     *
-     * <p>The search performs a match using {@code String.equalsIgnoreCase()}.
-     *
-     * @param cartProducts list of product elements displayed in the cart
-     * @param productName  text to match against each product's visible name
-     * @return zero-based index of the first matching product,
-     * or -1 if no match is found
-     */
-    public int findProductIndexInCart(List<WebElement> cartProducts, String productName) {
-        int index = IntStream.range(0, cartProducts.size())
-                .filter(i -> cartProducts.get(i).getText().equalsIgnoreCase(productName))
-                .findFirst()
-                .orElse(-1);
-
-        if (index >= 0) {
-            logger.info("Product '{}' found in cart at index {}", productName, index);
-        } else {
-            logger.info("Product '{}' not found in cart", productName);
-        }
-        return index;
-    }
-
-    public void deleteProduct(int productIndex) {
-        List<WebElement> products = getProductElements();
-        List<WebElement> deleteButtons = getDeleteButtonsList();
-        WebElement productToDelete = products.get(productIndex);
-        String productName = getTextOf(productToDelete);
-        logger.info("Deleting product {}", productName);
-        click(deleteButtons.get(productIndex), "deleteButton" + productIndex);
-
+    private void waitCartUpdatesAfterDeleteProduct(int initialCartSize) {
         if (!isCartEmpty()) {
-            waitUntilCartDeletesProduct();
-            waitUntilVisible(tableIndicator);
+            waitUntilCartDeletesProduct(initialCartSize);
+            waitUntilVisible(tableIndicator, "Shopping cart table");
         }
     }
 
-    public void waitUntilCartDeletesProduct() {
-        logger.info("Waiting for the shopping cart to reload");
-        int cartSize = getCartProducts().size();
+    public void waitUntilCartShowsProducts() {
+        logger.info("Waiting for the shopping cart to show products");
         By by = By.cssSelector("#tbodyid .success");
-        wait.until(ExpectedConditions.numberOfElementsToBe(by, cartSize - 1));
+        waitService.waitForNumberOfElementsToBeMoreThan(by, 0);
+    }
+
+    public void waitUntilCartDeletesProduct(int initialCartSize) {
+        logger.info("Waiting for the shopping cart to reload");
+        By by = By.cssSelector("#tbodyid .success");
+        waitService.waitForNumberOfElementsToBe(by, initialCartSize - 1);
     }
 
     public boolean isCartEmpty() {
+        waitUntilPageIsReady();
 
         logger.info("Checking if shopping cart is empty");
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.id("tbodyid")));
+        waitService.waitForPresenceOfElementLocated(By.id("tbodyid"));
 
         List<WebElement> rows =
-                driver.findElements(By.cssSelector("#tbodyid tr"));
+                driver.findElements(By.cssSelector("#tbodyid .success"));
 
         if (rows.size() == 0) {
             logger.info("Shopping cart is empty");
@@ -126,6 +121,45 @@ public class CartPage extends AbstractPage {
             logger.info("Shopping cart is not empty");
         }
         return rows.size() == 0;
+    }
+
+    //Test flow methods
+
+    public TopMenu getTopMenu() {
+        return new TopMenu(driver);
+    }
+
+    public boolean containsProduct(String productName) {
+        CartItemComponent cartItem = getCartItemComponentByName(productName);
+        return cartItem != null;
+    }
+
+    public int getProductCount() {
+        logger.info("Checking number of products in shopping cart");
+        waitService.waitForPresenceOfElementLocated(By.id("tbodyid"));
+
+        List<WebElement> rows =
+                driver.findElements(By.cssSelector("#tbodyid .success"));
+
+        int size = rows.size();
+        logger.info("Shopping cart has {} products", size);
+
+        return size;
+    }
+
+    public void waitUntilCartLoadsProducts() {
+        if (!isCartEmpty()) {
+            waitUntilCartShowsProducts();
+            waitUntilVisible(tableIndicator, "Shopping cart table");
+        }
+    }
+
+    public void emptyShoppingCart() {
+        while (!isCartEmpty()) {
+            logger.info("DELETE Deleting {} products from cart", getProductCount());
+            String productName = getCartItemComponents().get(0).getTitle();
+            deleteProduct(productName);
+        }
     }
 
 }

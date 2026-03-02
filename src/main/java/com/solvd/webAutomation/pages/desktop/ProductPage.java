@@ -5,8 +5,6 @@ import com.solvd.webAutomation.pages.common.AbstractPage;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 
-import java.util.Arrays;
-
 public class ProductPage extends AbstractPage {
 
     @FindBy(css = ".item.active")

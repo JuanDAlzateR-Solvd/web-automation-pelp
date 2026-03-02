@@ -1,15 +1,9 @@
 package com.solvd.webAutomation;
 
-import com.solvd.webAutomation.components.ContactModal;
-import com.solvd.webAutomation.components.LogInModal;
-import com.solvd.webAutomation.components.ProductGrid;
-import com.solvd.webAutomation.components.TopMenu;
 import com.solvd.webAutomation.config.ConfigReader;
 import com.solvd.webAutomation.driver.DriverFactory;
 import com.solvd.webAutomation.driver.DriverRunMode;
 import com.solvd.webAutomation.driver.DriverType;
-import com.solvd.webAutomation.pages.desktop.CartPage;
-import com.solvd.webAutomation.pages.desktop.HomePage;
 import com.solvd.webAutomation.utils.ScreenshotUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -69,29 +63,5 @@ public class AbstractTest {
     protected WebDriver getDriver() {
         return DriverFactory.getDriver();
     }
-
-//    public void clickCategory(HomePage homePage, HomePage.MenuItem category, ProductGrid productGrid) {
-//        homePage.click(category);
-//        homePage.waitUntilPageIsReady();
-//        homePage.waitUntilVisible(productGrid.getProductGridContainer(),"product grid");
-//    }
-//
-//    public void clickCart(TopMenu topMenu, CartPage cartPage) {
-//        topMenu.click(TopMenu.MenuItem.CART);
-//        cartPage.waitUntilPageIsReady();
-////        cartPage.waitVisible(cartPage.getProductGridContainer());
-//    }
-//
-//    public void clickContact(TopMenu topMenu, ContactModal contactModal) {
-//        topMenu.click(TopMenu.MenuItem.CONTACT);
-//        contactModal.waitUntilPageIsReady();
-//        contactModal.click(contactModal.getTitle());
-//    }
-//
-//    public void clickLogIn(TopMenu topMenu, LogInModal logInModal) {
-//        topMenu.click(TopMenu.MenuItem.LOG_IN);
-//        logInModal.waitUntilPageIsReady();
-//        logInModal.waitUntilVisible(logInModal.getTitle(),"LogInModal");
-//    }
 
 }

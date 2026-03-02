@@ -11,7 +11,7 @@ public class ElementActions {
     protected WebDriver driver;
     protected WaitService waitService;
 
-    public ElementActions(WebDriver driver,WaitService waitService) {
+    public ElementActions(WebDriver driver, WaitService waitService) {
         this.driver = driver;
         this.waitService = waitService;
     }
@@ -28,7 +28,7 @@ public class ElementActions {
         WebElement element = driver.findElement(locator);
 
         logger.info("Clicking on element [{}]", elementName);
-        waitService.waitForElementClickable(element,  elementName);
+        waitService.waitForElementClickable(element, elementName);
         scrollTo(element);
         element.click();
     }
@@ -36,7 +36,7 @@ public class ElementActions {
     public void type(WebElement element, String elementName, String text) {
         logger.info("Typing on element [{}]", elementName);
 
-        waitService.waitForElementVisible(element,  elementName);
+        waitService.waitForElementVisible(element, elementName);
         scrollTo(element);
         element.clear();
         element.sendKeys(text);

@@ -30,6 +30,7 @@ public class CartItemComponent extends AbstractComponent {
     public String getTitle() {
         return getText(dataItem.TITLE);
     }
+
     public String getPrice() {
         return getText(dataItem.PRICE);
     }

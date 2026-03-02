@@ -25,7 +25,7 @@ public class ProductGrid extends AbstractComponent {
 
     public ProductGrid(WebDriver driver, WebElement root) {
 
-        super(driver,root);
+        super(driver, root);
     }
 
     @Override
@@ -41,14 +41,14 @@ public class ProductGrid extends AbstractComponent {
                 .toList();
     }
 
-    public  List<WebElement> getProductElements() {
+    public List<WebElement> getProductElements() {
         return driver.findElements(By.cssSelector("#tbodyid .col-lg-4"));
     }
 
     public List<String> getProductTitles() {
 //        By by = By.cssSelector("#tbodyid .card-title");
 //        waitService.waitForNumberOfElementsToBeMoreThan(by,0);
-        return  getProductComponents().stream()
+        return getProductComponents().stream()
                 .map(ProductGridItemComponent::getTitle)
                 .map(WebElement::getText)
                 .toList();

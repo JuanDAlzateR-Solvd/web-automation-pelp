@@ -45,9 +45,9 @@ public class TopMenu extends AbstractPage {
     @FindBy(css = "a[id='nava'] img")
     private WebElement imageIndicator;
 
-    private final Map<MenuItem, WebElement> menuButtons ;
+    private final Map<MenuItem, WebElement> menuButtons;
 
-    private final Map<MenuItem, WebElement> closeButtons ;
+    private final Map<MenuItem, WebElement> closeButtons;
 
     public TopMenu(WebDriver driver) {
         super(driver);

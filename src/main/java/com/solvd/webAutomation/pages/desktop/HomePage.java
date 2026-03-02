@@ -12,10 +12,9 @@ import org.openqa.selenium.support.FindBy;
 import java.util.List;
 import java.util.Map;
 
-
 public class HomePage extends AbstractPage {
 
-        @FindBy(css = ".list-group a[onclick*='phone']")
+    @FindBy(css = ".list-group a[onclick*='phone']")
     private WebElement phonesButton;
 
     @FindBy(css = ".list-group a[onclick*='notebook']")
@@ -32,7 +31,7 @@ public class HomePage extends AbstractPage {
 
     private static final By LOADER = By.cssSelector(".loader, .spinner, .loading");
 
-    private final Map<Category, WebElement> menuButtons ;
+    private final Map<Category, WebElement> menuButtons;
 
     public HomePage(WebDriver driver) {
         super(driver);
@@ -71,7 +70,7 @@ public class HomePage extends AbstractPage {
     //Test flow methods
 
     public ProductGrid getProductGrid() {
-        return new ProductGrid(driver,productGridContainer);
+        return new ProductGrid(driver, productGridContainer);
     }
 
     public TopMenu getTopMenu() {
@@ -84,7 +83,7 @@ public class HomePage extends AbstractPage {
 
     public ProductGrid selectCategory(Category item) {
         click(item);
-        return new ProductGrid(driver,productGridContainer);
+        return new ProductGrid(driver, productGridContainer);
     }
 
 }

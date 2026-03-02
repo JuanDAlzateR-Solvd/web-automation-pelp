@@ -90,7 +90,7 @@ public class CartPage extends AbstractPage {
     private void waitCartUpdatesAfterDeleteProduct(int initialCartSize) {
         if (!isCartEmpty()) {
             waitUntilCartDeletesProduct(initialCartSize);
-            waitUntilVisible(tableIndicator,"Shopping cart table");
+            waitUntilVisible(tableIndicator, "Shopping cart table");
         }
     }
 
@@ -130,7 +130,7 @@ public class CartPage extends AbstractPage {
     }
 
     public boolean containsProduct(String productName) {
-       CartItemComponent cartItem = getCartItemComponentByName(productName);
+        CartItemComponent cartItem = getCartItemComponentByName(productName);
         return cartItem != null;
     }
 
@@ -150,14 +150,14 @@ public class CartPage extends AbstractPage {
     public void waitUntilCartLoadsProducts() {
         if (!isCartEmpty()) {
             waitUntilCartShowsProducts();
-            waitUntilVisible(tableIndicator,"Shopping cart table");
+            waitUntilVisible(tableIndicator, "Shopping cart table");
         }
     }
 
     public void emptyShoppingCart() {
         while (!isCartEmpty()) {
-            logger.info("DELETE Deleting {} products from cart",getProductCount());
-            String productName=getCartItemComponents().get(0).getTitle();
+            logger.info("DELETE Deleting {} products from cart", getProductCount());
+            String productName = getCartItemComponents().get(0).getTitle();
             deleteProduct(productName);
         }
     }

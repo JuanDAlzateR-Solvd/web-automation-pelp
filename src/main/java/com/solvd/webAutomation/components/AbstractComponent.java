@@ -11,9 +11,9 @@ public abstract class AbstractComponent extends AbstractUIObject {
 
     private static final By LOADER = By.cssSelector(".loader, .spinner, .loading");
 
-    public AbstractComponent(WebDriver driver,WebElement root){
+    public AbstractComponent(WebDriver driver, WebElement root) {
         super(driver);
-        this.root=root;
+        this.root = root;
 
         PageFactory.initElements(
                 new DefaultElementLocatorFactory(root),
@@ -40,7 +40,7 @@ public abstract class AbstractComponent extends AbstractUIObject {
 
         waitService.waitForPageLoad();
         waitService.waitForInvisibilityOfElementLocated(LOADER, "Component Loader");
-        waitService.waitForElementVisible(getComponentLoadedIndicator(),className+" Indicator");
+        waitService.waitForElementVisible(getComponentLoadedIndicator(), className + " Indicator");
 
         logger.info("The page [{}] is ready", this.getClass().getSimpleName());
     }

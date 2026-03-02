@@ -10,7 +10,7 @@ public abstract class AbstractPage extends AbstractUIObject {
 
     private static final By LOADER = By.cssSelector(".loader, .spinner, .loading");
 
-    int waitDuration=Integer.parseInt(ConfigReader.get("wait_duration"));
+    int waitDuration = Integer.parseInt(ConfigReader.get("wait_duration"));
 
     public AbstractPage(WebDriver driver) {
         super(driver);
@@ -39,7 +39,7 @@ public abstract class AbstractPage extends AbstractUIObject {
 
         waitService.waitForPageLoad();
         waitService.waitForInvisibilityOfElementLocated(LOADER, "Page Loader");
-        waitService.waitForElementVisible(getPageLoadedIndicator(),className+" Indicator");
+        waitService.waitForElementVisible(getPageLoadedIndicator(), className + " Indicator");
 
         logger.info("The page [{}] is ready", this.getClass().getSimpleName());
     }

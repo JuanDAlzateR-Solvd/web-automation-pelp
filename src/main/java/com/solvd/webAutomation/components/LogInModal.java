@@ -1,7 +1,6 @@
 package com.solvd.webAutomation.components;
 
 import com.solvd.webAutomation.pages.common.AbstractPage;
-import org.openqa.selenium.Alert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -25,9 +24,9 @@ public class LogInModal extends AbstractPage {
     @FindBy(id = "loginpassword")
     private WebElement passwordInput;
 
-    private final Map<MenuItem, WebElement> menuInputs ;
+    private final Map<MenuItem, WebElement> menuInputs;
 
-    private final Map<MenuItem, WebElement> menuButtons ;
+    private final Map<MenuItem, WebElement> menuButtons;
 
     public LogInModal(WebDriver driver) {
         super(driver);

@@ -1,6 +1,7 @@
 package com.solvd.webAutomation.components;
 
 import com.solvd.webAutomation.pages.common.AbstractPage;
+import com.solvd.webAutomation.utils.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -31,14 +32,13 @@ public class Footer extends AbstractPage {
                 .toArray(String[]::new);
     }
 
-    private String extractValueFromLine(String[] lines, int lineIndex) {
-        if (lines.length <= lineIndex) return "";
-        String[] parts = lines[lineIndex].split(":", 2);
-        return parts.length > 1 ? parts[1].trim() : "";
-    }
-
     public String getInfo(InfoItem item) {
-        return extractValueFromLine(getContactInfoText(), item.getLineIndex());
+        return Arrays.stream(contactInfo.getText().split("\n"))
+                .map(String::trim)
+                .filter(line -> line.startsWith(item.getLabel()))
+                .map(line -> line.split(":", 2)[1].trim())
+                .findFirst()
+                .orElse("");
     }
 
     public boolean isVisibleInScreen() {
@@ -50,19 +50,34 @@ public class Footer extends AbstractPage {
     }
 
     public boolean verifyAddress() {
-        return getInfo(InfoItem.ADDRESS).length() > 5;
+        return !getInfo(InfoItem.ADDRESS).isBlank();
     }
 
     public boolean verifyPhone() {
-        return getInfo(InfoItem.PHONE).length() > 5;
+        String phone = getInfo(InfoItem.PHONE);
+        return StringUtils.isValidPhone(phone);
     }
 
     public boolean verifyEmail() {
-        return getInfo(InfoItem.EMAIL).length() > 5;
+        String email = getInfo(InfoItem.EMAIL);
+        return StringUtils.isValidEmail(email);
     }
 
     public boolean verifyFooterInfo() {
-        return verifyAddress() && verifyPhone() && verifyEmail();
+        boolean validAddress = verifyAddress();
+        boolean validPhone = verifyPhone();
+        boolean validEmail = verifyEmail();
+
+        if (!validAddress) {
+            logger.error("Invalid Address: {}", getInfo(InfoItem.ADDRESS));
+        }
+        if (!validPhone) {
+            logger.error("Invalid Phone: {}", getInfo(InfoItem.PHONE));
+        }
+        if (!validEmail) {
+            logger.error("Invalid Email: {}", getInfo(InfoItem.EMAIL));
+        }
+        return validAddress && validPhone && validEmail;
     }
 
     public void ensureVisible() {
@@ -70,24 +85,18 @@ public class Footer extends AbstractPage {
     }
 
     public enum InfoItem {
-        ADDRESS("Get in Touch Address", 1),
-        PHONE("Get in Touch Phone", 2),
-        EMAIL("Get in Touch Email", 3);
+        ADDRESS("Address"),
+        PHONE("Phone"),
+        EMAIL("Email");
 
-        private final String name;
-        private final int lineIndex;
+        private final String label;
 
-        InfoItem(String name, int lineIndex) {
-            this.name = name;
-            this.lineIndex = lineIndex;
+        InfoItem(String label) {
+            this.label = label;
         }
 
-        public String getName() {
-            return name;
-        }
-
-        public int getLineIndex() {
-            return lineIndex;
+        public String getLabel() {
+            return label;
         }
     }
 

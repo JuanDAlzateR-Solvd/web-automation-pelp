@@ -24,8 +24,6 @@ public abstract class AbstractComponent extends AbstractUIObject {
                 Thread.currentThread().getId(),
                 System.identityHashCode(driver)
         );
-
-//        waitUntilComponentIsReady();
     }
 
     protected abstract WebElement getComponentLoadedIndicator();
@@ -38,9 +36,9 @@ public abstract class AbstractComponent extends AbstractUIObject {
         String className = this.getClass().getSimpleName();
         logger.info("Waiting for the component [{}] to load", className);
 
-        waitService.waitForPageLoad();
-        waitService.waitForInvisibilityOfElementLocated(LOADER, "Component Loader");
-        waitService.waitForElementVisible(getComponentLoadedIndicator(), className + " Indicator");
+        waitUtil.waitForPageLoad();
+        waitUtil.waitForInvisibilityOfElementLocated(LOADER, "Component Loader");
+        waitUtil.waitForElementVisible(getComponentLoadedIndicator(), className + " Indicator");
 
         logger.info("The page [{}] is ready", this.getClass().getSimpleName());
     }

@@ -21,37 +21,36 @@ public class CartItemComponent extends AbstractComponent {
         super(driver, root);
     }
 
-
     @Override
     public WebElement getComponentLoadedIndicator() {
         return imageIndicator;
     }
 
     public String getTitle() {
-        return getText(dataItem.TITLE);
+        return getText(DataItem.TITLE);
     }
 
     public String getPrice() {
-        return getText(dataItem.PRICE);
+        return getText(DataItem.PRICE);
     }
 
     public String getText() {
-        return getText(root, "Product Component"); //It doesn't work with root -> used title.
+        return getText(root, "Product Component");
     }
 
     public void deleteProduct() {
         click(deleteButton, "Delete Button");
     }
 
-    protected String getText(dataItem item) {
+    protected String getText(DataItem item) {
         return getText(getElementFrom(item), item.getName());
     }
 
-    protected WebElement getElementFrom(dataItem item) {
+    protected WebElement getElementFrom(DataItem item) {
         return tableDataList.get(item.getColumnIndex());
     }
 
-    public enum dataItem {
+    public enum DataItem {
         PICTURE("Product Picture", 0),
         TITLE("Product Title", 1),
         PRICE("Product Price", 2),
@@ -60,7 +59,7 @@ public class CartItemComponent extends AbstractComponent {
         private final String name;
         private final int columnIndex;
 
-        dataItem(String name, int lineIndex) {
+        DataItem(String name, int lineIndex) {
             this.name = name;
             this.columnIndex = lineIndex;
         }
@@ -73,4 +72,5 @@ public class CartItemComponent extends AbstractComponent {
             return columnIndex;
         }
     }
+
 }

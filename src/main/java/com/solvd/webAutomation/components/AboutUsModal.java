@@ -5,8 +5,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-import java.util.Map;
-
 public class AboutUsModal extends AbstractPage {
 
     @FindBy(id = "videoModalLabel")
@@ -18,14 +16,8 @@ public class AboutUsModal extends AbstractPage {
     @FindBy(css = "#videoModal .close")
     private WebElement exitButton;
 
-    private final Map<MenuItem, WebElement> menuButtons;
-
     public AboutUsModal(WebDriver driver) {
         super(driver);
-        menuButtons = Map.of(
-                MenuItem.CLOSE, closeButton,
-                MenuItem.EXIT, exitButton
-        );
     }
 
     @Override
@@ -37,33 +29,13 @@ public class AboutUsModal extends AbstractPage {
         return title;
     }
 
-    public void click(MenuItem item) {
-        WebElement button = menuButtons.get(item);
-        click(button, item.name);
-    }
-
     public boolean isModalVisible() {
         return title.isDisplayed();
     }
 
-    public enum MenuItem {
-        CLOSE("Close Button"),
-        EXIT("Exit Button");
-
-        private final String name;
-
-        MenuItem(String name) {
-            this.name = name;
-        }
-
-        public String getName() {
-            return name;
-        }
-    }
-
-    public void close() {
-        click(MenuItem.CLOSE);
-        waitService.waitForInvisibility(closeButton, "Close Button");
+    public void clickClose() {
+        click(closeButton, "AboutUsModal CloseButton");
+        waitUtil.waitForInvisibility(closeButton, "Close Button");
     }
 
 }

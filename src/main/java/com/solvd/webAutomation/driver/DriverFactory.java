@@ -52,12 +52,12 @@ public class DriverFactory {
             URL url = new URL(gridURL);
             switch (driverType) {
                 case CHROME:
-                    ChromeOptions options = new ChromeOptions();
-                    return new RemoteWebDriver(url, options);
+                    ChromeOptions chromeOptions = new ChromeOptions();
+                    return new RemoteWebDriver(url, chromeOptions);
 
                 case FIREFOX:
-                    FirefoxOptions options2 = new FirefoxOptions();
-                    return new RemoteWebDriver(url, options2);
+                    FirefoxOptions firefoxOptions = new FirefoxOptions();
+                    return new RemoteWebDriver(url, firefoxOptions);
 
                 default:
                     throw new IllegalArgumentException("Unsupported driver type: " + driverType);

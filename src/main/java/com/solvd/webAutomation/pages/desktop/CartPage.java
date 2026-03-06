@@ -39,7 +39,7 @@ public class CartPage extends AbstractPage {
 
     public List<CartItemComponent> getCartItemComponents() {
         waitUntilPageIsReady();
-        waitService.waitForPresenceOfElementLocated(By.id("tbodyid"));
+        waitUtil.waitForPresenceOfElementLocated(By.id("tbodyid"));
 
         By by = By.cssSelector("#tbodyid .success");
         List<WebElement> elements = driver.findElements(by);
@@ -97,20 +97,20 @@ public class CartPage extends AbstractPage {
     public void waitUntilCartShowsProducts() {
         logger.info("Waiting for the shopping cart to show products");
         By by = By.cssSelector("#tbodyid .success");
-        waitService.waitForNumberOfElementsToBeMoreThan(by, 0);
+        waitUtil.waitForNumberOfElementsToBeMoreThan(by, 0);
     }
 
     public void waitUntilCartDeletesProduct(int initialCartSize) {
         logger.info("Waiting for the shopping cart to reload");
         By by = By.cssSelector("#tbodyid .success");
-        waitService.waitForNumberOfElementsToBe(by, initialCartSize - 1);
+        waitUtil.waitForNumberOfElementsToBe(by, initialCartSize - 1);
     }
 
     public boolean isCartEmpty() {
         waitUntilPageIsReady();
 
         logger.info("Checking if shopping cart is empty");
-        waitService.waitForPresenceOfElementLocated(By.id("tbodyid"));
+        waitUtil.waitForPresenceOfElementLocated(By.id("tbodyid"));
 
         List<WebElement> rows =
                 driver.findElements(By.cssSelector("#tbodyid .success"));
@@ -136,7 +136,7 @@ public class CartPage extends AbstractPage {
 
     public int getProductCount() {
         logger.info("Checking number of products in shopping cart");
-        waitService.waitForPresenceOfElementLocated(By.id("tbodyid"));
+        waitUtil.waitForPresenceOfElementLocated(By.id("tbodyid"));
 
         List<WebElement> rows =
                 driver.findElements(By.cssSelector("#tbodyid .success"));

@@ -49,14 +49,14 @@ public class ProductPage extends AbstractPage {
 
     public void acceptProductAddedAlert() {
         logger.info("accepting 'Product Added' Alert");
-        Alert alert = waitService.waitForAlert();
+        Alert alert = waitUtil.waitForAlert();
         alert.accept();
     }
 
     public boolean isProductAddedAlertPresent() {
         logger.info("checking 'Product Added' Alert Present");
         try {
-            waitService.waitForAlert();
+            waitUtil.waitForAlert();
             return true;
         } catch (TimeoutException e) {
             return false;
@@ -84,7 +84,7 @@ public class ProductPage extends AbstractPage {
 
     public ProductPage addToCart() {
         clickAddToCartButton();
-        acceptProductAddedAlert();///
+        acceptProductAddedAlert();
         return this;
     }
 

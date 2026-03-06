@@ -51,4 +51,5 @@ public class ProductGridItemComponent extends AbstractComponent {
     public void clickProduct() {
         click(title, getProductName());
     }
+
 }

@@ -5,8 +5,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-import java.util.Map;
-
 public class LogInModal extends AbstractPage {
 
     @FindBy(id = "logInModalLabel")
@@ -43,6 +41,7 @@ public class LogInModal extends AbstractPage {
 
     public void clickClose() {
         click(closeButton, "LogInModal Close Button");
+        waitUtil.waitForInvisibility(closeButton, "Close Button");
     }
 
     public void typeUsername(String username) {

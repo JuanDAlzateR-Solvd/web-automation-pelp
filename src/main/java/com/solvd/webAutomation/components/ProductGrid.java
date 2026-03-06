@@ -11,9 +11,6 @@ import java.util.List;
 
 public class ProductGrid extends AbstractComponent {
 
-//    @FindBy(css = "#contcont")  //"#tbodyid"
-//    private WebElement productGridContainer;
-
     @FindBy(css = ".pagination #next2")
     private WebElement nextButton;
 
@@ -24,7 +21,6 @@ public class ProductGrid extends AbstractComponent {
     private WebElement imageIndicator;
 
     public ProductGrid(WebDriver driver, WebElement root) {
-
         super(driver, root);
     }
 
@@ -46,8 +42,6 @@ public class ProductGrid extends AbstractComponent {
     }
 
     public List<String> getProductTitles() {
-//        By by = By.cssSelector("#tbodyid .card-title");
-//        waitService.waitForNumberOfElementsToBeMoreThan(by,0);
         return getProductComponents().stream()
                 .map(ProductGridItemComponent::getTitle)
                 .map(WebElement::getText)
@@ -77,7 +71,6 @@ public class ProductGrid extends AbstractComponent {
         List<ProductGridItemComponent> products = getProductComponents();
         ProductGridItemComponent product = products.get(productIndex);
         logger.debug("Getting product {} from product grid", productIndex);
-//        logger.info("product [{}] in {} grid position",product.getProductName(), productIndex);
         return product;
     }
 

@@ -23,7 +23,7 @@ public class HomePage extends AbstractPage {
     @FindBy(css = ".list-group a[onclick*='monitor']")
     private WebElement monitorsButton;
 
-    @FindBy(css = "#tbodyid .card-img-top.img-fluid")// "#tbodyid .card-img-top.img-fluid"
+    @FindBy(css = "#tbodyid .card-img-top.img-fluid")
     private List<WebElement> imageIndicator;
 
     @FindBy(css = "#contcont")

@@ -22,8 +22,6 @@ public abstract class AbstractPage extends AbstractUIObject {
                 Thread.currentThread().getId(),
                 System.identityHashCode(driver)
         );
-
-//        waitUntilPageIsReady(); // move out of constructor??
     }
 
     protected abstract WebElement getPageLoadedIndicator();

@@ -35,7 +35,7 @@ public class CartItemComponent extends AbstractComponent {
     }
 
     public String getText() {
-        return getText(root, "Product Component"); //It doesn't work with root -> used title.
+        return getText(root, "Product Component");
     }
 
     public void deleteProduct() {

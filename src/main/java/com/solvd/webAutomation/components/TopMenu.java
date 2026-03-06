@@ -133,9 +133,7 @@ public class TopMenu extends AbstractPage {
         }
     }
 
-
     //Test flow methods
-
     public CartPage goToCartPage() {
         click(MenuItem.CART);
         CartPage cartPage = new CartPage(driver);

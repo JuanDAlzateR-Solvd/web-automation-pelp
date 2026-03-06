@@ -25,7 +25,6 @@ public class ScreenshotUtils {
         String browser = ((RemoteWebDriver) driver).getCapabilities().getBrowserName();
 
         long threadID = Thread.currentThread().getId();
-//                ((RemoteWebDriver) driver).getSessionId().toString();
 
         String screenshotName = testName + "_" + timestamp + "_T" + threadID + "_" + browser + "_";
 

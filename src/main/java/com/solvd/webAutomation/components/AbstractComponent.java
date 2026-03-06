@@ -24,8 +24,6 @@ public abstract class AbstractComponent extends AbstractUIObject {
                 Thread.currentThread().getId(),
                 System.identityHashCode(driver)
         );
-
-//        waitUntilComponentIsReady();
     }
 
     protected abstract WebElement getComponentLoadedIndicator();

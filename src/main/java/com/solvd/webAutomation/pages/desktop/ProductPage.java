@@ -84,7 +84,7 @@ public class ProductPage extends AbstractPage {
 
     public ProductPage addToCart() {
         clickAddToCartButton();
-        acceptProductAddedAlert();///
+        acceptProductAddedAlert();
         return this;
     }
 

@@ -37,16 +37,16 @@ public abstract class AbstractPage extends AbstractUIObject {
         String className = this.getClass().getSimpleName();
         logger.info("Waiting for the page [{}] to load", className);
 
-        waitService.waitForPageLoad();
-        waitService.waitForInvisibilityOfElementLocated(LOADER, "Page Loader");
-        waitService.waitForElementVisible(getPageLoadedIndicator(), className + " Indicator");
+        waitUtil.waitForPageLoad();
+        waitUtil.waitForInvisibilityOfElementLocated(LOADER, "Page Loader");
+        waitUtil.waitForElementVisible(getPageLoadedIndicator(), className + " Indicator");
 
         logger.info("The page [{}] is ready", this.getClass().getSimpleName());
     }
 
     public boolean isAlertPresent() {
         try {
-            waitService.waitForAlert();
+            waitUtil.waitForAlert();
             return true;
         } catch (TimeoutException e) {
             return false;
@@ -55,7 +55,7 @@ public abstract class AbstractPage extends AbstractUIObject {
 
     public void acceptWrongPasswordAlert() {
         logger.info("accepting 'Wrong password' Alert");
-        Alert alert = waitService.waitForAlert();
+        Alert alert = waitUtil.waitForAlert();
         alert.accept();
     }
 

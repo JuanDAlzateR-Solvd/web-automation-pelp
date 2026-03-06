@@ -1,6 +1,6 @@
 package com.solvd.webAutomation.actions;
 
-import com.solvd.webAutomation.wait.WaitService;
+import com.solvd.webAutomation.wait.WaitUtil;
 import org.jspecify.annotations.NonNull;
 import org.openqa.selenium.*;
 import org.slf4j.Logger;
@@ -9,16 +9,16 @@ import org.slf4j.LoggerFactory;
 public class ElementActions {
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
     protected WebDriver driver;
-    protected WaitService waitService;
+    protected WaitUtil waitUtil;
 
-    public ElementActions(WebDriver driver, WaitService waitService) {
+    public ElementActions(WebDriver driver, WaitUtil waitUtil) {
         this.driver = driver;
-        this.waitService = waitService;
+        this.waitUtil = waitUtil;
     }
 
     public void click(WebElement element, String elementName) {
         logger.info("Clicking on element [{}]", elementName);
-        waitService.waitForElementClickable(element, elementName);
+        waitUtil.waitForElementClickable(element, elementName);
         scrollTo(element);
         element.click();
     }
@@ -28,7 +28,7 @@ public class ElementActions {
         WebElement element = driver.findElement(locator);
 
         logger.info("Clicking on element [{}]", elementName);
-        waitService.waitForElementClickable(element, elementName);
+        waitUtil.waitForElementClickable(element, elementName);
         scrollTo(element);
         element.click();
     }
@@ -36,7 +36,7 @@ public class ElementActions {
     public void type(WebElement element, String elementName, String text) {
         logger.info("Typing on element [{}]", elementName);
 
-        waitService.waitForElementVisible(element, elementName);
+        waitUtil.waitForElementVisible(element, elementName);
         scrollTo(element);
         element.clear();
         element.sendKeys(text);
@@ -46,8 +46,7 @@ public class ElementActions {
     public String getText(WebElement element, String elementName) {
         logger.info("Getting text from element [{}]", elementName);
 
-        waitService.waitForElementVisible(element, elementName);
-//        waitService.waitForPresenceOfElement(element, elementName);
+        waitUtil.waitForElementVisible(element, elementName);
         scrollTo(element);
 
         return element.getText();

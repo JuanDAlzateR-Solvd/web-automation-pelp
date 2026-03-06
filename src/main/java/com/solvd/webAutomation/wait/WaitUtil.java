@@ -9,14 +9,14 @@ import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 
-public class WaitService {
+public class WaitUtil {
 
-    private static final Logger logger = LoggerFactory.getLogger(WaitService.class);
+    private static final Logger logger = LoggerFactory.getLogger(WaitUtil.class);
 
     private final WebDriver driver;
     private final int defaultTimeout;
 
-    public WaitService(WebDriver driver) {
+    public WaitUtil(WebDriver driver) {
         this.driver = driver;
         this.defaultTimeout = Integer.parseInt(ConfigReader.get("wait_duration"));
     }

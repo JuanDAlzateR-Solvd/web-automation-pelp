@@ -6,8 +6,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-import java.util.Map;
-
 public class ContactModal extends AbstractPage {
 
     @FindBy(css = "#exampleModalLabel")
@@ -28,19 +26,9 @@ public class ContactModal extends AbstractPage {
     @FindBy(css = "#exampleModal button.btn.btn-secondary")
     private WebElement closeButton;
 
-    private final Map<MenuItem, WebElement> menuItems;
-
     public ContactModal(WebDriver driver) {
         super(driver);
-        menuItems = Map.of(
-                MenuItem.EMAIL, emailInput,
-                MenuItem.NAME, nameInput,
-                MenuItem.MESSAGE, messageInput,
-                MenuItem.CLOSE, closeButton,
-                MenuItem.SEND, sendButton
-        );
     }
-
 
     @Override
     protected WebElement getPageLoadedIndicator() {
@@ -51,56 +39,43 @@ public class ContactModal extends AbstractPage {
         return title;
     }
 
-    public void click(MenuItem item) {
-        click(menuItems.get(item), item.getName());
-    }
-
-    public void type(MenuItem item, String text) {
-        type(menuItems.get(item), item.getName(), text);
-    }
-
     public boolean isModalVisible() {
         return title.isDisplayed();
     }
 
     public void acceptMessageAlert() {
         logger.info("accepting 'Thanks for message' Alert");
-        Alert alert = waitService.waitForAlert();
+        Alert alert = waitUtil.waitForAlert();
         alert.accept();
     }
 
-    public ContactModal submitContactForm(
-            String email,
-            String name,
-            String message) {
-        type(MenuItem.EMAIL, email);
-        type(MenuItem.NAME, name);
-        type(MenuItem.MESSAGE, message);
-        click(MenuItem.SEND);
+    public ContactModal fillAndSubmitForm(String email, String name, String message) {
+        typeEmail(email);
+        typeName(name);
+        typeMessage(message);
+        clickSend();
         return this;
     }
 
-    public void close() {
-        click(MenuItem.CLOSE);
-        waitService.waitForInvisibility(closeButton, "Close Button");
+    public void typeEmail(String email) {
+        type(emailInput, "ContactModal Email", email);
     }
 
-    public enum MenuItem {
-        EMAIL("Input Email"),
-        NAME("Input Name"),
-        MESSAGE("Input Message"),
-        CLOSE("Close Button"),
-        SEND("Send Button");
+    public void typeName(String name) {
+        type(nameInput, "ContactModal Name", name);
+    }
 
-        private final String name;
+    public void typeMessage(String message) {
+        type(messageInput, "ContactModal Message", message);
+    }
 
-        MenuItem(String name) {
-            this.name = name;
-        }
+    public void clickSend() {
+        click(sendButton, "ContactModal SendButton");
+    }
 
-        public String getName() {
-            return name;
-        }
+    public void clickClose() {
+        click(closeButton, "ContactModal CloseButton");
+        waitUtil.waitForInvisibility(closeButton, "Close Button");
     }
 
 }

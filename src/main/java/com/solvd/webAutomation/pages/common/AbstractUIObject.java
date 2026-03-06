@@ -1,7 +1,7 @@
 package com.solvd.webAutomation.pages.common;
 
 import com.solvd.webAutomation.actions.ElementActions;
-import com.solvd.webAutomation.wait.WaitService;
+import com.solvd.webAutomation.wait.WaitUtil;
 import org.jspecify.annotations.NonNull;
 import org.openqa.selenium.*;
 import org.slf4j.Logger;
@@ -10,13 +10,13 @@ import org.slf4j.LoggerFactory;
 public abstract class AbstractUIObject {
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
     protected final WebDriver driver;
-    protected final WaitService waitService;
+    protected final WaitUtil waitUtil;
     protected final ElementActions actions;
 
     protected AbstractUIObject(WebDriver driver) {
         this.driver = driver;
-        this.waitService = new WaitService(driver);
-        this.actions = new ElementActions(driver, waitService);
+        this.waitUtil = new WaitUtil(driver);
+        this.actions = new ElementActions(driver, waitUtil);
     }
 
     protected void click(WebElement element) {
@@ -103,11 +103,11 @@ public abstract class AbstractUIObject {
     }
 
     protected void waitUntilClickable(WebElement element, String elementName) {
-        waitService.waitForElementClickable(element, elementName);
+        waitUtil.waitForElementClickable(element, elementName);
     }
 
     public void waitUntilVisible(WebElement element, String elementName) {
-        waitService.waitForElementVisible(element, elementName);
+        waitUtil.waitForElementVisible(element, elementName);
         scrollTo(element);
     }
 

@@ -5,9 +5,6 @@ import com.solvd.webAutomation.components.TopMenu;
 
 import com.solvd.webAutomation.components.*;
 
-import com.solvd.webAutomation.driver.DriverFactory;
-import com.solvd.webAutomation.driver.DriverRunMode;
-import com.solvd.webAutomation.driver.DriverType;
 import com.solvd.webAutomation.flows.ShoppingFlow;
 import com.solvd.webAutomation.pages.common.AbstractPage;
 import com.solvd.webAutomation.pages.desktop.CartPage;
@@ -39,13 +36,13 @@ public class DemoblazeTest extends AbstractTest {
         logger.info("Testing Menu item: [Contact Modal]");
         ContactModal contactModal = topMenu.openContactModal();
         sa.assertTrue(contactModal.isModalVisible(), "Contact Modal should be visible");
-        contactModal.close();
+        contactModal.clickClose();
 
         //other modals
         logger.info("Testing Menu item: [About Us Modal]");
         AboutUsModal aboutUsModal = topMenu.openAboutUsModal();
         sa.assertTrue(aboutUsModal.isModalVisible(), "About Us Modal should be visible");
-        aboutUsModal.close();
+        aboutUsModal.clickClose();
 
         sa.assertAll();
     }
@@ -185,7 +182,7 @@ public class DemoblazeTest extends AbstractTest {
 
         sa.assertTrue(contactModal.isModalVisible(), "Contact modal is not visible");
 
-        contactModal.submitContactForm("example@email.com",
+        contactModal.fillAndSubmitForm("example@email.com",
                 "Example Name",
                 "This is a test message");
 
@@ -214,7 +211,7 @@ public class DemoblazeTest extends AbstractTest {
     }
 
     @Test(testName = "VerifyFooterInfo- Task3 TC-007",
-            description = "click on log in, then fills the form and click log in button")
+            description = "verifies footer visibility and contact info on the home page")
     public void verifyFooterVisibilityAndInfo() {
         WebDriver driver = getDriver();
 

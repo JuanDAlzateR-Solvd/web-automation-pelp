@@ -64,7 +64,7 @@ public class ProductGrid extends AbstractComponent {
 
     public void clickNextButtonIfPossible(HomePage.Category category) {
         if (isNextButtonClickable() && category != HomePage.Category.MONITORS) {
-            //demoblaze.com has a bug, when click on category monitors it shows the next button, even thought it shouldn't.
+            // Monitors category is expected to be a single page without pagination, so do not use the Next button for it.
             clickNextButton();
         }
     }
@@ -96,7 +96,7 @@ public class ProductGrid extends AbstractComponent {
 
     public int getProductCount() {
         logger.info("Checking number of products in product grid");
-        waitService.waitForPresenceOfElementLocated(By.id("tbodyid"));
+        waitUtil.waitForPresenceOfElementLocated(By.id("tbodyid"));
 
         List<WebElement> rows =
                 driver.findElements(By.cssSelector("#tbodyid .card-title"));

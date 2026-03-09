@@ -90,8 +90,8 @@ public class TopMenu extends AbstractPage {
             result = isVisible(closeButtons.get(item));
         } else {
             switch (item) {
-                case HOME -> result = driver.getCurrentUrl().contains("index.html");
-                case CART -> result = driver.getCurrentUrl().contains("cart.html");
+                case HOME -> result = new HomePage(driver).isPageVisible();
+                case CART -> result = new CartPage(driver).isPageVisible();
             }
         }
         return result;

@@ -2,6 +2,7 @@ package com.solvd.webAutomation.pages.desktop;
 
 import com.solvd.webAutomation.components.CartItemComponent;
 import com.solvd.webAutomation.components.TopMenu;
+import com.solvd.webAutomation.flows.Navigation;
 import com.solvd.webAutomation.pages.common.AbstractPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -23,6 +24,12 @@ public class CartPage extends AbstractPage {
 
     @FindBy(css = ".table-responsive")
     private WebElement tableIndicator;
+
+    @FindBy(css = ".navbar.navbar-toggleable-md.bg-inverse")
+    private WebElement topMenuContainer;
+
+    @FindBy(css = "html[lang]")
+    private WebElement navigationRoot;
 
     public CartPage(WebDriver driver) {
         super(driver);
@@ -126,7 +133,11 @@ public class CartPage extends AbstractPage {
     //Test flow methods
 
     public TopMenu getTopMenu() {
-        return new TopMenu(driver);
+        return new TopMenu(driver, topMenuContainer);
+    }
+
+    public Navigation getNavigation() {
+        return new Navigation(driver,navigationRoot,getTopMenu());
     }
 
     public boolean containsProduct(String productName) {

@@ -1,6 +1,7 @@
 package com.solvd.webAutomation;
 
 import com.solvd.webAutomation.components.*;
+import com.solvd.webAutomation.flows.Navigation;
 import com.solvd.webAutomation.flows.ShoppingFlow;
 import com.solvd.webAutomation.pages.common.AbstractPage;
 import com.solvd.webAutomation.pages.desktop.CartPage;
@@ -25,33 +26,33 @@ public class DemoblazeTest extends AbstractTest {
         WebDriver driver = getDriver();
         HomePage homePage = AbstractPage.openHomePage(driver);
 
-        TopMenu topMenu = homePage.getTopMenu();
+        Navigation navigation = homePage.getNavigation();
         SoftAssert sa = new SoftAssert();
 
         logger.info("Testing Menu item: [Contact Modal]");
-        ContactModal contactModal = topMenu.openContactModal();
+        ContactModal contactModal = navigation.openContactModal();
         sa.assertTrue(contactModal.isModalVisible(), "Contact Modal should be visible");
         contactModal.clickClose();
 
         logger.info("Testing Menu item: [About Us Modal]");
-        AboutUsModal aboutUsModal = topMenu.openAboutUsModal();
+        AboutUsModal aboutUsModal = navigation.openAboutUsModal();
         sa.assertTrue(aboutUsModal.isModalVisible(), "About Us Modal should be visible");
         aboutUsModal.clickClose();
 
         logger.info("Testing Menu item: [Log In Modal]");
-        LogInModal logInModal = topMenu.openLogInModal();
+        LogInModal logInModal = navigation.openLogInModal();
         sa.assertTrue(logInModal.isModalVisible(), "Log In Modal should be visible");
         logInModal.clickClose();
 
         logger.info("Testing Menu item: [Sign Up Modal]");
-        SignUpModal signUpModal = topMenu.openSignUpModal();
+        SignUpModal signUpModal = navigation.openSignUpModal();
         sa.assertTrue(signUpModal.isModalVisible(), "Sign Up Modal should be visible");
         signUpModal.clickClose();
 
         logger.info("Testing Menu item: [CartPage]");
-        CartPage cartPage = topMenu.goToCartPage();
+        CartPage cartPage = navigation.goToCartPage();
         sa.assertTrue(cartPage.isPageVisible(), "Cart Page should be visible");
-        topMenu.goToHomePage();
+        cartPage.getNavigation().goToHomePage();
 
         sa.assertAll();
     }
@@ -103,7 +104,7 @@ public class DemoblazeTest extends AbstractTest {
         CartPage cartPage = productGrid
                 .openProductByIndex(0)
                 .addToCart()
-                .getTopMenu()
+                .getNavigation()
                 .goToCartPage();
 
         cartPage.waitUntilCartShowsProducts();
@@ -129,7 +130,7 @@ public class DemoblazeTest extends AbstractTest {
         CartPage cartPage = productGrid
                 .openProductByIndex(0)
                 .addToCart()
-                .getTopMenu()
+                .getNavigation()
                 .goToCartPage();
 
         cartPage.waitUntilCartShowsProducts();
@@ -161,7 +162,7 @@ public class DemoblazeTest extends AbstractTest {
         List<String> productNames = shoppingFlow.addRandomProductsToCart(5);
 
         SoftAssert sa = new SoftAssert();
-        CartPage cartPage = homePage.getTopMenu().goToCartPage();
+        CartPage cartPage = homePage.getNavigation().goToCartPage();
 
         cartPage.waitUntilCartShowsProducts();
 
@@ -186,7 +187,7 @@ public class DemoblazeTest extends AbstractTest {
 
         HomePage homePage = AbstractPage.openHomePage(driver);
 
-        ContactModal contactModal = homePage.getTopMenu().openContactModal();
+        ContactModal contactModal = homePage.getNavigation().openContactModal();
         SoftAssert sa = new SoftAssert();
 
         sa.assertTrue(contactModal.isModalVisible(), "Contact modal is not visible");
@@ -207,7 +208,7 @@ public class DemoblazeTest extends AbstractTest {
         WebDriver driver = getDriver();
 
         HomePage homePage = AbstractPage.openHomePage(driver);
-        LogInModal logInModal = homePage.getTopMenu().openLogInModal();
+        LogInModal logInModal = homePage.getNavigation().openLogInModal();
 
         SoftAssert sa = new SoftAssert();
         sa.assertTrue(logInModal.isModalVisible(), "Log In modal is not visible");
@@ -247,14 +248,14 @@ public class DemoblazeTest extends AbstractTest {
                 .toArray(Object[][]::new);
     }
 
-    @DataProvider(name = "TopMenu Modal MenuItem Provider")
-    public Object[][] modalMenuItem() {
-        return new Object[][]{
-                {TopMenu.MenuItem.CONTACT},
-                {TopMenu.MenuItem.ABOUT_US},
-                {TopMenu.MenuItem.LOG_IN},
-                {TopMenu.MenuItem.SIGN_UP}
-        };
-    }
+//    @DataProvider(name = "TopMenu Modal MenuItem Provider")
+//    public Object[][] modalMenuItem() {
+//        return new Object[][]{
+//                {TopMenu.MenuItem.CONTACT},
+//                {TopMenu.MenuItem.ABOUT_US},
+//                {TopMenu.MenuItem.LOG_IN},
+//                {TopMenu.MenuItem.SIGN_UP}
+//        };
+//    }
 
 }

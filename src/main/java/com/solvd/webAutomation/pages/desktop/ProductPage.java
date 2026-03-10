@@ -1,6 +1,7 @@
 package com.solvd.webAutomation.pages.desktop;
 
 import com.solvd.webAutomation.components.TopMenu;
+import com.solvd.webAutomation.flows.Navigation;
 import com.solvd.webAutomation.pages.common.AbstractPage;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
@@ -24,6 +25,12 @@ public class ProductPage extends AbstractPage {
 
     @FindBy(css = "#myCarousel-2")
     private WebElement imageLocator;
+
+    @FindBy(css = ".navbar.navbar-toggleable-md.bg-inverse")
+    private WebElement topMenuContainer;
+
+    @FindBy(css = "html[lang]")
+    private WebElement navigationRoot;
 
     public ProductPage(WebDriver driver) {
         super(driver);
@@ -89,7 +96,11 @@ public class ProductPage extends AbstractPage {
     }
 
     public TopMenu getTopMenu() {
-        return new TopMenu(driver);
+        return new TopMenu(driver, topMenuContainer);
+    }
+
+    public Navigation getNavigation() {
+        return new Navigation(driver,navigationRoot,getTopMenu());
     }
 
     public boolean isInfoVisible() {

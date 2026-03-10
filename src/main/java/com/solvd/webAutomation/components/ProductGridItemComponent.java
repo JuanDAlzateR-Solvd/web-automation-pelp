@@ -27,8 +27,8 @@ public class ProductGridItemComponent extends AbstractComponent {
         return title;
     }
 
-    public WebElement getTitle() {
-        return title;
+    public String getTitle() {
+        return getText(title, "Product title");
     }
 
     public String getText() {
@@ -40,16 +40,18 @@ public class ProductGridItemComponent extends AbstractComponent {
         return getText(title, "Product title");
     }
 
-    public WebElement getPrice() {
-        return price;
+    public String getPrice() {
+        return getText(price, "Product price");
     }
 
-    public WebElement getDescription() {
-        return description;
+    public String getDescription() {
+        return getText(description, "Product description");
     }
 
     public void clickProduct() {
         click(title, getProductName());
     }
+
+
 
 }

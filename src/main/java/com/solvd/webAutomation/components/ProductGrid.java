@@ -38,13 +38,15 @@ public class ProductGrid extends AbstractComponent {
     }
 
     public List<WebElement> getProductElements() {
-        return driver.findElements(By.cssSelector("#tbodyid .col-lg-4"));
+        waitUntilComponentIsReady();
+        logger.debug("Getting product elements");
+        return productElements;
+
     }
 
     public List<String> getProductTitles() {
         return getProductComponents().stream()
                 .map(ProductGridItemComponent::getTitle)
-                .map(WebElement::getText)
                 .toList();
     }
 
@@ -54,17 +56,6 @@ public class ProductGrid extends AbstractComponent {
 
     public void clickNextButton() {
         click(nextButton, "Next Button");
-    }
-
-    public void clickNextButtonIfPossible(HomePage.Category category) {
-        if (isNextButtonClickable() && category != HomePage.Category.MONITORS) {
-            // Monitors category is expected to be a single page without pagination, so do not use the Next button for it.
-            clickNextButton();
-        }
-    }
-
-    public WebElement getProductGridContainer() {
-        return root;
     }
 
     public ProductGridItemComponent getProductByIndex(int productIndex) {
@@ -99,5 +90,4 @@ public class ProductGrid extends AbstractComponent {
 
         return size;
     }
-
 }

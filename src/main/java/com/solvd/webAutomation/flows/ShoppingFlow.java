@@ -16,7 +16,7 @@ import java.util.Random;
 public class ShoppingFlow {
 
     private final WebDriver driver;
-    private static final Logger logger = LoggerFactory.getLogger(WaitUtil.class);
+    private static final Logger logger = LoggerFactory.getLogger(ShoppingFlow.class);
 
     public ShoppingFlow(WebDriver driver) {
         this.driver = driver;
@@ -45,7 +45,7 @@ public class ShoppingFlow {
         productGrid
                 .openProductByIndex(productIndex)
                 .addToCart()
-                .getTopMenu()
+                .getNavigation()
                 .goToHomePage();
 
         return productName;

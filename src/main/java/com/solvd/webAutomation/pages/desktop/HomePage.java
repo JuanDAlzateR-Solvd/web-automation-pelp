@@ -3,6 +3,7 @@ package com.solvd.webAutomation.pages.desktop;
 import com.solvd.webAutomation.components.Footer;
 import com.solvd.webAutomation.components.ProductGrid;
 import com.solvd.webAutomation.components.TopMenu;
+import com.solvd.webAutomation.flows.Navigation;
 import com.solvd.webAutomation.pages.common.AbstractPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -31,6 +32,12 @@ public class HomePage extends AbstractPage {
 
     @FindBy(css = "#fotcont")
     private WebElement footerContainer;
+
+    @FindBy(css = "#narvbarx")
+    private WebElement topMenuContainer;
+
+    @FindBy(css = "html[lang]")
+    private WebElement navigationRoot;
 
     private static final By LOADER = By.cssSelector(".loader, .spinner, .loading");
 
@@ -77,7 +84,11 @@ public class HomePage extends AbstractPage {
     }
 
     public TopMenu getTopMenu() {
-        return new TopMenu(driver);
+        return new TopMenu(driver,topMenuContainer);
+    }
+
+    public Navigation getNavigation() {
+        return new Navigation(driver,navigationRoot,getTopMenu());
     }
 
     public Footer getFooter() {
@@ -86,6 +97,7 @@ public class HomePage extends AbstractPage {
 
     public ProductGrid selectCategory(Category item) {
         click(item);
+        waitUntilPageIsReady();
         return new ProductGrid(driver, productGridContainer);
     }
 

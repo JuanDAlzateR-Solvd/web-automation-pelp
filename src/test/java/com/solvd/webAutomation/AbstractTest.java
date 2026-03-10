@@ -23,7 +23,7 @@ public class AbstractTest {
 
     @Parameters("browser")
     @BeforeMethod
-    public void setUp(Method method, @Optional("FIREFOX") String browser) {
+    public void setUp(Method method, @Optional("CHROME") String browser) {
         DriverRunMode runMode = DriverRunMode.valueOf(ConfigReader.get("run_mode"));
         DriverType driverType = DriverType.valueOf(browser);
         DriverFactory.createDriver(runMode, driverType);

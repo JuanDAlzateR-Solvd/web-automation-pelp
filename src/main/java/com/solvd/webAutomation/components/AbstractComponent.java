@@ -13,7 +13,12 @@ public abstract class AbstractComponent extends AbstractUIObject {
 
     public AbstractComponent(WebDriver driver, WebElement root) {
         super(driver);
-        this.root = root;
+        this.root =  root;
+
+        if (root == null) {
+            logger.error("Root element cannot be null for component: {}", getClass().getSimpleName());
+            throw new IllegalArgumentException("Root element cannot be null for component: " + getClass().getSimpleName());
+        }
 
         PageFactory.initElements(
                 new DefaultElementLocatorFactory(root),

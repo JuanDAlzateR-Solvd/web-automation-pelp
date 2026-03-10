@@ -82,7 +82,7 @@ public class CartPage extends AbstractPage {
         List<CartItemComponent> cartItems = getCartItemComponents();
         logger.info("Printing products in cart:");
         cartItems.forEach(p -> {
-            logger.info(p.getText());
+            logger.info(p.getRootText());
         });
         logger.info("Finished printing products in cart.");
     }

@@ -27,14 +27,14 @@ public class CartItemComponent extends AbstractComponent {
     }
 
     public String getTitle() {
-        return getText(DataItem.TITLE);
+        return getDataItemText(DataItem.TITLE);
     }
 
     public String getPrice() {
-        return getText(DataItem.PRICE);
+        return getDataItemText(DataItem.PRICE);
     }
 
-    public String getText() {
+    public String getRootText() {
         return getText(root, "Product Component");
     }
 
@@ -42,8 +42,7 @@ public class CartItemComponent extends AbstractComponent {
         click(deleteButton, "Delete Button");
     }
 
-    protected String getText(DataItem item) {
-        return getText(getElementFrom(item), item.getName());
+    protected String getDataItemText(DataItem item) {return getText(getElementFrom(item), item.getName());
     }
 
     protected WebElement getElementFrom(DataItem item) {
@@ -53,15 +52,14 @@ public class CartItemComponent extends AbstractComponent {
     public enum DataItem {
         PICTURE("Product Picture", 0),
         TITLE("Product Title", 1),
-        PRICE("Product Price", 2),
-        DELETE("Product Delete", 3);
+        PRICE("Product Price", 2);
 
         private final String name;
         private final int columnIndex;
 
-        DataItem(String name, int lineIndex) {
+        DataItem(String name, int columnIndex) {
             this.name = name;
-            this.columnIndex = lineIndex;
+            this.columnIndex = columnIndex;
         }
 
         public String getName() {

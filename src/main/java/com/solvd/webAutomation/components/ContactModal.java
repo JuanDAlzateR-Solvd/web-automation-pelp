@@ -6,7 +6,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-public class ContactModal extends AbstractPage {
+public class ContactModal extends AbstractComponent {
 
     @FindBy(css = "#exampleModalLabel")
     private WebElement title;
@@ -26,12 +26,12 @@ public class ContactModal extends AbstractPage {
     @FindBy(css = "#exampleModal button.btn.btn-secondary")
     private WebElement closeButton;
 
-    public ContactModal(WebDriver driver) {
-        super(driver);
+    public ContactModal(WebDriver driver, WebElement root) {
+        super(driver, root);
     }
 
     @Override
-    protected WebElement getPageLoadedIndicator() {
+    protected WebElement getComponentLoadedIndicator() {
         return title;
     }
 

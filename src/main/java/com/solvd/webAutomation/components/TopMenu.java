@@ -42,6 +42,18 @@ public class TopMenu extends AbstractPage {
     @FindBy(css = "#signInModal .close")
     private WebElement signUpCloseButton;
 
+    @FindBy(css = "#exampleModal")
+    private WebElement contactContainer;
+
+    @FindBy(css = "#videoModal")
+    private WebElement aboutUsContainer;
+
+    @FindBy(css = "#logInModal")
+    private WebElement logInContainer;
+
+    @FindBy(css = "#signInModal")
+    private WebElement signUpContainer;
+
     @FindBy(css = "a[id='nava'] img")
     private WebElement imageIndicator;
 
@@ -151,29 +163,29 @@ public class TopMenu extends AbstractPage {
 
     public AboutUsModal openAboutUsModal() {
         click(MenuItem.ABOUT_US);
-        AboutUsModal aboutUsModal = new AboutUsModal(driver);
-        aboutUsModal.waitUntilPageIsReady();
+        AboutUsModal aboutUsModal = new AboutUsModal(driver, aboutUsContainer);
+        aboutUsModal.waitUntilComponentIsReady();
         return aboutUsModal;
     }
 
     public SignUpModal openSignUpModal() {
         click(MenuItem.SIGN_UP);
-        SignUpModal signUpModal = new SignUpModal(driver);
-        signUpModal.waitUntilPageIsReady();
+        SignUpModal signUpModal = new SignUpModal(driver, signUpContainer);
+        signUpModal.waitUntilComponentIsReady();
         return signUpModal;
     }
 
     public ContactModal openContactModal() {
         click(MenuItem.CONTACT);
-        ContactModal contactModal = new ContactModal(driver);
-        contactModal.waitUntilPageIsReady();
+        ContactModal contactModal = new ContactModal(driver, contactContainer);
+        contactModal.waitUntilComponentIsReady();
         return contactModal;
     }
 
     public LogInModal openLogInModal() {
         click(MenuItem.LOG_IN);
-        LogInModal logInModal = new LogInModal(driver);
-        logInModal.waitUntilPageIsReady();
+        LogInModal logInModal = new LogInModal(driver,logInContainer);
+        logInModal.waitUntilComponentIsReady();
         return logInModal;
     }
 

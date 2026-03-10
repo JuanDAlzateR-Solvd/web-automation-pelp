@@ -5,7 +5,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-public class LogInModal extends AbstractPage {
+public class LogInModal extends AbstractComponent {
 
     @FindBy(id = "logInModalLabel")
     private WebElement title;
@@ -22,12 +22,12 @@ public class LogInModal extends AbstractPage {
     @FindBy(id = "loginpassword")
     private WebElement passwordInput;
 
-    public LogInModal(WebDriver driver) {
-        super(driver);
+    public LogInModal(WebDriver driver, WebElement root) {
+        super(driver,root);
     }
 
     @Override
-    protected WebElement getPageLoadedIndicator() {
+    protected WebElement getComponentLoadedIndicator() {
         return title;
     }
 

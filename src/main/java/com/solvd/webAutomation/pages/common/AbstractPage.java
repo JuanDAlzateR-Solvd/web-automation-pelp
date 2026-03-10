@@ -42,21 +42,6 @@ public abstract class AbstractPage extends AbstractUIObject {
         logger.info("The page [{}] is ready", this.getClass().getSimpleName());
     }
 
-    public boolean isAlertPresent() {
-        try {
-            waitUtil.waitForAlert();
-            return true;
-        } catch (TimeoutException e) {
-            return false;
-        }
-    }
-
-    public void acceptWrongPasswordAlert() {
-        logger.info("accepting 'Wrong password' Alert");
-        Alert alert = waitUtil.waitForAlert();
-        alert.accept();
-    }
-
     public static HomePage openHomePage(WebDriver driver) {
         HomePage homePage = new HomePage(driver);
         homePage.waitUntilPageIsReady();

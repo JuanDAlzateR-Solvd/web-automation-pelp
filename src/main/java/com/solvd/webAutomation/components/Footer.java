@@ -7,38 +7,42 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.Arrays;
+import java.util.Map;
+import java.util.stream.Collectors;
 
-public class Footer extends AbstractPage {
+public class Footer extends AbstractComponent {
 
-    @FindBy(css = "#fotcont div[class*='col-sm-3'] .caption")
+    @FindBy(css = "div[class*='col-sm-3'] .caption")
     private WebElement contactInfo;
 
-    @FindBy(css = "#fotcont img")
+    @FindBy(css = "img")
     private WebElement imageLocator;
 
-    public Footer(WebDriver driver) {
-        super(driver);
+    public Footer(WebDriver driver, WebElement root) {
+        super(driver,root);
     }
 
     @Override
-    protected WebElement getPageLoadedIndicator() {
+    protected WebElement getComponentLoadedIndicator() {
         return imageLocator;
     }
 
-    public String[] getContactInfoText() {
-        logger.debug(contactInfo.getText());
-        return Arrays.stream(contactInfo.getText().split("\n"))
-                .map(String::trim)
-                .toArray(String[]::new);
-    }
+    /**
+     * Parse contact info once and return a map:
+     * Address -> value
+     * Phone -> value
+     * Email -> value
+     */
+    private Map<String, String> parseContactInfo() {
 
-    public String getInfo(InfoItem item) {
         return Arrays.stream(contactInfo.getText().split("\n"))
                 .map(String::trim)
-                .filter(line -> line.startsWith(item.getLabel()))
-                .map(line -> line.split(":", 2)[1].trim())
-                .findFirst()
-                .orElse("");
+                .map(line -> line.split(":", 2))
+                .filter(parts -> parts.length == 2)
+                .collect(Collectors.toMap(
+                        parts -> parts[0].trim(),
+                        parts -> parts[1].trim()
+                ));
     }
 
     public boolean isVisibleInScreen() {
@@ -49,34 +53,22 @@ public class Footer extends AbstractPage {
         scrollTo(contactInfo);
     }
 
-    public boolean verifyAddress() {
-        return !getInfo(InfoItem.ADDRESS).isBlank();
-    }
-
-    public boolean verifyPhone() {
-        String phone = getInfo(InfoItem.PHONE);
-        return StringUtils.isValidPhone(phone);
-    }
-
-    public boolean verifyEmail() {
-        String email = getInfo(InfoItem.EMAIL);
-        return StringUtils.isValidEmail(email);
-    }
-
     public boolean verifyFooterInfo() {
-        boolean validAddress = verifyAddress();
-        boolean validPhone = verifyPhone();
-        boolean validEmail = verifyEmail();
 
-        if (!validAddress) {
-            logger.error("Invalid Address: {}", getInfo(InfoItem.ADDRESS));
-        }
-        if (!validPhone) {
-            logger.error("Invalid Phone: {}", getInfo(InfoItem.PHONE));
-        }
-        if (!validEmail) {
-            logger.error("Invalid Email: {}", getInfo(InfoItem.EMAIL));
-        }
+        Map<String, String> info = parseContactInfo();
+
+        String address = info.getOrDefault(InfoItem.ADDRESS.getLabel(), "");
+        String phone = info.getOrDefault(InfoItem.PHONE.getLabel(), "");
+        String email = info.getOrDefault(InfoItem.EMAIL.getLabel(), "");
+
+        boolean validAddress = !address.isBlank();
+        boolean validPhone = StringUtils.isValidPhone(phone);
+        boolean validEmail = StringUtils.isValidEmail(email);
+
+        if (!validAddress) {logger.error("Invalid Address: {}", address);}
+        if (!validPhone) {logger.error("Invalid Phone: {}", phone);}
+        if (!validEmail) {logger.error("Invalid Email: {}", email);}
+
         return validAddress && validPhone && validEmail;
     }
 

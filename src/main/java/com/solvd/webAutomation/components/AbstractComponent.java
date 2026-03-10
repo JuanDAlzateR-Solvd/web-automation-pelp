@@ -7,7 +7,7 @@ import org.openqa.selenium.support.pagefactory.DefaultElementLocatorFactory;
 
 public abstract class AbstractComponent extends AbstractUIObject {
 
-    protected WebElement root;
+    protected final WebElement root;
 
     private static final By LOADER = By.cssSelector(".loader, .spinner, .loading");
 
@@ -34,14 +34,28 @@ public abstract class AbstractComponent extends AbstractUIObject {
 
     public void waitUntilComponentIsReady() {
         String className = this.getClass().getSimpleName();
-        logger.info("Waiting for the component [{}] to load", className);
+        logger.info("Waiting for the component [{}] to be ready", className);
 
-        waitUtil.waitForPageLoad();
+//        waitUtil.waitForPageLoad();
         waitUtil.waitForInvisibilityOfElementLocated(LOADER, "Component Loader");
         waitUtil.waitForElementVisible(getComponentLoadedIndicator(), className + " Indicator");
 
-        logger.info("The page [{}] is ready", this.getClass().getSimpleName());
+        logger.info("The component [{}] is ready", this.getClass().getSimpleName());
     }
 
+    public boolean isAlertPresent() {
+        try {
+            waitUtil.waitForAlert();
+            return true;
+        } catch (TimeoutException e) {
+            return false;
+        }
+    }
+
+    public void acceptWrongPasswordAlert() {
+        logger.info("accepting 'Wrong password' Alert");
+        Alert alert = waitUtil.waitForAlert();
+        alert.accept();
+    }
 
 }

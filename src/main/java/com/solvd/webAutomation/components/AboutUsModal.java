@@ -5,7 +5,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-public class AboutUsModal extends AbstractPage {
+public class AboutUsModal extends AbstractComponent {
 
     @FindBy(id = "videoModalLabel")
     private WebElement title;
@@ -16,12 +16,12 @@ public class AboutUsModal extends AbstractPage {
     @FindBy(css = "#videoModal .close")
     private WebElement exitButton;
 
-    public AboutUsModal(WebDriver driver) {
-        super(driver);
+    public AboutUsModal(WebDriver driver, WebElement root) {
+        super(driver, root);
     }
 
     @Override
-    protected WebElement getPageLoadedIndicator() {
+    protected WebElement getComponentLoadedIndicator() {
         return title;
     }
 

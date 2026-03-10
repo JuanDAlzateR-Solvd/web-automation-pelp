@@ -29,6 +29,9 @@ public class HomePage extends AbstractPage {
     @FindBy(css = "#contcont")
     private WebElement productGridContainer;
 
+    @FindBy(css = "#fotcont")
+    private WebElement footerContainer;
+
     private static final By LOADER = By.cssSelector(".loader, .spinner, .loading");
 
     private final Map<Category, WebElement> menuButtons;
@@ -78,7 +81,7 @@ public class HomePage extends AbstractPage {
     }
 
     public Footer getFooter() {
-        return new Footer(driver);
+        return new Footer(driver,footerContainer);
     }
 
     public ProductGrid selectCategory(Category item) {

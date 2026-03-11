@@ -1,6 +1,5 @@
 package com.solvd.webAutomation.components;
 
-import com.solvd.webAutomation.pages.common.AbstractPage;
 import com.solvd.webAutomation.utils.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -19,7 +18,7 @@ public class Footer extends AbstractComponent {
     private WebElement imageLocator;
 
     public Footer(WebDriver driver, WebElement root) {
-        super(driver,root);
+        super(driver, root);
     }
 
     @Override
@@ -65,9 +64,15 @@ public class Footer extends AbstractComponent {
         boolean validPhone = StringUtils.isValidPhone(phone);
         boolean validEmail = StringUtils.isValidEmail(email);
 
-        if (!validAddress) {logger.error("Invalid Address: {}", address);}
-        if (!validPhone) {logger.error("Invalid Phone: {}", phone);}
-        if (!validEmail) {logger.error("Invalid Email: {}", email);}
+        if (!validAddress) {
+            logger.error("Invalid Address: {}", address);
+        }
+        if (!validPhone) {
+            logger.error("Invalid Phone: {}", phone);
+        }
+        if (!validEmail) {
+            logger.error("Invalid Email: {}", email);
+        }
 
         return validAddress && validPhone && validEmail;
     }

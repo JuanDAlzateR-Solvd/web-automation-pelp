@@ -83,7 +83,7 @@ public class DemoblazeTest extends AbstractTest {
         int productIndex = productGrid.getProductCount() - 1;
 
         ProductPage productPage = productGrid
-                .openProductByIndex(productIndex);
+                .openProduct(productIndex);
 
         Assert.assertTrue(productPage.isInfoVisible(), "Product Page should have all info visible");
 
@@ -99,10 +99,10 @@ public class DemoblazeTest extends AbstractTest {
 
         ProductGrid productGrid = homePage.selectCategory(category);
 
-        String productName = productGrid.getProductNameByIndex(0);
+        String productName = productGrid.getProductName(0);
 
         CartPage cartPage = productGrid
-                .openProductByIndex(0)
+                .openProduct(0)
                 .addToCart()
                 .getNavigation()
                 .goToCartPage();
@@ -125,10 +125,10 @@ public class DemoblazeTest extends AbstractTest {
 
         ProductGrid productGrid = homePage.selectCategory(category);
 
-        String productName = productGrid.getProductNameByIndex(0);
+        String productName = productGrid.getProductName(0);
 
         CartPage cartPage = productGrid
-                .openProductByIndex(0)
+                .openProduct(0)
                 .addToCart()
                 .getNavigation()
                 .goToCartPage();

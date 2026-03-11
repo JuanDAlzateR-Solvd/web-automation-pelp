@@ -100,7 +100,7 @@ public class ProductPage extends AbstractPage {
     }
 
     public Navigation getNavigation() {
-        return new Navigation(driver,navigationRoot,getTopMenu());
+        return new Navigation(driver, navigationRoot, getTopMenu());
     }
 
     public boolean isInfoVisible() {

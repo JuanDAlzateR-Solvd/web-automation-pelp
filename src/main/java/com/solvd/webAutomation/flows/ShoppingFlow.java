@@ -3,7 +3,6 @@ package com.solvd.webAutomation.flows;
 import com.solvd.webAutomation.components.ProductGrid;
 import com.solvd.webAutomation.config.ConfigReader;
 import com.solvd.webAutomation.pages.desktop.HomePage;
-import com.solvd.webAutomation.wait.WaitUtil;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +27,7 @@ public class ShoppingFlow {
 
         ProductGrid productGrid = homePage.getProductGrid();
 
-        String productName = productGrid.getProductNameByIndex(productIndex);
+        String productName = productGrid.getProductName(productIndex);
         String excludedProductsConfig = ConfigReader.get("excluded_products");
         List<String> excludedProducts = excludedProductsConfig != null
                 ? Arrays.stream(excludedProductsConfig.split(","))
@@ -46,13 +45,13 @@ public class ShoppingFlow {
             throw new RuntimeException("No products available to add to cart");
         }
 
-        if(!availableProducts.contains(productName)) {
+        if (!availableProducts.contains(productName)) {
             logger.debug("Product [{}] not found in available products. Selecting first available product.", productName);
             productIndex = availableProducts.indexOf(availableProducts.get(0));
         }
 
         productGrid
-                .openProductByIndex(productIndex)
+                .openProduct(productIndex)
                 .addToCart()
                 .getNavigation()
                 .goToHomePage();

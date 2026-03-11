@@ -121,7 +121,7 @@ public class CartPage extends AbstractPage {
         waitUntilPageIsReady();
         logger.info("Checking if shopping cart is empty");
 
-        List<WebElement> rows =getCartRows();
+        List<WebElement> rows = getCartRows();
 
         if (rows.isEmpty()) {
             logger.info("Shopping cart is empty");
@@ -138,7 +138,7 @@ public class CartPage extends AbstractPage {
     }
 
     public Navigation getNavigation() {
-        return new Navigation(driver,navigationRoot,getTopMenu());
+        return new Navigation(driver, navigationRoot, getTopMenu());
     }
 
     public boolean containsProduct(String productName) {
@@ -149,7 +149,7 @@ public class CartPage extends AbstractPage {
     public int getProductCount() {
         logger.info("Checking number of products in shopping cart");
 
-        List<WebElement> rows =getCartRows();
+        List<WebElement> rows = getCartRows();
         int size = rows.size();
         logger.info("Shopping cart has {} products", size);
 

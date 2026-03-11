@@ -70,8 +70,8 @@ public class WaitUtil {
         buildWait().until(ExpectedConditions.numberOfElementsToBe(locator, number));
     }
 
-    public void waitForStalenessOf(WebElement element,String elementName) {
-        logger.debug("Waiting for staleness of element {}",  elementName);
+    public void waitForStalenessOf(WebElement element, String elementName) {
+        logger.debug("Waiting for staleness of element {}", elementName);
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(defaultTimeout));
         wait.until(ExpectedConditions.stalenessOf(element));
     }

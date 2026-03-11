@@ -1,6 +1,5 @@
 package com.solvd.webAutomation.components;
 
-import com.solvd.webAutomation.pages.common.AbstractPage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -38,13 +37,16 @@ public class SignUpModal extends AbstractComponent {
     public void clickSignIn() {
         click(signInButton, "Sign In Button");
     }
+
     public void clickClose() {
         click(closeButton, "Close Button");
         waitUtil.waitForInvisibility(closeButton, "Close Button");
     }
+
     public void typeUsername(String username) {
         type(usernameInput, "Input Username", username);
     }
+
     public void typePassword(String password) {
         type(passwordInput, "Input Password", password);
     }

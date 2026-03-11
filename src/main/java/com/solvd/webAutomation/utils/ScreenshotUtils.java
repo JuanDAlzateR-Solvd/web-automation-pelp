@@ -44,4 +44,5 @@ public class ScreenshotUtils {
             logger.error("Failed to save screenshot: {}", e.getMessage());
         }
     }
+
 }

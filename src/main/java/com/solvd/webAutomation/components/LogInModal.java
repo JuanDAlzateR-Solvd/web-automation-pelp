@@ -1,6 +1,5 @@
 package com.solvd.webAutomation.components;
 
-import com.solvd.webAutomation.pages.common.AbstractPage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -23,7 +22,7 @@ public class LogInModal extends AbstractComponent {
     private WebElement passwordInput;
 
     public LogInModal(WebDriver driver, WebElement root) {
-        super(driver,root);
+        super(driver, root);
     }
 
     @Override

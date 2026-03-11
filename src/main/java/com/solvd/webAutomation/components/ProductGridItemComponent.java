@@ -7,13 +7,16 @@ import org.openqa.selenium.support.FindBy;
 public class ProductGridItemComponent extends AbstractComponent {
 
     @FindBy(css = ".card-title")
-    private WebElement title;
+    private WebElement productTitle;
+
+    @FindBy(css = ".card-title a")
+    private WebElement productLink;
 
     @FindBy(css = "h5")
-    private WebElement price;
+    private WebElement productPrice;
 
     @FindBy(css = ".card-text")
-    private WebElement description;
+    private WebElement productDescription;
 
     @FindBy(css = ".card-img-top")
     private WebElement imageIndicator;
@@ -24,34 +27,32 @@ public class ProductGridItemComponent extends AbstractComponent {
 
     @Override
     public WebElement getComponentLoadedIndicator() {
-        return title;
+        return productTitle;
     }
 
-    public String getTitle() {
-        return getText(title, "Product title");
+    public String getProductTitle() {
+        return getText(productTitle, "Product title");
     }
 
     public String getText() {
 
-        return getText(title, "Product Component"); //It doesn't work with root -> used title.
+        return getText(productTitle, "Product Component"); //It doesn't work with root -> used title.
     }
 
     public String getProductName() {
-        return getText(title, "Product title");
+        return getText(productTitle, "Product title");
     }
 
-    public String getPrice() {
-        return getText(price, "Product price");
+    public String getProductPrice() {
+        return getText(productPrice, "Product price");
     }
 
-    public String getDescription() {
-        return getText(description, "Product description");
+    public String getProductDescription() {
+        return getText(productDescription, "Product description");
     }
 
     public void clickProduct() {
-        click(title, getProductName());
+        click(productLink, getProductName());
     }
-
-
 
 }

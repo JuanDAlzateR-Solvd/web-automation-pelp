@@ -84,15 +84,15 @@ public class HomePage extends AbstractPage {
     }
 
     public TopMenu getTopMenu() {
-        return new TopMenu(driver,topMenuContainer);
+        return new TopMenu(driver, topMenuContainer);
     }
 
     public Navigation getNavigation() {
-        return new Navigation(driver,navigationRoot,getTopMenu());
+        return new Navigation(driver, navigationRoot, getTopMenu());
     }
 
     public Footer getFooter() {
-        return new Footer(driver,footerContainer);
+        return new Footer(driver, footerContainer);
     }
 
     public ProductGrid selectCategory(Category item) {

@@ -1,12 +1,8 @@
 package com.solvd.webAutomation.components;
 
-import com.solvd.webAutomation.pages.desktop.CartPage;
-import com.solvd.webAutomation.pages.desktop.HomePage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-
-import java.util.Map;
 
 public class TopMenu extends AbstractComponent {
 
@@ -31,8 +27,8 @@ public class TopMenu extends AbstractComponent {
     @FindBy(css = "a[id='nava'] img")
     private WebElement imageIndicator;
 
-    public TopMenu(WebDriver driver,WebElement root) {
-        super(driver,root);
+    public TopMenu(WebDriver driver, WebElement root) {
+        super(driver, root);
     }
 
     @Override

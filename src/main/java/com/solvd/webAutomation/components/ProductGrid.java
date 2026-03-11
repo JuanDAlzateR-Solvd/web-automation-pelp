@@ -1,6 +1,5 @@
 package com.solvd.webAutomation.components;
 
-import com.solvd.webAutomation.pages.desktop.HomePage;
 import com.solvd.webAutomation.pages.desktop.ProductPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -14,7 +13,7 @@ public class ProductGrid extends AbstractComponent {
     @FindBy(css = ".pagination #next2")
     private WebElement nextButton;
 
-    @FindBy(css = ".col-lg-4")
+    @FindBy(css = "#tbodyid .col-lg-4")
     private List<WebElement> productElements;
 
     @FindBy(css = ".card-img-top.img-fluid")
@@ -46,7 +45,7 @@ public class ProductGrid extends AbstractComponent {
 
     public List<String> getProductTitles() {
         return getProductComponents().stream()
-                .map(ProductGridItemComponent::getTitle)
+                .map(ProductGridItemComponent::getProductTitle)
                 .toList();
     }
 
@@ -58,23 +57,31 @@ public class ProductGrid extends AbstractComponent {
         click(nextButton, "Next Button");
     }
 
-    public ProductGridItemComponent getProductByIndex(int productIndex) {
+    public ProductGridItemComponent getProduct(int productIndex) {
         List<ProductGridItemComponent> products = getProductComponents();
-        ProductGridItemComponent product = products.get(productIndex);
-        logger.debug("Getting product {} from product grid", productIndex);
-        return product;
+
+        if (productIndex >= products.size()) {
+            throw new IllegalArgumentException(
+                    "Requested product index " + productIndex +
+                            ", but only " + products.size() + " products found"
+            );
+        }
+            ProductGridItemComponent product = products.get(productIndex);
+            logger.debug("Getting product {} from product grid", productIndex);
+            return product;
+
     }
 
     //Test flow methods
 
-    public ProductPage openProductByIndex(int index) {
-        ProductGridItemComponent product = getProductByIndex(index);
+    public ProductPage openProduct(int index) {
+        ProductGridItemComponent product = getProduct(index);
         product.clickProduct();
         return new ProductPage(driver);
     }
 
-    public String getProductNameByIndex(int index) {
-        ProductGridItemComponent product = getProductByIndex(index);
+    public String getProductName(int index) {
+        ProductGridItemComponent product = getProduct(index);
         return product.getProductName();
     }
 
@@ -90,4 +97,5 @@ public class ProductGrid extends AbstractComponent {
 
         return size;
     }
+
 }

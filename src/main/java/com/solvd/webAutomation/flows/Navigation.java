@@ -3,7 +3,6 @@ package com.solvd.webAutomation.flows;
 import com.solvd.webAutomation.components.*;
 import com.solvd.webAutomation.pages.desktop.CartPage;
 import com.solvd.webAutomation.pages.desktop.HomePage;
-import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -76,4 +75,5 @@ public class Navigation extends AbstractComponent {
         homePage.waitUntilPageIsReady();
         return homePage;
     }
+
 }

@@ -42,7 +42,8 @@ public class CartItemComponent extends AbstractComponent {
         click(deleteButton, "Delete Button");
     }
 
-    protected String getDataItemText(DataItem item) {return getText(getElementFrom(item), item.getName());
+    protected String getDataItemText(DataItem item) {
+        return getText(getElementFrom(item), item.getName());
     }
 
     protected WebElement getElementFrom(DataItem item) {

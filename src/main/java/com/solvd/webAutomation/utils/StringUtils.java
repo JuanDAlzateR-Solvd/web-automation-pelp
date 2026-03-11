@@ -91,4 +91,5 @@ public class StringUtils {
         }
         return str.substring(0, maxLength) + "...";
     }
+
 }

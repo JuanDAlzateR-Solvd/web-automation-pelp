@@ -31,6 +31,10 @@ public class CartPage extends AbstractPage {
     @FindBy(css = "html[lang]")
     private WebElement navigationRoot;
 
+
+    @FindBy(css = "#tbodyid .success")
+    private List<CartItemComponent> cartItemComponents;
+
     public CartPage(WebDriver driver) {
         super(driver);
     }
@@ -115,24 +119,21 @@ public class CartPage extends AbstractPage {
 
     public boolean isCartEmpty() {
         waitUntilPageIsReady();
-
         logger.info("Checking if shopping cart is empty");
-        waitUtil.waitForPresenceOfElementLocated(By.id("tbodyid"));
 
-        List<WebElement> rows =
-                driver.findElements(By.cssSelector("#tbodyid .success"));
+        List<WebElement> rows =getCartRows();
 
-        if (rows.size() == 0) {
+        if (rows.isEmpty()) {
             logger.info("Shopping cart is empty");
         } else {
             logger.info("Shopping cart is not empty");
         }
-        return rows.size() == 0;
+        return rows.isEmpty();
     }
 
     //Test flow methods
 
-    public TopMenu getTopMenu() {
+    private TopMenu getTopMenu() {
         return new TopMenu(driver, topMenuContainer);
     }
 
@@ -147,15 +148,17 @@ public class CartPage extends AbstractPage {
 
     public int getProductCount() {
         logger.info("Checking number of products in shopping cart");
-        waitUtil.waitForPresenceOfElementLocated(By.id("tbodyid"));
 
-        List<WebElement> rows =
-                driver.findElements(By.cssSelector("#tbodyid .success"));
-
+        List<WebElement> rows =getCartRows();
         int size = rows.size();
         logger.info("Shopping cart has {} products", size);
 
         return size;
+    }
+
+    private List<WebElement> getCartRows() {
+        waitUtil.waitForPresenceOfElementLocated(By.id("tbodyid"));
+        return driver.findElements(By.cssSelector("#tbodyid .success"));
     }
 
     public void waitUntilCartLoadsProducts() {
@@ -166,11 +169,30 @@ public class CartPage extends AbstractPage {
     }
 
     public void emptyShoppingCart() {
+        final int maxAttempts = 20;
+        int attempts = 0;
+
         while (!isCartEmpty()) {
-            logger.info("DELETE Deleting {} products from cart", getProductCount());
-            String productName = getCartItemComponents().get(0).getTitle();
+
+            if (attempts >= maxAttempts) {
+                throw new IllegalStateException(
+                        "Failed to empty shopping cart after " + maxAttempts + " attempts."
+                );
+            }
+
+            CartItemComponent item = getCartItemComponents().get(0);
+            String productName = item.getTitle();
+
+            logger.info("Deleting product '{}' from cart", productName);
+
+            WebElement rowElement = item.getRoot();
             deleteProduct(productName);
+            waitUtil.waitForStalenessOf(rowElement, productName);
+
+            attempts++;
         }
+
+        logger.info("Shopping cart successfully emptied");
     }
 
 }

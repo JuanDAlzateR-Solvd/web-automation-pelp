@@ -37,9 +37,18 @@ public class ShoppingFlow {
                 : List.of();
 
         //Identified a bug specific for some products (e.g. Nexus 6).
-        while (excludedProducts.contains(productName)) {
-            productIndex++;
-            productName = productGrid.getProductNameByIndex(productIndex);
+        List<String> availableProducts = productGrid.getProductTitles()
+                .stream()
+                .filter(p -> !excludedProducts.contains(p))
+                .toList();
+
+        if (availableProducts.isEmpty()) {
+            throw new RuntimeException("No products available to add to cart");
+        }
+
+        if(!availableProducts.contains(productName)) {
+            logger.debug("Product [{}] not found in available products. Selecting first available product.", productName);
+            productIndex = availableProducts.indexOf(availableProducts.get(0));
         }
 
         productGrid

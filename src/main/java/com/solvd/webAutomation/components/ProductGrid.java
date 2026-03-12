@@ -75,23 +75,23 @@ public class ProductGrid extends AbstractComponent {
 
     public ProductPage openProduct(int index) {
 
-        Function<Integer,ProductPage> openProd = (i) -> {
+        Function<Integer, ProductPage> openProd = (i) -> {
             ProductGridItemComponent product = getProduct(i);
             product.clickProduct();
             return new ProductPage(driver);
         };
 
-        return waitUtil.waitUntil(driver->openProd.apply(index));
+        return waitUtil.waitUntil(driver -> openProd.apply(index));
     }
 
     public String getProductName(int index) {
 
-        Function<Integer,String> getName = (i) -> {
+        Function<Integer, String> getName = (i) -> {
             ProductGridItemComponent product = getProduct(index);
             return product.getProductName();
         };
 
-        return waitUtil.waitUntil(driver->getName.apply(index));
+        return waitUtil.waitUntil(driver -> getName.apply(index));
     }
 
     public int getProductCount() {

@@ -40,7 +40,6 @@ public class HomePage extends AbstractPage {
     @FindBy(css = "html[lang]")
     private WebElement navigationRoot;
 
-
     private final Map<Category, WebElement> menuButtons;
 
     public HomePage(WebDriver driver) {

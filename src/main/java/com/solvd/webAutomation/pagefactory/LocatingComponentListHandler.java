@@ -65,5 +65,5 @@ public class LocatingComponentListHandler<T extends AbstractComponent> implement
             return true;
         }
     }
-}
 
+}

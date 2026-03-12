@@ -106,11 +106,12 @@ public class WaitUtil {
         return buildWait().until(condition);
     }
 
-    public <X,T> T waitUntilApply(Function<X, T> condition, X object) {
+    public <X, T> T waitUntilApply(Function<X, T> condition, X object) {
         return buildWait().until(driver -> condition.apply(object));
     }
 
     public void waitUntilTrue(Function<WebDriver, Boolean> condition) {
         buildWait().until(condition);
     }
+
 }

@@ -57,7 +57,7 @@ public class CartPage extends AbstractPage {
 
     public CartItemComponent getCartItemComponentByName(String productName) {
 
-        Function<String,CartItemComponent> findCartItem = (name) ->
+        Function<String, CartItemComponent> findCartItem = (name) ->
                 Objects.requireNonNull(
                         getCartItemComponents().stream()
                                 .filter(ci -> ci.getTitle().equalsIgnoreCase(name))
@@ -65,7 +65,7 @@ public class CartPage extends AbstractPage {
                                 .orElse(null)
                 );
 
-        return waitUtil.waitUntil(driver->findCartItem.apply(productName));
+        return waitUtil.waitUntil(driver -> findCartItem.apply(productName));
 //        return waitUtil.waitUntilApply(findCartItem, productName);
     }
 
@@ -193,4 +193,5 @@ public class CartPage extends AbstractPage {
 
         logger.info("Shopping cart successfully emptied");
     }
+
 }

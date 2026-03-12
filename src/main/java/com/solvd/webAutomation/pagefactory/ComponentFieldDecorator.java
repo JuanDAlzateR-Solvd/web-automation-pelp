@@ -79,4 +79,5 @@ public class ComponentFieldDecorator extends DefaultFieldDecorator {
 
         return listItemType.asSubclass(AbstractComponent.class);
     }
+
 }

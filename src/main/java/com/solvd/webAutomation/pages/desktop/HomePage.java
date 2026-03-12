@@ -5,7 +5,6 @@ import com.solvd.webAutomation.components.ProductGrid;
 import com.solvd.webAutomation.components.TopMenu;
 import com.solvd.webAutomation.flows.Navigation;
 import com.solvd.webAutomation.pages.common.AbstractPage;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -28,18 +27,17 @@ public class HomePage extends AbstractPage {
     private List<WebElement> imageIndicator;
 
     @FindBy(css = "#contcont")
-    private WebElement productGridContainer;
+    private ProductGrid productGrid;
 
     @FindBy(css = "#fotcont")
-    private WebElement footerContainer;
+    private Footer footer;
 
     @FindBy(css = "#narvbarx")
-    private WebElement topMenuContainer;
+    private TopMenu topMenu;
 
     @FindBy(css = "html[lang]")
     private WebElement navigationRoot;
 
-    private static final By LOADER = By.cssSelector(".loader, .spinner, .loading");
 
     private final Map<Category, WebElement> menuButtons;
 
@@ -80,11 +78,11 @@ public class HomePage extends AbstractPage {
     //Test flow methods
 
     public ProductGrid getProductGrid() {
-        return new ProductGrid(driver, productGridContainer);
+        return productGrid;
     }
 
     public TopMenu getTopMenu() {
-        return new TopMenu(driver, topMenuContainer);
+        return topMenu;
     }
 
     public Navigation getNavigation() {
@@ -92,13 +90,13 @@ public class HomePage extends AbstractPage {
     }
 
     public Footer getFooter() {
-        return new Footer(driver, footerContainer);
+        return footer;
     }
 
     public ProductGrid selectCategory(Category item) {
         click(item);
         waitUntilPageIsReady();
-        return new ProductGrid(driver, productGridContainer);
+        return productGrid;
     }
 
 }

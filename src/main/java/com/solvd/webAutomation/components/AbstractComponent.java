@@ -1,5 +1,6 @@
 package com.solvd.webAutomation.components;
 
+import com.solvd.webAutomation.pagefactory.ComponentFieldDecorator;
 import com.solvd.webAutomation.pages.common.AbstractUIObject;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.PageFactory;
@@ -11,7 +12,7 @@ public abstract class AbstractComponent extends AbstractUIObject {
 
     private static final By LOADER = By.cssSelector(".loader, .spinner, .loading");
 
-    public AbstractComponent(WebDriver driver, WebElement root) {
+    protected AbstractComponent(WebDriver driver, WebElement root) {
         super(driver);
         this.root = root;
 
@@ -20,10 +21,8 @@ public abstract class AbstractComponent extends AbstractUIObject {
             throw new IllegalArgumentException("Root element cannot be null for component: " + getClass().getSimpleName());
         }
 
-        PageFactory.initElements(
-                new DefaultElementLocatorFactory(root),
-                this
-        );
+        DefaultElementLocatorFactory locatorFactory = new DefaultElementLocatorFactory(root);
+        PageFactory.initElements(new ComponentFieldDecorator(locatorFactory, root, driver), this);
 
         logger.info("Page Created | Thread: {} | Driver: {}",
                 Thread.currentThread().getId(),
@@ -41,7 +40,6 @@ public abstract class AbstractComponent extends AbstractUIObject {
         String className = this.getClass().getSimpleName();
         logger.info("Waiting for the component [{}] to be ready", className);
 
-//        waitUtil.waitForPageLoad();
         waitUtil.waitForInvisibilityOfElementLocated(LOADER, "Component Loader");
         waitUtil.waitForElementVisible(getComponentLoadedIndicator(), className + " Indicator");
 

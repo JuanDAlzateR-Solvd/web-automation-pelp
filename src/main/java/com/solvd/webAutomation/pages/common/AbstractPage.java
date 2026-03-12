@@ -1,6 +1,7 @@
 package com.solvd.webAutomation.pages.common;
 
 import com.solvd.webAutomation.config.ConfigReader;
+import com.solvd.webAutomation.pagefactory.ComponentFieldDecorator;
 import com.solvd.webAutomation.pages.desktop.HomePage;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.PageFactory;
@@ -12,11 +13,11 @@ public abstract class AbstractPage extends AbstractUIObject {
 
     int waitDuration = Integer.parseInt(ConfigReader.get("wait_duration"));
 
-    public AbstractPage(WebDriver driver) {
+    protected AbstractPage(WebDriver driver) {
         super(driver);
 
-        PageFactory.initElements(
-                new AjaxElementLocatorFactory(driver, waitDuration), this);
+        AjaxElementLocatorFactory locatorFactory = new AjaxElementLocatorFactory(driver, waitDuration);
+        PageFactory.initElements(new ComponentFieldDecorator(locatorFactory, driver, driver), this);
 
         logger.info("Page Created | Thread: {} | Driver: {}",
                 Thread.currentThread().getId(),

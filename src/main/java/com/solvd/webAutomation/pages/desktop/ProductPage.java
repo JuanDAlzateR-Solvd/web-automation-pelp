@@ -27,7 +27,7 @@ public class ProductPage extends AbstractPage {
     private WebElement imageLocator;
 
     @FindBy(css = ".navbar.navbar-toggleable-md.bg-inverse")
-    private WebElement topMenuContainer;
+    private TopMenu topMenu;
 
     @FindBy(css = "html[lang]")
     private WebElement navigationRoot;
@@ -96,7 +96,7 @@ public class ProductPage extends AbstractPage {
     }
 
     public TopMenu getTopMenu() {
-        return new TopMenu(driver, topMenuContainer);
+        return topMenu;
     }
 
     public Navigation getNavigation() {

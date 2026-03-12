@@ -20,20 +20,16 @@ public class CartPage extends AbstractPage {
     private WebElement totalPrice;
 
     @FindBy(css = "#tbodyid .success")
-    private List<WebElement> tableRows;
+    private List<CartItemComponent> cartItemComponents;
 
     @FindBy(css = ".table-responsive")
     private WebElement tableIndicator;
 
     @FindBy(css = ".navbar.navbar-toggleable-md.bg-inverse")
-    private WebElement topMenuContainer;
+    private TopMenu topMenu;
 
     @FindBy(css = "html[lang]")
     private WebElement navigationRoot;
-
-
-    @FindBy(css = "#tbodyid .success")
-    private List<CartItemComponent> cartItemComponents;
 
     public CartPage(WebDriver driver) {
         super(driver);
@@ -51,18 +47,12 @@ public class CartPage extends AbstractPage {
     public List<CartItemComponent> getCartItemComponents() {
         waitUntilPageIsReady();
         waitUtil.waitForPresenceOfElementLocated(By.id("tbodyid"));
-
-        By by = By.cssSelector("#tbodyid .success");
-        List<WebElement> elements = driver.findElements(by);
-        logger.debug("Getting cart item components: found {} products", elements.size());
-        return elements.stream()
-                .map(el -> new CartItemComponent(driver, el))
-                .toList();
+        logger.debug("Getting cart item components: found {} products", cartItemComponents.size());
+        return cartItemComponents;
     }
 
     public CartItemComponent getCartItemComponentByName(String productName) {
-        List<CartItemComponent> cartItems = getCartItemComponents();
-        return cartItems.stream()
+        return getCartItemComponents().stream()
                 .filter(ci -> ci.getTitle().equalsIgnoreCase(productName))
                 .findFirst()
                 .orElse(null);
@@ -92,14 +82,12 @@ public class CartPage extends AbstractPage {
     public void printProductsInCart() {
         List<CartItemComponent> cartItems = getCartItemComponents();
         logger.info("Printing products in cart:");
-        cartItems.forEach(p -> {
-            logger.info(p.getRootText());
-        });
+        cartItems.forEach(p -> logger.info(p.getRootText()));
         logger.info("Finished printing products in cart.");
     }
 
     private void waitCartUpdatesAfterDeleteProduct(int initialCartSize) {
-        if (!isCartEmpty()) {
+        if (initialCartSize > 1) {
             waitUntilCartDeletesProduct(initialCartSize);
             waitUntilVisible(tableIndicator, "Shopping cart table");
         }
@@ -121,20 +109,20 @@ public class CartPage extends AbstractPage {
         waitUntilPageIsReady();
         logger.info("Checking if shopping cart is empty");
 
-        List<WebElement> rows = getCartRows();
+        boolean empty = getCartItemComponents().isEmpty();
 
-        if (rows.isEmpty()) {
+        if (empty) {
             logger.info("Shopping cart is empty");
         } else {
             logger.info("Shopping cart is not empty");
         }
-        return rows.isEmpty();
+        return empty;
     }
 
     //Test flow methods
 
     private TopMenu getTopMenu() {
-        return new TopMenu(driver, topMenuContainer);
+        return topMenu;
     }
 
     public Navigation getNavigation() {
@@ -149,20 +137,14 @@ public class CartPage extends AbstractPage {
     public int getProductCount() {
         logger.info("Checking number of products in shopping cart");
 
-        List<WebElement> rows = getCartRows();
-        int size = rows.size();
+        int size = getCartItemComponents().size();
         logger.info("Shopping cart has {} products", size);
 
         return size;
     }
 
-    private List<WebElement> getCartRows() {
-        waitUtil.waitForPresenceOfElementLocated(By.id("tbodyid"));
-        return driver.findElements(By.cssSelector("#tbodyid .success"));
-    }
-
     public void waitUntilCartLoadsProducts() {
-        if (!isCartEmpty()) {
+        if (!getCartItemComponents().isEmpty()) {
             waitUntilCartShowsProducts();
             waitUntilVisible(tableIndicator, "Shopping cart table");
         }
@@ -194,5 +176,4 @@ public class CartPage extends AbstractPage {
 
         logger.info("Shopping cart successfully emptied");
     }
-
 }

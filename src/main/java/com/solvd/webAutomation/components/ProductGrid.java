@@ -14,7 +14,7 @@ public class ProductGrid extends AbstractComponent {
     private WebElement nextButton;
 
     @FindBy(css = "#tbodyid .col-lg-4")
-    private List<WebElement> productElements;
+    private List<ProductGridItemComponent> productItems;
 
     @FindBy(css = ".card-img-top.img-fluid")
     private WebElement imageIndicator;
@@ -29,18 +29,9 @@ public class ProductGrid extends AbstractComponent {
     }
 
     public List<ProductGridItemComponent> getProductComponents() {
-        List<WebElement> elements = getProductElements();
-        logger.debug("Getting product components: found {} products", elements.size());
-        return elements.stream()
-                .map(el -> new ProductGridItemComponent(driver, el))
-                .toList();
-    }
-
-    public List<WebElement> getProductElements() {
         waitUntilComponentIsReady();
-        logger.debug("Getting product elements");
-        return productElements;
-
+        logger.debug("Getting product components: found {} products", productItems.size());
+        return productItems;
     }
 
     public List<String> getProductTitles() {
@@ -66,10 +57,9 @@ public class ProductGrid extends AbstractComponent {
                             ", but only " + products.size() + " products found"
             );
         }
-            ProductGridItemComponent product = products.get(productIndex);
-            logger.debug("Getting product {} from product grid", productIndex);
-            return product;
-
+        ProductGridItemComponent product = products.get(productIndex);
+        logger.debug("Getting product {} from product grid", productIndex);
+        return product;
     }
 
     //Test flow methods
@@ -89,10 +79,7 @@ public class ProductGrid extends AbstractComponent {
         logger.info("Checking number of products in product grid");
         waitUtil.waitForPresenceOfElementLocated(By.id("tbodyid"));
 
-        List<WebElement> rows =
-                driver.findElements(By.cssSelector("#tbodyid .card-title"));
-
-        int size = rows.size();
+        int size = getProductComponents().size();
         logger.info("Product grid has {} products", size);
 
         return size;

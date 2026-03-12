@@ -8,11 +8,11 @@ import org.openqa.selenium.support.pagefactory.DefaultElementLocatorFactory;
 
 public abstract class AbstractComponent extends AbstractUIObject {
 
-    protected final WebElement root;
+    protected final SearchContext root;
 
     private static final By LOADER = By.cssSelector(".loader, .spinner, .loading");
 
-    protected AbstractComponent(WebDriver driver, WebElement root) {
+    protected AbstractComponent(WebDriver driver, SearchContext root) {
         super(driver);
         this.root = root;
 
@@ -33,7 +33,10 @@ public abstract class AbstractComponent extends AbstractUIObject {
     protected abstract WebElement getComponentLoadedIndicator();
 
     public WebElement getRoot() {
-        return root;
+        if (root instanceof WebElement element) {
+            return element;
+        }
+        throw new IllegalStateException("SearchContext is not a WebElement");
     }
 
     public void waitUntilComponentIsReady() {

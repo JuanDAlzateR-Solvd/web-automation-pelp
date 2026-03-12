@@ -5,11 +5,15 @@ import com.solvd.webAutomation.components.TopMenu;
 import com.solvd.webAutomation.flows.Navigation;
 import com.solvd.webAutomation.pages.common.AbstractPage;
 import org.openqa.selenium.By;
+
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class CartPage extends AbstractPage {
 
@@ -52,10 +56,17 @@ public class CartPage extends AbstractPage {
     }
 
     public CartItemComponent getCartItemComponentByName(String productName) {
-        return getCartItemComponents().stream()
-                .filter(ci -> ci.getTitle().equalsIgnoreCase(productName))
-                .findFirst()
-                .orElse(null);
+
+        Function<String,CartItemComponent> findCartItem = (name) ->
+                Objects.requireNonNull(
+                        getCartItemComponents().stream()
+                                .filter(ci -> ci.getTitle().equalsIgnoreCase(name))
+                                .findFirst()
+                                .orElse(null)
+                );
+
+        return waitUtil.waitUntil(driver->findCartItem.apply(productName));
+//        return waitUtil.waitUntilApply(findCartItem, productName);
     }
 
     public void deleteProduct(String productName) {
@@ -87,8 +98,8 @@ public class CartPage extends AbstractPage {
     }
 
     private void waitCartUpdatesAfterDeleteProduct(int initialCartSize) {
+        waitUntilCartDeletesProduct(initialCartSize);
         if (initialCartSize > 1) {
-            waitUntilCartDeletesProduct(initialCartSize);
             waitUntilVisible(tableIndicator, "Shopping cart table");
         }
     }
@@ -96,7 +107,11 @@ public class CartPage extends AbstractPage {
     public void waitUntilCartShowsProducts() {
         logger.info("Waiting for the shopping cart to show products");
         By by = By.cssSelector("#tbodyid .success");
-        waitUtil.waitForNumberOfElementsToBeMoreThan(by, 0);
+        try {
+            waitUtil.waitForNumberOfElementsToBeMoreThan(by, 0);
+        } catch (org.openqa.selenium.TimeoutException e) {
+            logger.warn("Timeout waiting for cart items to be more than 0");
+        }
     }
 
     public void waitUntilCartDeletesProduct(int initialCartSize) {
@@ -135,12 +150,14 @@ public class CartPage extends AbstractPage {
     }
 
     public int getProductCount() {
-        logger.info("Checking number of products in shopping cart");
 
-        int size = getCartItemComponents().size();
-        logger.info("Shopping cart has {} products", size);
+        Supplier<Integer> getCount = () -> {
+            int size = getCartItemComponents().size();
+            logger.info("Shopping cart has {} products", size);
+            return size;
+        };
 
-        return size;
+        return waitUtil.waitUntil(driver -> getCount.get());
     }
 
     public void waitUntilCartLoadsProducts() {

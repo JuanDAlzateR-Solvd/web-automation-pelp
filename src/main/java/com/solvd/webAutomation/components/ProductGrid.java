@@ -2,11 +2,14 @@ package com.solvd.webAutomation.components;
 
 import com.solvd.webAutomation.pages.desktop.ProductPage;
 import org.openqa.selenium.By;
+import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class ProductGrid extends AbstractComponent {
 
@@ -19,7 +22,7 @@ public class ProductGrid extends AbstractComponent {
     @FindBy(css = ".card-img-top.img-fluid")
     private WebElement imageIndicator;
 
-    public ProductGrid(WebDriver driver, WebElement root) {
+    public ProductGrid(WebDriver driver, SearchContext root) {
         super(driver, root);
     }
 
@@ -35,9 +38,15 @@ public class ProductGrid extends AbstractComponent {
     }
 
     public List<String> getProductTitles() {
-        return getProductComponents().stream()
-                .map(ProductGridItemComponent::getProductTitle)
-                .toList();
+
+        Supplier<List<String>> getTitles = () -> {
+            return getProductComponents().stream()
+                    .map(ProductGridItemComponent::getProductTitle)
+                    .toList();
+        };
+
+        return waitUtil.waitUntil(driver -> getTitles.get());
+
     }
 
     public boolean isNextButtonClickable() {
@@ -65,14 +74,24 @@ public class ProductGrid extends AbstractComponent {
     //Test flow methods
 
     public ProductPage openProduct(int index) {
-        ProductGridItemComponent product = getProduct(index);
-        product.clickProduct();
-        return new ProductPage(driver);
+
+        Function<Integer,ProductPage> openProd = (i) -> {
+            ProductGridItemComponent product = getProduct(i);
+            product.clickProduct();
+            return new ProductPage(driver);
+        };
+
+        return waitUtil.waitUntil(driver->openProd.apply(index));
     }
 
     public String getProductName(int index) {
-        ProductGridItemComponent product = getProduct(index);
-        return product.getProductName();
+
+        Function<Integer,String> getName = (i) -> {
+            ProductGridItemComponent product = getProduct(index);
+            return product.getProductName();
+        };
+
+        return waitUtil.waitUntil(driver->getName.apply(index));
     }
 
     public int getProductCount() {

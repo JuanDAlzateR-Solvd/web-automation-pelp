@@ -64,7 +64,7 @@ public class DemoblazeTest extends AbstractTest {
 
         ProductGrid productGrid = homePage.selectCategory(HomePage.Category.LAPTOPS);
 
-        List<String> productsList = productGrid.getProductTitles();
+          List<String> productsList = productGrid.getProductTitles();
         productsList.forEach(logger::info);
 
         Assert.assertFalse(productsList.isEmpty(), "There are no products in the grid");

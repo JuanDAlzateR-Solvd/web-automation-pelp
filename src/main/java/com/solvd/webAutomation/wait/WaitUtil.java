@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
+import java.util.function.Function;
 
 public class WaitUtil {
 
@@ -97,4 +98,19 @@ public class WaitUtil {
                         .equals("complete"));
     }
 
+    // ==========================
+    // CONDITIONS
+    // ==========================
+
+    public <T> T waitUntil(Function<WebDriver, T> condition) {
+        return buildWait().until(condition);
+    }
+
+    public <X,T> T waitUntilApply(Function<X, T> condition, X object) {
+        return buildWait().until(driver -> condition.apply(object));
+    }
+
+    public void waitUntilTrue(Function<WebDriver, Boolean> condition) {
+        buildWait().until(condition);
+    }
 }

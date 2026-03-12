@@ -1,6 +1,7 @@
 package com.solvd.webAutomation.components;
 
 import com.solvd.webAutomation.utils.StringUtils;
+import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -17,7 +18,7 @@ public class Footer extends AbstractComponent {
     @FindBy(css = "img")
     private WebElement imageLocator;
 
-    public Footer(WebDriver driver, WebElement root) {
+    public Footer(WebDriver driver, SearchContext root) {
         super(driver, root);
     }
 

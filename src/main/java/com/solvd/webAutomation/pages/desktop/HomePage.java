@@ -2,9 +2,11 @@ package com.solvd.webAutomation.pages.desktop;
 
 import com.solvd.webAutomation.components.Footer;
 import com.solvd.webAutomation.components.ProductGrid;
+import com.solvd.webAutomation.components.ProductGridItemComponent;
 import com.solvd.webAutomation.components.TopMenu;
 import com.solvd.webAutomation.flows.Navigation;
 import com.solvd.webAutomation.pages.common.AbstractPage;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -94,8 +96,18 @@ public class HomePage extends AbstractPage {
     }
 
     public ProductGrid selectCategory(Category item) {
+        List<ProductGridItemComponent> components = productGrid.getProductComponents();
+        WebElement firstProductBefore = components.isEmpty() ? null : components.get(0).getRoot();
         click(item);
+        if (firstProductBefore != null) {
+            try {
+                waitUtil.waitForStalenessOf(firstProductBefore, "First product from previous category");
+            } catch (TimeoutException e) {
+                logger.warn("Timeout waiting for staleness of first product, it might be the same or grid didn't refresh");
+            }
+        }
         waitUntilPageIsReady();
+        productGrid.waitUntilComponentIsReady();
         return productGrid;
     }
 

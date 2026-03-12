@@ -1,5 +1,6 @@
 package com.solvd.webAutomation.components;
 
+import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -21,7 +22,7 @@ public class SignUpModal extends AbstractComponent {
     @FindBy(id = "sign-password")
     private WebElement passwordInput;
 
-    public SignUpModal(WebDriver driver, WebElement root) {
+    public SignUpModal(WebDriver driver, SearchContext root) {
         super(driver, root);
     }
 

@@ -1,6 +1,7 @@
 package com.solvd.webAutomation.components;
 
 import org.openqa.selenium.Alert;
+import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -25,7 +26,7 @@ public class ContactModal extends AbstractComponent {
     @FindBy(css = "#exampleModal button.btn.btn-secondary")
     private WebElement closeButton;
 
-    public ContactModal(WebDriver driver, WebElement root) {
+    public ContactModal(WebDriver driver, SearchContext root) {
         super(driver, root);
     }
 

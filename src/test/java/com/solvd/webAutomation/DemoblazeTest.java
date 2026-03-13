@@ -1,15 +1,11 @@
 package com.solvd.webAutomation;
 
-import com.solvd.webAutomation.components.ProductGrid;
-import com.solvd.webAutomation.components.TopMenu;
-
 import com.solvd.webAutomation.components.*;
-
+import com.solvd.webAutomation.flows.Navigation;
 import com.solvd.webAutomation.flows.ShoppingFlow;
 import com.solvd.webAutomation.pages.common.AbstractPage;
 import com.solvd.webAutomation.pages.desktop.CartPage;
 import com.solvd.webAutomation.pages.desktop.HomePage;
-
 import com.solvd.webAutomation.pages.desktop.ProductPage;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
@@ -19,8 +15,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class DemoblazeTest extends AbstractTest {
     private static final Logger logger =
@@ -31,19 +26,33 @@ public class DemoblazeTest extends AbstractTest {
         WebDriver driver = getDriver();
         HomePage homePage = AbstractPage.openHomePage(driver);
 
-        TopMenu topMenu = homePage.getTopMenu();
+        Navigation navigation = homePage.getNavigation();
         SoftAssert sa = new SoftAssert();
 
         logger.info("Testing Menu item: [Contact Modal]");
-        ContactModal contactModal = topMenu.openContactModal();
+        ContactModal contactModal = navigation.openContactModal();
         sa.assertTrue(contactModal.isModalVisible(), "Contact Modal should be visible");
-        contactModal.close();
+        contactModal.clickClose();
 
-        //other modals
         logger.info("Testing Menu item: [About Us Modal]");
-        AboutUsModal aboutUsModal = topMenu.openAboutUsModal();
+        AboutUsModal aboutUsModal = navigation.openAboutUsModal();
         sa.assertTrue(aboutUsModal.isModalVisible(), "About Us Modal should be visible");
-        aboutUsModal.close();
+        aboutUsModal.clickClose();
+
+        logger.info("Testing Menu item: [Log In Modal]");
+        LogInModal logInModal = navigation.openLogInModal();
+        sa.assertTrue(logInModal.isModalVisible(), "Log In Modal should be visible");
+        logInModal.clickClose();
+
+        logger.info("Testing Menu item: [Sign Up Modal]");
+        SignUpModal signUpModal = navigation.openSignUpModal();
+        sa.assertTrue(signUpModal.isModalVisible(), "Sign Up Modal should be visible");
+        signUpModal.clickClose();
+
+        logger.info("Testing Menu item: [CartPage]");
+        CartPage cartPage = navigation.goToCartPage();
+        sa.assertTrue(cartPage.isPageVisible(), "Cart Page should be visible");
+        cartPage.getNavigation().goToHomePage();
 
         sa.assertAll();
     }
@@ -74,7 +83,7 @@ public class DemoblazeTest extends AbstractTest {
         int productIndex = productGrid.getProductCount() - 1;
 
         ProductPage productPage = productGrid
-                .openProductByIndex(productIndex);
+                .openProduct(productIndex);
 
         Assert.assertTrue(productPage.isInfoVisible(), "Product Page should have all info visible");
 
@@ -90,12 +99,12 @@ public class DemoblazeTest extends AbstractTest {
 
         ProductGrid productGrid = homePage.selectCategory(category);
 
-        String productName = productGrid.getProductNameByIndex(0);
+        String productName = productGrid.getProductName(0);
 
         CartPage cartPage = productGrid
-                .openProductByIndex(0)
+                .openProduct(0)
                 .addToCart()
-                .getTopMenu()
+                .getNavigation()
                 .goToCartPage();
 
         cartPage.waitUntilCartShowsProducts();
@@ -116,12 +125,12 @@ public class DemoblazeTest extends AbstractTest {
 
         ProductGrid productGrid = homePage.selectCategory(category);
 
-        String productName = productGrid.getProductNameByIndex(0);
+        String productName = productGrid.getProductName(0);
 
         CartPage cartPage = productGrid
-                .openProductByIndex(0)
+                .openProduct(0)
                 .addToCart()
-                .getTopMenu()
+                .getNavigation()
                 .goToCartPage();
 
         cartPage.waitUntilCartShowsProducts();
@@ -153,9 +162,9 @@ public class DemoblazeTest extends AbstractTest {
         List<String> productNames = shoppingFlow.addRandomProductsToCart(5);
 
         SoftAssert sa = new SoftAssert();
-        CartPage cartPage = homePage.getTopMenu().goToCartPage();
+        CartPage cartPage = homePage.getNavigation().goToCartPage();
 
-        cartPage.waitUntilCartShowsProducts(); //change later
+        cartPage.waitUntilCartShowsProducts();
 
         int initialSize = cartPage.getProductCount();
 
@@ -178,12 +187,12 @@ public class DemoblazeTest extends AbstractTest {
 
         HomePage homePage = AbstractPage.openHomePage(driver);
 
-        ContactModal contactModal = homePage.getTopMenu().openContactModal();
+        ContactModal contactModal = homePage.getNavigation().openContactModal();
         SoftAssert sa = new SoftAssert();
 
         sa.assertTrue(contactModal.isModalVisible(), "Contact modal is not visible");
 
-        contactModal.submitContactForm("example@email.com",
+        contactModal.fillAndSubmitForm("example@email.com",
                 "Example Name",
                 "This is a test message");
 
@@ -199,7 +208,7 @@ public class DemoblazeTest extends AbstractTest {
         WebDriver driver = getDriver();
 
         HomePage homePage = AbstractPage.openHomePage(driver);
-        LogInModal logInModal = homePage.getTopMenu().openLogInModal();
+        LogInModal logInModal = homePage.getNavigation().openLogInModal();
 
         SoftAssert sa = new SoftAssert();
         sa.assertTrue(logInModal.isModalVisible(), "Log In modal is not visible");
@@ -212,7 +221,7 @@ public class DemoblazeTest extends AbstractTest {
     }
 
     @Test(testName = "VerifyFooterInfo- Task3 TC-007",
-            description = "click on log in, then fills the form and click log in button")
+            description = "verifies footer visibility and contact info on the home page")
     public void verifyFooterVisibilityAndInfo() {
         WebDriver driver = getDriver();
 
@@ -239,14 +248,14 @@ public class DemoblazeTest extends AbstractTest {
                 .toArray(Object[][]::new);
     }
 
-    @DataProvider(name = "TopMenu Modal MenuItem Provider")
-    public Object[][] modalMenuItem() {
-        return new Object[][]{
-                {TopMenu.MenuItem.CONTACT},
-                {TopMenu.MenuItem.ABOUT_US},
-                {TopMenu.MenuItem.LOG_IN},
-                {TopMenu.MenuItem.SIGN_UP}
-        };
-    }
+//    @DataProvider(name = "TopMenu Modal MenuItem Provider")
+//    public Object[][] modalMenuItem() {
+//        return new Object[][]{
+//                {TopMenu.MenuItem.CONTACT},
+//                {TopMenu.MenuItem.ABOUT_US},
+//                {TopMenu.MenuItem.LOG_IN},
+//                {TopMenu.MenuItem.SIGN_UP}
+//        };
+//    }
 
 }

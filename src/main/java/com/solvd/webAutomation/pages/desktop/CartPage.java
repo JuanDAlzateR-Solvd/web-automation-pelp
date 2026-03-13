@@ -2,13 +2,18 @@ package com.solvd.webAutomation.pages.desktop;
 
 import com.solvd.webAutomation.components.CartItemComponent;
 import com.solvd.webAutomation.components.TopMenu;
+import com.solvd.webAutomation.flows.Navigation;
 import com.solvd.webAutomation.pages.common.AbstractPage;
 import org.openqa.selenium.By;
+
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class CartPage extends AbstractPage {
 
@@ -19,10 +24,16 @@ public class CartPage extends AbstractPage {
     private WebElement totalPrice;
 
     @FindBy(css = "#tbodyid .success")
-    private List<WebElement> tableRows;
+    private List<CartItemComponent> cartItemComponents;
 
     @FindBy(css = ".table-responsive")
     private WebElement tableIndicator;
+
+    @FindBy(css = ".navbar.navbar-toggleable-md.bg-inverse")
+    private TopMenu topMenu;
+
+    @FindBy(css = "html[lang]")
+    private WebElement navigationRoot;
 
     public CartPage(WebDriver driver) {
         super(driver);
@@ -39,22 +50,23 @@ public class CartPage extends AbstractPage {
 
     public List<CartItemComponent> getCartItemComponents() {
         waitUntilPageIsReady();
-        waitService.waitForPresenceOfElementLocated(By.id("tbodyid"));
-
-        By by = By.cssSelector("#tbodyid .success");
-        List<WebElement> elements = driver.findElements(by);
-        logger.debug("Getting cart item components: found {} products", elements.size());
-        return elements.stream()
-                .map(el -> new CartItemComponent(driver, el))
-                .toList();
+        waitUtil.waitForPresenceOfElementLocated(By.id("tbodyid"));
+        logger.debug("Getting cart item components: found {} products", cartItemComponents.size());
+        return cartItemComponents;
     }
 
     public CartItemComponent getCartItemComponentByName(String productName) {
-        List<CartItemComponent> cartItems = getCartItemComponents();
-        return cartItems.stream()
-                .filter(ci -> ci.getTitle().equalsIgnoreCase(productName))
-                .findFirst()
-                .orElse(null);
+
+        Function<String, CartItemComponent> findCartItem = (name) ->
+                Objects.requireNonNull(
+                        getCartItemComponents().stream()
+                                .filter(ci -> ci.getTitle().equalsIgnoreCase(name))
+                                .findFirst()
+                                .orElse(null)
+                );
+
+        return waitUtil.waitUntil(driver -> findCartItem.apply(productName));
+//        return waitUtil.waitUntilApply(findCartItem, productName);
     }
 
     public void deleteProduct(String productName) {
@@ -81,15 +93,13 @@ public class CartPage extends AbstractPage {
     public void printProductsInCart() {
         List<CartItemComponent> cartItems = getCartItemComponents();
         logger.info("Printing products in cart:");
-        cartItems.forEach(p -> {
-            logger.info(p.getText());
-        });
+        cartItems.forEach(p -> logger.info(p.getRootText()));
         logger.info("Finished printing products in cart.");
     }
 
     private void waitCartUpdatesAfterDeleteProduct(int initialCartSize) {
-        if (!isCartEmpty()) {
-            waitUntilCartDeletesProduct(initialCartSize);
+        waitUntilCartDeletesProduct(initialCartSize);
+        if (initialCartSize > 1) {
             waitUntilVisible(tableIndicator, "Shopping cart table");
         }
     }
@@ -97,36 +107,41 @@ public class CartPage extends AbstractPage {
     public void waitUntilCartShowsProducts() {
         logger.info("Waiting for the shopping cart to show products");
         By by = By.cssSelector("#tbodyid .success");
-        waitService.waitForNumberOfElementsToBeMoreThan(by, 0);
+        try {
+            waitUtil.waitForNumberOfElementsToBeMoreThan(by, 0);
+        } catch (org.openqa.selenium.TimeoutException e) {
+            logger.warn("Timeout waiting for cart items to be more than 0");
+        }
     }
 
     public void waitUntilCartDeletesProduct(int initialCartSize) {
         logger.info("Waiting for the shopping cart to reload");
         By by = By.cssSelector("#tbodyid .success");
-        waitService.waitForNumberOfElementsToBe(by, initialCartSize - 1);
+        waitUtil.waitForNumberOfElementsToBe(by, initialCartSize - 1);
     }
 
     public boolean isCartEmpty() {
         waitUntilPageIsReady();
-
         logger.info("Checking if shopping cart is empty");
-        waitService.waitForPresenceOfElementLocated(By.id("tbodyid"));
 
-        List<WebElement> rows =
-                driver.findElements(By.cssSelector("#tbodyid .success"));
+        boolean empty = getCartItemComponents().isEmpty();
 
-        if (rows.size() == 0) {
+        if (empty) {
             logger.info("Shopping cart is empty");
         } else {
             logger.info("Shopping cart is not empty");
         }
-        return rows.size() == 0;
+        return empty;
     }
 
     //Test flow methods
 
-    public TopMenu getTopMenu() {
-        return new TopMenu(driver);
+    private TopMenu getTopMenu() {
+        return topMenu;
+    }
+
+    public Navigation getNavigation() {
+        return new Navigation(driver, navigationRoot, getTopMenu());
     }
 
     public boolean containsProduct(String productName) {
@@ -135,31 +150,48 @@ public class CartPage extends AbstractPage {
     }
 
     public int getProductCount() {
-        logger.info("Checking number of products in shopping cart");
-        waitService.waitForPresenceOfElementLocated(By.id("tbodyid"));
 
-        List<WebElement> rows =
-                driver.findElements(By.cssSelector("#tbodyid .success"));
+        Supplier<Integer> getCount = () -> {
+            int size = getCartItemComponents().size();
+            logger.info("Shopping cart has {} products", size);
+            return size;
+        };
 
-        int size = rows.size();
-        logger.info("Shopping cart has {} products", size);
-
-        return size;
+        return waitUtil.waitUntil(driver -> getCount.get());
     }
 
     public void waitUntilCartLoadsProducts() {
-        if (!isCartEmpty()) {
+        if (!getCartItemComponents().isEmpty()) {
             waitUntilCartShowsProducts();
             waitUntilVisible(tableIndicator, "Shopping cart table");
         }
     }
 
     public void emptyShoppingCart() {
+        final int maxAttempts = 20;
+        int attempts = 0;
+
         while (!isCartEmpty()) {
-            logger.info("DELETE Deleting {} products from cart", getProductCount());
-            String productName = getCartItemComponents().get(0).getTitle();
+
+            if (attempts >= maxAttempts) {
+                throw new IllegalStateException(
+                        "Failed to empty shopping cart after " + maxAttempts + " attempts."
+                );
+            }
+
+            CartItemComponent item = getCartItemComponents().get(0);
+            String productName = item.getTitle();
+
+            logger.info("Deleting product '{}' from cart", productName);
+
+            WebElement rowElement = item.getRoot();
             deleteProduct(productName);
+            waitUtil.waitForStalenessOf(rowElement, productName);
+
+            attempts++;
         }
+
+        logger.info("Shopping cart successfully emptied");
     }
 
 }

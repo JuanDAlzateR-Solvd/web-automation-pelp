@@ -1,5 +1,6 @@
 package com.solvd.webAutomation.components;
 
+import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -7,48 +8,52 @@ import org.openqa.selenium.support.FindBy;
 public class ProductGridItemComponent extends AbstractComponent {
 
     @FindBy(css = ".card-title")
-    private WebElement title;
+    private WebElement productTitle;
+
+    @FindBy(css = ".card-title a")
+    private WebElement productLink;
 
     @FindBy(css = "h5")
-    private WebElement price;
+    private WebElement productPrice;
 
     @FindBy(css = ".card-text")
-    private WebElement description;
+    private WebElement productDescription;
 
     @FindBy(css = ".card-img-top")
     private WebElement imageIndicator;
 
-    public ProductGridItemComponent(WebDriver driver, WebElement root) {
+    public ProductGridItemComponent(WebDriver driver, SearchContext root) {
         super(driver, root);
     }
 
     @Override
     public WebElement getComponentLoadedIndicator() {
-        return title;
+        return productTitle;
     }
 
-    public WebElement getTitle() {
-        return title;
+    public String getProductTitle() {
+        return getText(productTitle, "Product title");
     }
 
     public String getText() {
 
-        return getText(title, "Product Component"); //It doesn't work with root -> used title.
+        return getText(productTitle, "Product Component"); //It doesn't work with root -> used title.
     }
 
     public String getProductName() {
-        return getText(title, "Product title");
+        return getText(productTitle, "Product title");
     }
 
-    public WebElement getPrice() {
-        return price;
+    public String getProductPrice() {
+        return getText(productPrice, "Product price");
     }
 
-    public WebElement getDescription() {
-        return description;
+    public String getProductDescription() {
+        return getText(productDescription, "Product description");
     }
 
     public void clickProduct() {
-        click(title, getProductName());
+        click(productLink, getProductName());
     }
+
 }

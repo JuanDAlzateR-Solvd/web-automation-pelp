@@ -1,44 +1,48 @@
 package com.solvd.webAutomation.components;
 
-import com.solvd.webAutomation.pages.common.AbstractPage;
+import com.solvd.webAutomation.utils.StringUtils;
+import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.Arrays;
+import java.util.Map;
+import java.util.stream.Collectors;
 
-public class Footer extends AbstractPage {
+public class Footer extends AbstractComponent {
 
-    @FindBy(css = "#fotcont div[class*='col-sm-3'] .caption")
+    @FindBy(css = "div[class*='col-sm-3'] .caption")
     private WebElement contactInfo;
 
-    @FindBy(css = "#fotcont img")
+    @FindBy(css = "img")
     private WebElement imageLocator;
 
-    public Footer(WebDriver driver) {
-        super(driver);
+    public Footer(WebDriver driver, SearchContext root) {
+        super(driver, root);
     }
 
     @Override
-    protected WebElement getPageLoadedIndicator() {
+    protected WebElement getComponentLoadedIndicator() {
         return imageLocator;
     }
 
-    public String[] getContactInfoText() {
-        logger.debug(contactInfo.getText());
+    /**
+     * Parse contact info once and return a map:
+     * Address -> value
+     * Phone -> value
+     * Email -> value
+     */
+    private Map<String, String> parseContactInfo() {
+
         return Arrays.stream(contactInfo.getText().split("\n"))
                 .map(String::trim)
-                .toArray(String[]::new);
-    }
-
-    private String extractValueFromLine(String[] lines, int lineIndex) {
-        if (lines.length <= lineIndex) return "";
-        String[] parts = lines[lineIndex].split(":", 2);
-        return parts.length > 1 ? parts[1].trim() : "";
-    }
-
-    public String getInfo(InfoItem item) {
-        return extractValueFromLine(getContactInfoText(), item.getLineIndex());
+                .map(line -> line.split(":", 2))
+                .filter(parts -> parts.length == 2)
+                .collect(Collectors.toMap(
+                        parts -> parts[0].trim(),
+                        parts -> parts[1].trim()
+                ));
     }
 
     public boolean isVisibleInScreen() {
@@ -49,20 +53,29 @@ public class Footer extends AbstractPage {
         scrollTo(contactInfo);
     }
 
-    public boolean verifyAddress() {
-        return getInfo(InfoItem.ADDRESS).length() > 5;
-    }
-
-    public boolean verifyPhone() {
-        return getInfo(InfoItem.PHONE).length() > 5;
-    }
-
-    public boolean verifyEmail() {
-        return getInfo(InfoItem.EMAIL).length() > 5;
-    }
-
     public boolean verifyFooterInfo() {
-        return verifyAddress() && verifyPhone() && verifyEmail();
+
+        Map<String, String> info = parseContactInfo();
+
+        String address = info.getOrDefault(InfoItem.ADDRESS.getLabel(), "");
+        String phone = info.getOrDefault(InfoItem.PHONE.getLabel(), "");
+        String email = info.getOrDefault(InfoItem.EMAIL.getLabel(), "");
+
+        boolean validAddress = !address.isBlank();
+        boolean validPhone = StringUtils.isValidPhone(phone);
+        boolean validEmail = StringUtils.isValidEmail(email);
+
+        if (!validAddress) {
+            logger.error("Invalid Address: {}", address);
+        }
+        if (!validPhone) {
+            logger.error("Invalid Phone: {}", phone);
+        }
+        if (!validEmail) {
+            logger.error("Invalid Email: {}", email);
+        }
+
+        return validAddress && validPhone && validEmail;
     }
 
     public void ensureVisible() {
@@ -70,24 +83,18 @@ public class Footer extends AbstractPage {
     }
 
     public enum InfoItem {
-        ADDRESS("Get in Touch Address", 1),
-        PHONE("Get in Touch Phone", 2),
-        EMAIL("Get in Touch Email", 3);
+        ADDRESS("Address"),
+        PHONE("Phone"),
+        EMAIL("Email");
 
-        private final String name;
-        private final int lineIndex;
+        private final String label;
 
-        InfoItem(String name, int lineIndex) {
-            this.name = name;
-            this.lineIndex = lineIndex;
+        InfoItem(String label) {
+            this.label = label;
         }
 
-        public String getName() {
-            return name;
-        }
-
-        public int getLineIndex() {
-            return lineIndex;
+        public String getLabel() {
+            return label;
         }
     }
 

@@ -8,15 +8,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
+import java.util.function.Function;
 
-public class WaitService {
+public class WaitUtil {
 
-    private static final Logger logger = LoggerFactory.getLogger(WaitService.class);
+    private static final Logger logger = LoggerFactory.getLogger(WaitUtil.class);
 
     private final WebDriver driver;
     private final int defaultTimeout;
 
-    public WaitService(WebDriver driver) {
+    public WaitUtil(WebDriver driver) {
         this.driver = driver;
         this.defaultTimeout = Integer.parseInt(ConfigReader.get("wait_duration"));
     }
@@ -70,6 +71,12 @@ public class WaitService {
         buildWait().until(ExpectedConditions.numberOfElementsToBe(locator, number));
     }
 
+    public void waitForStalenessOf(WebElement element, String elementName) {
+        logger.debug("Waiting for staleness of element {}", elementName);
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(defaultTimeout));
+        wait.until(ExpectedConditions.stalenessOf(element));
+    }
+
     // ==========================
     // ALERTS
     // ==========================
@@ -90,4 +97,21 @@ public class WaitService {
                         .executeScript("return document.readyState")
                         .equals("complete"));
     }
+
+    // ==========================
+    // CONDITIONS
+    // ==========================
+
+    public <T> T waitUntil(Function<WebDriver, T> condition) {
+        return buildWait().until(condition);
+    }
+
+    public <X, T> T waitUntilApply(Function<X, T> condition, X object) {
+        return buildWait().until(driver -> condition.apply(object));
+    }
+
+    public void waitUntilTrue(Function<WebDriver, Boolean> condition) {
+        buildWait().until(condition);
+    }
+
 }

@@ -1,30 +1,28 @@
 package com.solvd.webAutomation.components;
 
-import com.solvd.webAutomation.pages.desktop.HomePage;
 import com.solvd.webAutomation.pages.desktop.ProductPage;
 import org.openqa.selenium.By;
+import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class ProductGrid extends AbstractComponent {
-
-//    @FindBy(css = "#contcont")  //"#tbodyid"
-//    private WebElement productGridContainer;
 
     @FindBy(css = ".pagination #next2")
     private WebElement nextButton;
 
-    @FindBy(css = ".col-lg-4")
-    private List<WebElement> productElements;
+    @FindBy(css = "#tbodyid .col-lg-4")
+    private List<ProductGridItemComponent> productItems;
 
     @FindBy(css = ".card-img-top.img-fluid")
     private WebElement imageIndicator;
 
-    public ProductGrid(WebDriver driver, WebElement root) {
-
+    public ProductGrid(WebDriver driver, SearchContext root) {
         super(driver, root);
     }
 
@@ -34,24 +32,21 @@ public class ProductGrid extends AbstractComponent {
     }
 
     public List<ProductGridItemComponent> getProductComponents() {
-        List<WebElement> elements = getProductElements();
-        logger.debug("Getting product components: found {} products", elements.size());
-        return elements.stream()
-                .map(el -> new ProductGridItemComponent(driver, el))
-                .toList();
-    }
-
-    public List<WebElement> getProductElements() {
-        return driver.findElements(By.cssSelector("#tbodyid .col-lg-4"));
+        waitUntilComponentIsReady();
+        logger.debug("Getting product components: found {} products", productItems.size());
+        return productItems;
     }
 
     public List<String> getProductTitles() {
-//        By by = By.cssSelector("#tbodyid .card-title");
-//        waitService.waitForNumberOfElementsToBeMoreThan(by,0);
-        return getProductComponents().stream()
-                .map(ProductGridItemComponent::getTitle)
-                .map(WebElement::getText)
-                .toList();
+
+        Supplier<List<String>> getTitles = () -> {
+            return getProductComponents().stream()
+                    .map(ProductGridItemComponent::getProductTitle)
+                    .toList();
+        };
+
+        return waitUtil.waitUntil(driver -> getTitles.get());
+
     }
 
     public boolean isNextButtonClickable() {
@@ -62,46 +57,48 @@ public class ProductGrid extends AbstractComponent {
         click(nextButton, "Next Button");
     }
 
-    public void clickNextButtonIfPossible(HomePage.Category category) {
-        if (isNextButtonClickable() && category != HomePage.Category.MONITORS) {
-            //demoblaze.com has a bug, when click on category monitors it shows the next button, even thought it shouldn't.
-            clickNextButton();
-        }
-    }
-
-    public WebElement getProductGridContainer() {
-        return root;
-    }
-
-    public ProductGridItemComponent getProductByIndex(int productIndex) {
+    public ProductGridItemComponent getProduct(int productIndex) {
         List<ProductGridItemComponent> products = getProductComponents();
+
+        if (productIndex >= products.size()) {
+            throw new IllegalArgumentException(
+                    "Requested product index " + productIndex +
+                            ", but only " + products.size() + " products found"
+            );
+        }
         ProductGridItemComponent product = products.get(productIndex);
         logger.debug("Getting product {} from product grid", productIndex);
-//        logger.info("product [{}] in {} grid position",product.getProductName(), productIndex);
         return product;
     }
 
     //Test flow methods
 
-    public ProductPage openProductByIndex(int index) {
-        ProductGridItemComponent product = getProductByIndex(index);
-        product.clickProduct();
-        return new ProductPage(driver);
+    public ProductPage openProduct(int index) {
+
+        Function<Integer, ProductPage> openProd = (i) -> {
+            ProductGridItemComponent product = getProduct(i);
+            product.clickProduct();
+            return new ProductPage(driver);
+        };
+
+        return waitUtil.waitUntil(driver -> openProd.apply(index));
     }
 
-    public String getProductNameByIndex(int index) {
-        ProductGridItemComponent product = getProductByIndex(index);
-        return product.getProductName();
+    public String getProductName(int index) {
+
+        Function<Integer, String> getName = (i) -> {
+            ProductGridItemComponent product = getProduct(index);
+            return product.getProductName();
+        };
+
+        return waitUtil.waitUntil(driver -> getName.apply(index));
     }
 
     public int getProductCount() {
         logger.info("Checking number of products in product grid");
-        waitService.waitForPresenceOfElementLocated(By.id("tbodyid"));
+        waitUtil.waitForPresenceOfElementLocated(By.id("tbodyid"));
 
-        List<WebElement> rows =
-                driver.findElements(By.cssSelector("#tbodyid .card-title"));
-
-        int size = rows.size();
+        int size = getProductComponents().size();
         logger.info("Product grid has {} products", size);
 
         return size;

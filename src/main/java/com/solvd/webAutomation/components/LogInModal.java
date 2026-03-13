@@ -1,13 +1,11 @@
 package com.solvd.webAutomation.components;
 
-import com.solvd.webAutomation.pages.common.AbstractPage;
+import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-import java.util.Map;
-
-public class LogInModal extends AbstractPage {
+public class LogInModal extends AbstractComponent {
 
     @FindBy(id = "logInModalLabel")
     private WebElement title;
@@ -24,24 +22,12 @@ public class LogInModal extends AbstractPage {
     @FindBy(id = "loginpassword")
     private WebElement passwordInput;
 
-    private final Map<MenuItem, WebElement> menuInputs;
-
-    private final Map<MenuItem, WebElement> menuButtons;
-
-    public LogInModal(WebDriver driver) {
-        super(driver);
-        menuInputs = Map.of(
-                MenuItem.USERNAME, usernameInput,
-                MenuItem.PASSWORD, passwordInput
-        );
-        menuButtons = Map.of(
-                MenuItem.CLOSE, closeButton,
-                MenuItem.LOG_IN, logInButton
-        );
+    public LogInModal(WebDriver driver, SearchContext root) {
+        super(driver, root);
     }
 
     @Override
-    protected WebElement getPageLoadedIndicator() {
+    protected WebElement getComponentLoadedIndicator() {
         return title;
     }
 
@@ -49,44 +35,32 @@ public class LogInModal extends AbstractPage {
         return title;
     }
 
-    public void click(MenuItem item) {
-        WebElement button = menuButtons.get(item);
-        click(button, item.getName());
+    public void clickLogIn() {
+        click(logInButton, "Log In Button");
     }
 
-    public void type(MenuItem item, String text) {
-        WebElement element = menuInputs.get(item);
-        type(element, item.getName(), text);
+    public void clickClose() {
+        click(closeButton, "LogInModal Close Button");
+        waitUtil.waitForInvisibility(closeButton, "Close Button");
+    }
+
+    public void typeUsername(String username) {
+        type(usernameInput, "Input Username", username);
+    }
+
+    public void typePassword(String password) {
+        type(passwordInput, "Input Password", password);
     }
 
     public boolean isModalVisible() {
         return title.isDisplayed();
     }
 
-    public LogInModal logInWith(
-            String username,
-            String password) {
-        type(MenuItem.USERNAME, username);
-        type(MenuItem.PASSWORD, password);
-        click(MenuItem.LOG_IN);
+    public LogInModal logInWith(String username, String password) {
+        typeUsername(username);
+        typePassword(password);
+        clickLogIn();
         return this;
-    }
-
-    public enum MenuItem {
-        USERNAME("Input Username"),
-        PASSWORD("Input Password"),
-        CLOSE("Close Button"),
-        LOG_IN("Log In Button");
-
-        private final String name;
-
-        MenuItem(String name) {
-            this.name = name;
-        }
-
-        public String getName() {
-            return name;
-        }
     }
 
 }

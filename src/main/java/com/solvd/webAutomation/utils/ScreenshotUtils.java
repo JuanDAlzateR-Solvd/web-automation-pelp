@@ -4,6 +4,8 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,6 +15,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class ScreenshotUtils {
+    static final Logger logger = LoggerFactory.getLogger(ScreenshotUtils.class);
 
     public static void takeScreenshot(WebDriver driver, String testName) {
 
@@ -22,7 +25,6 @@ public class ScreenshotUtils {
         String browser = ((RemoteWebDriver) driver).getCapabilities().getBrowserName();
 
         long threadID = Thread.currentThread().getId();
-//                ((RemoteWebDriver) driver).getSessionId().toString();
 
         String screenshotName = testName + "_" + timestamp + "_T" + threadID + "_" + browser + "_";
 
@@ -39,7 +41,8 @@ public class ScreenshotUtils {
             Files.copy(src.toPath(), dest.toPath(),
                     StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Failed to save screenshot: {}", e.getMessage());
         }
     }
+
 }

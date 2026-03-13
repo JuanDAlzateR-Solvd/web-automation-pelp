@@ -1,6 +1,7 @@
 package com.solvd.webAutomation.pages.common;
 
 import com.solvd.webAutomation.config.ConfigReader;
+import com.solvd.webAutomation.pagefactory.ComponentFieldDecorator;
 import com.solvd.webAutomation.pages.desktop.HomePage;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.PageFactory;
@@ -12,18 +13,16 @@ public abstract class AbstractPage extends AbstractUIObject {
 
     int waitDuration = Integer.parseInt(ConfigReader.get("wait_duration"));
 
-    public AbstractPage(WebDriver driver) {
+    protected AbstractPage(WebDriver driver) {
         super(driver);
 
-        PageFactory.initElements(
-                new AjaxElementLocatorFactory(driver, waitDuration), this);
+        AjaxElementLocatorFactory locatorFactory = new AjaxElementLocatorFactory(driver, waitDuration);
+        PageFactory.initElements(new ComponentFieldDecorator(locatorFactory, driver, driver), this);
 
         logger.info("Page Created | Thread: {} | Driver: {}",
                 Thread.currentThread().getId(),
                 System.identityHashCode(driver)
         );
-
-//        waitUntilPageIsReady(); // move out of constructor??
     }
 
     protected abstract WebElement getPageLoadedIndicator();
@@ -37,26 +36,11 @@ public abstract class AbstractPage extends AbstractUIObject {
         String className = this.getClass().getSimpleName();
         logger.info("Waiting for the page [{}] to load", className);
 
-        waitService.waitForPageLoad();
-        waitService.waitForInvisibilityOfElementLocated(LOADER, "Page Loader");
-        waitService.waitForElementVisible(getPageLoadedIndicator(), className + " Indicator");
+        waitUtil.waitForPageLoad();
+        waitUtil.waitForInvisibilityOfElementLocated(LOADER, "Page Loader");
+        waitUtil.waitForElementVisible(getPageLoadedIndicator(), className + " Indicator");
 
         logger.info("The page [{}] is ready", this.getClass().getSimpleName());
-    }
-
-    public boolean isAlertPresent() {
-        try {
-            waitService.waitForAlert();
-            return true;
-        } catch (TimeoutException e) {
-            return false;
-        }
-    }
-
-    public void acceptWrongPasswordAlert() {
-        logger.info("accepting 'Wrong password' Alert");
-        Alert alert = waitService.waitForAlert();
-        alert.accept();
     }
 
     public static HomePage openHomePage(WebDriver driver) {

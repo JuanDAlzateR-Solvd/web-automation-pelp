@@ -1,5 +1,6 @@
 package com.solvd.webAutomation.components;
 
+import com.solvd.webAutomation.pagefactory.ComponentFieldDecorator;
 import com.solvd.webAutomation.pages.common.AbstractUIObject;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.PageFactory;
@@ -7,43 +8,60 @@ import org.openqa.selenium.support.pagefactory.DefaultElementLocatorFactory;
 
 public abstract class AbstractComponent extends AbstractUIObject {
 
-    protected WebElement root;
+    protected final SearchContext root;
 
     private static final By LOADER = By.cssSelector(".loader, .spinner, .loading");
 
-    public AbstractComponent(WebDriver driver, WebElement root) {
+    protected AbstractComponent(WebDriver driver, SearchContext root) {
         super(driver);
         this.root = root;
 
-        PageFactory.initElements(
-                new DefaultElementLocatorFactory(root),
-                this
-        );
+        if (root == null) {
+            logger.error("Root element cannot be null for component: {}", getClass().getSimpleName());
+            throw new IllegalArgumentException("Root element cannot be null for component: " + getClass().getSimpleName());
+        }
+
+        DefaultElementLocatorFactory locatorFactory = new DefaultElementLocatorFactory(root);
+        PageFactory.initElements(new ComponentFieldDecorator(locatorFactory, root, driver), this);
 
         logger.info("Page Created | Thread: {} | Driver: {}",
                 Thread.currentThread().getId(),
                 System.identityHashCode(driver)
         );
-
-//        waitUntilComponentIsReady();
     }
 
     protected abstract WebElement getComponentLoadedIndicator();
 
     public WebElement getRoot() {
-        return root;
+        if (root instanceof WebElement element) {
+            return element;
+        }
+        throw new IllegalStateException("SearchContext is not a WebElement");
     }
 
     public void waitUntilComponentIsReady() {
         String className = this.getClass().getSimpleName();
-        logger.info("Waiting for the component [{}] to load", className);
+        logger.info("Waiting for the component [{}] to be ready", className);
 
-        waitService.waitForPageLoad();
-        waitService.waitForInvisibilityOfElementLocated(LOADER, "Component Loader");
-        waitService.waitForElementVisible(getComponentLoadedIndicator(), className + " Indicator");
+        waitUtil.waitForInvisibilityOfElementLocated(LOADER, "Component Loader");
+        waitUtil.waitForElementVisible(getComponentLoadedIndicator(), className + " Indicator");
 
-        logger.info("The page [{}] is ready", this.getClass().getSimpleName());
+        logger.info("The component [{}] is ready", this.getClass().getSimpleName());
     }
 
+    public boolean isAlertPresent() {
+        try {
+            waitUtil.waitForAlert();
+            return true;
+        } catch (TimeoutException e) {
+            return false;
+        }
+    }
+
+    public void acceptWrongPasswordAlert() {
+        logger.info("accepting 'Wrong password' Alert");
+        Alert alert = waitUtil.waitForAlert();
+        alert.accept();
+    }
 
 }

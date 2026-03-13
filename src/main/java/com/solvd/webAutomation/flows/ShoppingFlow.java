@@ -1,9 +1,13 @@
 package com.solvd.webAutomation.flows;
 
 import com.solvd.webAutomation.components.ProductGrid;
+import com.solvd.webAutomation.config.ConfigReader;
 import com.solvd.webAutomation.pages.desktop.HomePage;
 import org.openqa.selenium.WebDriver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -11,6 +15,7 @@ import java.util.Random;
 public class ShoppingFlow {
 
     private final WebDriver driver;
+    private static final Logger logger = LoggerFactory.getLogger(ShoppingFlow.class);
 
     public ShoppingFlow(WebDriver driver) {
         this.driver = driver;
@@ -22,18 +27,33 @@ public class ShoppingFlow {
 
         ProductGrid productGrid = homePage.getProductGrid();
 
-        String productName = productGrid.getProductNameByIndex(productIndex);
+        String productName = productGrid.getProductName(productIndex);
+        String excludedProductsConfig = ConfigReader.get("excluded_products");
+        List<String> excludedProducts = excludedProductsConfig != null
+                ? Arrays.stream(excludedProductsConfig.split(","))
+                .map(String::trim)
+                .toList()
+                : List.of();
 
-        //Identified a bug specific for the Nexus 6 product, for now just change product.
-        if ("Nexus 6".equals(productName)) {
-            productIndex++;
-            productName = productGrid.getProductNameByIndex(productIndex);
+        //Identified a bug specific for some products (e.g. Nexus 6).
+        List<String> availableProducts = productGrid.getProductTitles()
+                .stream()
+                .filter(p -> !excludedProducts.contains(p))
+                .toList();
+
+        if (availableProducts.isEmpty()) {
+            throw new RuntimeException("No products available to add to cart");
+        }
+
+        if (!availableProducts.contains(productName)) {
+            logger.debug("Product [{}] not found in available products. Selecting first available product.", productName);
+            productIndex = availableProducts.indexOf(availableProducts.get(0));
         }
 
         productGrid
-                .openProductByIndex(productIndex)
+                .openProduct(productIndex)
                 .addToCart()
-                .getTopMenu()
+                .getNavigation()
                 .goToHomePage();
 
         return productName;
@@ -52,11 +72,12 @@ public class ShoppingFlow {
     }
 
     public List<String> addRandomProductsToCart(int numberOfProducts) {
-
         List<String> productNames = new ArrayList<>();
+
         for (int i = 0; i < numberOfProducts; i++) {
             productNames.add(addRandomProductToCart());
         }
         return productNames;
     }
+
 }

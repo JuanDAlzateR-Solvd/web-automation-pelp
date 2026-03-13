@@ -13,16 +13,19 @@ import org.slf4j.LoggerFactory;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Optional;
+import org.testng.annotations.Parameters;
 
 import java.lang.reflect.Method;
 
 public class AbstractTest {
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    @Parameters("browser")
     @BeforeMethod
-    public void setUp(Method method) {
+    public void setUp(Method method, @Optional("CHROME") String browser) {
         DriverRunMode runMode = DriverRunMode.valueOf(ConfigReader.get("run_mode"));
-        DriverType driverType = DriverType.valueOf(ConfigReader.get("browser"));
+        DriverType driverType = DriverType.valueOf(browser);
         DriverFactory.createDriver(runMode, driverType);
         WebDriver driver = DriverFactory.getDriver();
         //DriverRunMode LOCAL or REMOTE. REMOTE Requires Selenium server standalone.
